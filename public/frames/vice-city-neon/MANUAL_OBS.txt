@@ -1,0 +1,101 @@
+════════════════════════════════════════════════════════
+  VICE CITY NEON — Marco de Camara Animado
+  Estetica: GTA Vice City / Miami 80s / Neon retro
+════════════════════════════════════════════════════════
+
+CONTENIDO
+─────────
+  index.html     → Marco horizontal (420 × 320 px)
+  vertical.html  → Marco vertical   (320 × 480 px)
+
+
+COMO USAR EN OBS
+────────────────
+
+1. Agregar Browser Source
+   - Click derecho en Sources → Add → Browser
+   - Nombre sugerido: "Cam Frame - Vice City Neon"
+
+2. Configurar el Browser Source
+   - Marcar "Local file" y seleccionar:
+     • index.html    para camara horizontal
+     • vertical.html para camara vertical
+   - Ancho:  420  (horizontal) o 320 (vertical)
+   - Alto:   320  (horizontal) o 480 (vertical)
+   - Marcar "Shutdown source when not visible" (ahorra CPU)
+   - Marcar "Refresh browser when scene becomes active"
+
+3. Orden de capas (MUY IMPORTANTE)
+   El marco va DEBAJO de tu webcam en la lista de sources:
+
+     Capa superior:  [Tu Webcam]         ← fuente real
+     Capa inferior:  [Cam Frame]         ← este marco
+
+   Asi la webcam se ve POR ENCIMA del marco decorativo.
+
+4. Ajustar la webcam
+   - Redimensiona tu webcam para que calce dentro del marco
+   - Horizontal: area interior aprox 366 × 246 px
+   - Vertical:   area interior aprox 246 × 386 px
+   - Centra la webcam sobre el marco
+
+5. Posicionar en la escena
+   - Mover ambos sources (marco + webcam) juntos
+   - Tip: agrupalos (click derecho → Group Selected Items)
+
+
+PERSONALIZAR TEXTO
+──────────────────
+
+El texto que aparece debajo del marco es editable.
+Abri el archivo HTML con un editor de texto (Notepad, VS Code, etc.)
+y busca esta linea al inicio del bloque <script>:
+
+   const LABEL_TEXT = 'VICE CITY';
+
+Cambia el contenido entre las comillas por lo que quieras.
+Ejemplos:
+
+   const LABEL_TEXT = 'MI CANAL';
+   const LABEL_TEXT = 'MIAMI NIGHTS';
+   const LABEL_TEXT = 'twitch.tv/tucuenta';
+
+Guarda el archivo y en OBS hace click derecho sobre el
+Browser Source → "Refresh" para ver el cambio.
+
+
+EFECTOS INCLUIDOS
+─────────────────
+  • Borde neon doble: rosa brillante exterior + cyan interior
+  • Bordes con esquinas redondeadas (8px)
+  • Resplandor neon con box-shadow multicapa
+  • Flicker de neon cada ~6 segundos (simula tubo de neon real)
+  • Punto de luz viajero recorriendo todo el borde (rosa)
+  • 2 siluetas de palmera en las esquinas inferiores del borde
+  • Brillo de atardecer sutil en la zona inferior del marco
+  • Linea chrome/reflectiva en el borde superior interior
+  • 30 estrellas flotantes cerca de los bordes (Canvas)
+  • Label personalizable con fuente Permanent Marker
+
+
+PALETA DE COLORES
+─────────────────
+  #ff2d95  — Rosa neon (hot pink)
+  #00fff7  — Cyan neon
+  #ff6b35  — Naranja atardecer
+  #8b5cf6  — Purpura
+
+
+FUENTE UTILIZADA
+────────────────
+  Permanent Marker (Google Fonts) — estilo manuscrito / graffiti
+
+
+NOTAS
+─────
+  • No requiere internet (excepto Google Fonts la primera vez)
+  • Fondo 100% transparente — no tapa nada fuera del marco
+  • La zona central de la webcam queda completamente limpia
+  • Bajo consumo de CPU gracias a requestAnimationFrame
+  • Compatible con OBS 28+ y Streamlabs OBS
+  • Ideal para streams con tematica retro, GTA o Miami Vice

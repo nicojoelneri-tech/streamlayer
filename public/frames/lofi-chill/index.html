@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=420,height=320">
+<title>Lo-Fi Chill — Camera Frame</title>
+<style>
+  /* ═══════════════════════════════════════════
+     LO-FI CHILL — Dreamy Camera Frame
+     Browser Source: 420 × 320, transparent bg
+     Webcam goes ABOVE this source in OBS
+  ═══════════════════════════════════════════ */
+
+  @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap');
+
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:420px;height:320px;background:transparent;overflow:hidden}
+
+  .frame-wrap{
+    position:absolute;left:50%;top:50%;
+    transform:translate(-50%,-50%);
+    width:380px;height:260px;
+    animation:breathe 4s ease-in-out infinite;
+  }
+  @keyframes breathe{
+    0%,100%{opacity:1}
+    50%{opacity:.88}
+  }
+
+  /* ── Outer border ── */
+  .border-outer{
+    position:absolute;inset:0;
+    border:2px solid #c4b5fd;
+    border-radius:12px;
+    box-shadow:0 0 8px rgba(196,181,253,.45),inset 0 0 6px rgba(196,181,253,.2);
+  }
+
+  /* ── Inner dotted border ── */
+  .border-inner{
+    position:absolute;inset:4px;
+    border:1px dotted #fda4af;
+    border-radius:8px;
+    pointer-events:none;
+  }
+
+  /* ── Stars on border area ── */
+  .star{
+    position:absolute;
+    font-size:8px;
+    color:#ddd6fe;
+    animation:twinkle 3s ease-in-out infinite;
+    pointer-events:none;
+    text-shadow:0 0 4px rgba(221,214,254,.6);
+  }
+  @keyframes twinkle{
+    0%,100%{opacity:.3;transform:scale(.8)}
+    50%{opacity:1;transform:scale(1.1)}
+  }
+  .star:nth-child(1){top:-1px;left:30px;animation-delay:0s}
+  .star:nth-child(2){top:-1px;left:140px;animation-delay:.8s}
+  .star:nth-child(3){top:-1px;right:60px;animation-delay:1.6s}
+  .star:nth-child(4){bottom:-1px;left:60px;animation-delay:.4s}
+  .star:nth-child(5){bottom:-1px;left:200px;animation-delay:1.2s}
+  .star:nth-child(6){bottom:-1px;right:40px;animation-delay:2s}
+  .star:nth-child(7){top:40px;left:-3px;animation-delay:.6s}
+  .star:nth-child(8){top:140px;left:-3px;animation-delay:1.4s}
+  .star:nth-child(9){top:60px;right:-3px;animation-delay:1s}
+  .star:nth-child(10){top:160px;right:-3px;animation-delay:1.8s}
+  .star:nth-child(11){top:-1px;left:250px;animation-delay:2.2s}
+  .star:nth-child(12){bottom:-1px;left:130px;animation-delay:0.2s}
+
+  /* ── Cloud puffs ── */
+  .cloud{
+    position:absolute;
+    top:-6px;
+    pointer-events:none;
+    animation:cloudFloat 6s ease-in-out infinite;
+  }
+  .cloud.left      { left:6px;   animation-delay:0s   }
+  .cloud.ql        { left:22%;   animation-delay:0.9s }
+  .cloud.qr        { right:22%;  animation-delay:2.4s }
+  .cloud.right     { right:6px;  animation-delay:1.5s }
+
+  .cloud-body{
+    position:relative;
+    width:28px;height:10px;
+    background:rgba(221,214,254,.55);
+    border-radius:10px;
+  }
+  .cloud-body::before{
+    content:'';position:absolute;
+    bottom:4px;left:6px;
+    width:12px;height:12px;
+    background:rgba(221,214,254,.55);
+    border-radius:50%;
+  }
+  .cloud-body::after{
+    content:'';position:absolute;
+    bottom:3px;left:14px;
+    width:9px;height:9px;
+    background:rgba(221,214,254,.55);
+    border-radius:50%;
+  }
+  /* smaller variant */
+  .cloud.sm .cloud-body        { width:20px; height:7px; }
+  .cloud.sm .cloud-body::before{ width:8px; height:8px; left:4px; bottom:3px; }
+  .cloud.sm .cloud-body::after { width:6px; height:6px; left:10px; bottom:2px; }
+
+  @keyframes cloudFloat{
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-2px)}
+  }
+
+  /* ── Rainbow at top center ── */
+  .rainbow-wrap{
+    position:absolute;
+    top:-30px;
+    left:50%;
+    width:62px; height:31px;
+    overflow:hidden;
+    pointer-events:none;
+    animation:rainbowAppear 12s ease-in-out infinite;
+  }
+  @keyframes rainbowAppear{
+    0%    { opacity:0; transform:translateX(-50%) scaleX(0.2); }
+    8%    { opacity:1; transform:translateX(-50%) scaleX(1); }
+    65%   { opacity:1; transform:translateX(-50%) scaleX(1); }
+    76%   { opacity:0; transform:translateX(-50%) scaleX(0.4); }
+    100%  { opacity:0; transform:translateX(-50%) scaleX(0.2); }
+  }
+  .rb-arc{
+    position:absolute;
+    bottom:0; left:50%;
+    transform:translateX(-50%);
+    border-bottom:none;
+  }
+  .rb-1{ width:62px; height:31px; border:2.5px solid rgba(255,90,90,.85);   border-radius:31px 31px 0 0; border-bottom:none; }
+  .rb-2{ width:52px; height:26px; border:2.5px solid rgba(255,165,50,.85);  border-radius:26px 26px 0 0; border-bottom:none; }
+  .rb-3{ width:42px; height:21px; border:2.5px solid rgba(255,225,60,.85);  border-radius:21px 21px 0 0; border-bottom:none; }
+  .rb-4{ width:32px; height:16px; border:2.5px solid rgba(90,210,110,.85);  border-radius:16px 16px 0 0; border-bottom:none; }
+  .rb-5{ width:22px; height:11px; border:2.5px solid rgba(80,140,255,.85);  border-radius:11px 11px 0 0; border-bottom:none; }
+  .rb-6{ width:12px; height:6px;  border:2.5px solid rgba(190,100,255,.85); border-radius:6px  6px  0 0; border-bottom:none; }
+
+  /* ── Cassette tape on bottom border ── */
+  .cassette{
+    position:absolute;
+    bottom:-7px;left:50%;transform:translateX(-50%);
+    width:34px;height:14px;
+    background:#c4b5fd;
+    border-radius:3px;
+    border:1px solid #a78bfa;
+    pointer-events:none;
+  }
+  .cassette::before{
+    content:'';position:absolute;
+    top:3px;left:5px;
+    width:8px;height:8px;
+    border-radius:50%;
+    border:2px solid #fef3c7;
+    background:transparent;
+    box-shadow:16px 0 0 -1px transparent,16px 0 0 0 #fef3c7;
+  }
+  .cassette::after{
+    content:'';position:absolute;
+    bottom:2px;left:8px;
+    width:18px;height:3px;
+    background:#ddd6fe;
+    border-radius:1px;
+  }
+
+  /* ── Canvas for musical notes ── */
+  #fx{
+    position:absolute;inset:0;
+    width:420px;height:320px;
+    pointer-events:none;
+  }
+
+  /* ── Label ── */
+  #label{
+    position:absolute;
+    bottom:6px;left:50%;transform:translateX(-50%);
+    font-family:'Quicksand',sans-serif;
+    font-weight:600;font-size:13px;
+    color:#c4b5fd;
+    letter-spacing:2px;
+    text-shadow:0 0 8px rgba(196,181,253,.5);
+    white-space:nowrap;
+  }
+</style>
+</head>
+<body>
+
+<div class="frame-wrap">
+  <div class="border-outer"></div>
+  <div class="border-inner"></div>
+
+  <!-- Stars -->
+  <span class="star">★</span><span class="star">★</span>
+  <span class="star">★</span><span class="star">★</span>
+  <span class="star">★</span><span class="star">★</span>
+  <span class="star">★</span><span class="star">★</span>
+  <span class="star">★</span><span class="star">★</span>
+  <span class="star">★</span><span class="star">★</span>
+
+  <!-- Clouds -->
+  <div class="cloud left"><div class="cloud-body"></div></div>
+  <div class="cloud ql sm"><div class="cloud-body"></div></div>
+  <div class="cloud qr sm"><div class="cloud-body"></div></div>
+  <div class="cloud right"><div class="cloud-body"></div></div>
+
+  <!-- Rainbow -->
+  <div class="rainbow-wrap">
+    <div class="rb-arc rb-1"></div>
+    <div class="rb-arc rb-2"></div>
+    <div class="rb-arc rb-3"></div>
+    <div class="rb-arc rb-4"></div>
+    <div class="rb-arc rb-5"></div>
+    <div class="rb-arc rb-6"></div>
+  </div>
+
+  <!-- Cassette -->
+  <div class="cassette"></div>
+</div>
+
+<canvas id="fx"></canvas>
+<div id="label"></div>
+
+<script>
+  const LABEL_TEXT = 'CHILL VIBES';
+
+  document.getElementById('label').textContent = LABEL_TEXT;
+
+  // ── Canvas: floating musical notes ──
+  const c = document.getElementById('fx');
+  const ctx = c.getContext('2d');
+  c.width = 420; c.height = 320;
+
+  // Frame geometry (centered in viewport)
+  const FX = (420 - 380) / 2;  // 20
+  const FY = (320 - 260) / 2;  // 30
+  const FW = 380;
+  const FH = 260;
+  const BORDER = 10; // border zone width
+
+  const palette = ['#c4b5fd','#fda4af','#fef3c7','#ddd6fe','#93c5fd'];
+
+  class Note {
+    constructor() { this.reset(true); }
+    reset(init) {
+      // Spawn on left or right border zone
+      const side = Math.random() < 0.5;
+      if (side) {
+        this.x = FX + Math.random() * BORDER;
+      } else {
+        this.x = FX + FW - BORDER + Math.random() * BORDER;
+      }
+      this.y = init ? FY + Math.random() * FH : FY + FH + 4;
+      this.vy = -(0.2 + Math.random() * 0.35);
+      this.vx = (Math.random() - 0.5) * 0.15;
+      this.size = 10 + Math.random() * 4;
+      this.alpha = 0.5 + Math.random() * 0.4;
+      this.color = palette[Math.floor(Math.random() * palette.length)];
+      this.symbol = Math.random() < 0.5 ? '♪' : '♫';
+      this.wobble = Math.random() * Math.PI * 2;
+    }
+    update() {
+      this.y += this.vy;
+      this.wobble += 0.02;
+      this.x += this.vx + Math.sin(this.wobble) * 0.15;
+      if (this.y < FY - 10) this.reset(false);
+    }
+    draw() {
+      ctx.save();
+      ctx.globalAlpha = this.alpha * 0.7;
+      ctx.font = this.size + 'px Quicksand, sans-serif';
+      ctx.fillStyle = this.color;
+      ctx.shadowColor = this.color;
+      ctx.shadowBlur = 6;
+      ctx.fillText(this.symbol, this.x, this.y);
+      ctx.restore();
+    }
+  }
+
+  const notes = [];
+  for (let i = 0; i < 5; i++) notes.push(new Note());
+
+  function animate() {
+    ctx.clearRect(0, 0, 420, 320);
+    notes.forEach(n => { n.update(); n.draw(); });
+    requestAnimationFrame(animate);
+  }
+  animate();
+</script>
+</body>
+</html>

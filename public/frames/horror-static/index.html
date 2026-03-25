@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=420,height=320">
+<title>Horror Static — Horizontal</title>
+<link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:420px;height:320px;overflow:hidden;background:transparent}
+
+  #frame-wrap{
+    position:absolute;
+    left:50%;top:50%;
+    width:384px;height:260px;
+    transform:translate(-50%,-50%);
+  }
+
+  /* ── main border ── */
+  .border-main{
+    position:absolute;inset:0;
+    border:4px solid #8b0000;
+    box-shadow:
+      inset 0 0 12px rgba(139,0,0,.45),
+      0 0 8px rgba(139,0,0,.3);
+  }
+  .border-inner{
+    position:absolute;inset:5px;
+    border:1px solid rgba(139,0,0,.35);
+  }
+
+  /* ── rust / decay corner gradients ── */
+  .rust-tl,.rust-tr,.rust-bl,.rust-br{
+    position:absolute;width:70px;height:60px;pointer-events:none;opacity:.55;
+  }
+  .rust-tl{top:0;left:0;background:radial-gradient(ellipse at 0% 0%,rgba(107,58,42,.7),transparent 70%)}
+  .rust-tr{top:0;right:0;background:radial-gradient(ellipse at 100% 0%,rgba(107,58,42,.7),transparent 70%)}
+  .rust-bl{bottom:0;left:0;background:radial-gradient(ellipse at 0% 100%,rgba(42,74,42,.6),transparent 70%)}
+  .rust-br{bottom:0;right:0;background:radial-gradient(ellipse at 100% 100%,rgba(107,58,42,.6),transparent 70%)}
+
+  /* ── cracks (offset border segments) ── */
+  .crack{position:absolute;background:#8b0000}
+  .crack-1{width:22px;height:2px;top:-2px;left:90px;transform:rotate(-2deg)}
+  .crack-2{width:2px;height:18px;top:60px;left:-3px;transform:rotate(3deg)}
+  .crack-3{width:16px;height:2px;bottom:-2px;left:200px;transform:rotate(1.5deg)}
+  .crack-4{width:2px;height:14px;top:140px;right:-3px;transform:rotate(-2deg)}
+  .crack-5{width:18px;height:2px;top:-2px;right:60px;transform:rotate(2.5deg)}
+
+  /* ── broken corner (top-right) ── */
+  .broken-seg{position:absolute;background:#8b0000}
+  .broken-seg-1{width:24px;height:3px;top:-5px;right:2px;transform:rotate(-4deg)}
+  .broken-seg-2{width:3px;height:20px;right:-5px;top:2px;transform:rotate(5deg)}
+  .broken-seg-3{width:12px;height:2px;top:-8px;right:18px;transform:rotate(8deg);opacity:.6}
+
+  /* ── scratches ── */
+  .scratch{position:absolute;pointer-events:none;opacity:.45}
+  .scratch-1{
+    width:60px;height:1px;background:linear-gradient(90deg,transparent,#8b0000,transparent);
+    top:12px;left:30px;transform:rotate(-35deg);
+  }
+  .scratch-2{
+    width:45px;height:1px;background:linear-gradient(90deg,transparent,#8b0000 40%,transparent);
+    bottom:18px;right:25px;transform:rotate(28deg);
+  }
+  .scratch-3{
+    width:50px;height:1px;background:linear-gradient(90deg,transparent,#6b3a2a,transparent);
+    top:40px;right:50px;transform:rotate(-42deg);opacity:.35;
+  }
+
+  /* ── blood drips ── */
+  .drip{
+    position:absolute;top:0;width:3px;border-radius:0 0 2px 2px;
+    background:linear-gradient(180deg,#8b0000 60%,rgba(139,0,0,.2));
+    transform-origin:top center;
+    animation:dripFall var(--dur) ease-in var(--delay) infinite;
+    opacity:0;
+  }
+  .drip-1{left:55px;height:38px;--dur:5s;--delay:0s}
+  .drip-2{left:140px;height:28px;--dur:6.5s;--delay:1.2s}
+  .drip-3{left:250px;height:50px;--dur:7s;--delay:2.5s}
+  .drip-4{left:310px;height:22px;--dur:5.5s;--delay:0.8s}
+  .drip-5{right:40px;height:34px;--dur:6s;--delay:3.2s}
+
+  @keyframes dripFall{
+    0%{opacity:0;clip-path:inset(100% 0 0 0)}
+    10%{opacity:.85}
+    50%{opacity:.85;clip-path:inset(0 0 0 0)}
+    85%{opacity:.5;clip-path:inset(0 0 0 0)}
+    100%{opacity:0;clip-path:inset(0 0 0 0)}
+  }
+
+  /* ── canvas for static ── */
+  #static-canvas{
+    position:absolute;inset:0;pointer-events:none;
+  }
+
+  /* ── label ── */
+  #label{
+    position:absolute;
+    bottom:-28px;left:50%;transform:translateX(-50%);
+    font-family:'Creepster',cursive;
+    font-size:22px;
+    color:#8b0000;
+    text-shadow:0 0 8px rgba(139,0,0,.6),0 2px 4px rgba(0,0,0,.8);
+    letter-spacing:6px;
+    white-space:nowrap;
+  }
+
+  /* ── flicker ── */
+  @keyframes flicker{
+    0%,100%{opacity:1}
+    49.5%{opacity:1}
+    50%{opacity:.08}
+    51%{opacity:.9}
+    51.5%{opacity:.05}
+    52%{opacity:1}
+  }
+  .flicker-active{
+    animation:flicker .15s steps(1) 1;
+  }
+
+  /* ── shake ── */
+  @keyframes shake{
+    0%{transform:translate(-50%,-50%)}
+    10%{transform:translate(-52%,-48%)}
+    20%{transform:translate(-49%,-52%)}
+    30%{transform:translate(-51%,-49%)}
+    40%{transform:translate(-48%,-51%)}
+    50%{transform:translate(-52%,-50%)}
+    60%{transform:translate(-50%,-48%)}
+    70%{transform:translate(-49%,-52%)}
+    80%{transform:translate(-51%,-50%)}
+    90%{transform:translate(-50%,-49%)}
+    100%{transform:translate(-50%,-50%)}
+  }
+  .shake-active{
+    animation:shake .25s ease-in-out 1;
+  }
+</style>
+</head>
+<body>
+<div id="frame-wrap">
+  <div class="border-main"></div>
+  <div class="border-inner"></div>
+
+  <div class="rust-tl"></div>
+  <div class="rust-tr"></div>
+  <div class="rust-bl"></div>
+  <div class="rust-br"></div>
+
+  <div class="crack crack-1"></div>
+  <div class="crack crack-2"></div>
+  <div class="crack crack-3"></div>
+  <div class="crack crack-4"></div>
+  <div class="crack crack-5"></div>
+
+  <div class="broken-seg broken-seg-1"></div>
+  <div class="broken-seg broken-seg-2"></div>
+  <div class="broken-seg broken-seg-3"></div>
+
+  <div class="scratch scratch-1"></div>
+  <div class="scratch scratch-2"></div>
+  <div class="scratch scratch-3"></div>
+
+  <div class="drip drip-1"></div>
+  <div class="drip drip-2"></div>
+  <div class="drip drip-3"></div>
+  <div class="drip drip-4"></div>
+  <div class="drip drip-5"></div>
+
+  <canvas id="static-canvas"></canvas>
+
+  <div id="label"></div>
+</div>
+
+<script>
+const LABEL_TEXT = 'FEAR';
+
+/* ── apply label ── */
+document.getElementById('label').textContent = LABEL_TEXT;
+
+/* ── frame dimensions ── */
+const FW = 384, FH = 260, BORDER = 18;
+const canvas = document.getElementById('static-canvas');
+canvas.width = FW;
+canvas.height = FH;
+const ctx = canvas.getContext('2d');
+
+/* ── static noise on border only ── */
+function drawStatic() {
+  ctx.clearRect(0, 0, FW, FH);
+  const id = ctx.createImageData(FW, FH);
+  const d = id.data;
+  for (let y = 0; y < FH; y++) {
+    for (let x = 0; x < FW; x++) {
+      /* skip center (webcam area) */
+      if (x > BORDER && x < FW - BORDER && y > BORDER && y < FH - BORDER) continue;
+      if (Math.random() > 0.35) continue;
+      const i = (y * FW + x) * 4;
+      const v = Math.random() * 255 | 0;
+      d[i] = v; d[i+1] = v; d[i+2] = v;
+      d[i+3] = (Math.random() * 120 + 30) | 0;
+    }
+  }
+  ctx.putImageData(id, 0, 0);
+}
+
+/* ── animation loop ── */
+let lastStatic = 0;
+function loop(t) {
+  if (t - lastStatic > 80) {
+    drawStatic();
+    lastStatic = t;
+  }
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+
+/* ── periodic flicker (~every 8s) ── */
+function triggerFlicker() {
+  const fw = document.getElementById('frame-wrap');
+  fw.classList.add('flicker-active');
+  setTimeout(() => fw.classList.remove('flicker-active'), 200);
+  setTimeout(triggerFlicker, 7000 + Math.random() * 3000);
+}
+setTimeout(triggerFlicker, 5000 + Math.random() * 3000);
+
+/* ── periodic shake (~every 10s) ── */
+function triggerShake() {
+  const fw = document.getElementById('frame-wrap');
+  fw.classList.add('shake-active');
+  setTimeout(() => fw.classList.remove('shake-active'), 300);
+  setTimeout(triggerShake, 9000 + Math.random() * 4000);
+}
+setTimeout(triggerShake, 8000 + Math.random() * 4000);
+</script>
+</body>
+</html>

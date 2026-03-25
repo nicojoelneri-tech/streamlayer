@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=420, height=320">
+<title>Beat Drop - Camera Frame</title>
+<link href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 420px; height: 320px;
+    background: transparent;
+    overflow: hidden;
+    font-family: 'Audiowide', cursive;
+  }
+
+  #frame-container {
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 384px; height: 260px;
+    transform: translate(-50%, -50%);
+  }
+
+  /* Main border with warm amber pulse */
+  #frame-border {
+    position: absolute;
+    inset: 0;
+    border: 1.5px solid rgba(255,165,30,0.65);
+    border-radius: 6px;
+    box-shadow:
+      0 0 6px rgba(255,150,30,0.2),
+      0 0 14px rgba(255,130,0,0.08);
+    animation: beatPulse 0.55s ease-in-out infinite;
+  }
+
+  @keyframes beatPulse {
+    0%, 100% { box-shadow: 0 0 5px rgba(255,150,30,0.18), 0 0 12px rgba(255,130,0,0.07); }
+    50% { box-shadow: 0 0 10px rgba(255,165,0,0.42), 0 0 22px rgba(255,140,0,0.16), 0 0 36px rgba(255,100,0,0.07); }
+  }
+
+  /* Canvas for note particles */
+  #particle-canvas {
+    position: absolute;
+    inset: 0;
+    width: 384px; height: 260px;
+    pointer-events: none;
+    z-index: 5;
+  }
+
+  /* Equalizer bars on bottom border */
+  .eq-container {
+    position: absolute;
+    bottom: -1px; left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 4px;
+    align-items: flex-end;
+    z-index: 3;
+  }
+  .eq-bar {
+    width: 3px;
+    border-radius: 1px 1px 0 0;
+    background: linear-gradient(to top, #ff6b00, #ffd700);
+    animation: eqBounce var(--dur) ease-in-out infinite alternate;
+    transform-origin: bottom;
+  }
+  @keyframes eqBounce {
+    0% { height: var(--h-min); }
+    100% { height: var(--h-max); }
+  }
+
+  /* Sound wave SVG on top border */
+  #sound-wave {
+    position: absolute;
+    top: -6px; left: 20px;
+    width: 344px; height: 12px;
+    z-index: 3;
+  }
+  #wave-path {
+    fill: none;
+    stroke: url(#waveGrad);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    animation: waveShift 3s linear infinite;
+  }
+  @keyframes waveShift {
+    0% { stroke-dashoffset: 0; }
+    100% { stroke-dashoffset: -60; }
+  }
+
+  /* Vinyl record */
+  .vinyl {
+    position: absolute;
+    top: -12px; right: -12px;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle, #0a0a0a 3px, transparent 3px),
+      radial-gradient(circle, transparent 5px, #1a1a1a 5px, #1a1a1a 6px, transparent 6px),
+      radial-gradient(circle, transparent 8px, #222 8px, #222 9px, transparent 9px),
+      radial-gradient(circle, transparent 11px, #1a1a1a 11px, #1a1a1a 12px, transparent 12px),
+      radial-gradient(circle, #0a0a0a 100%);
+    border: 1px solid rgba(255,180,40,0.5);
+    animation: vinylSpin 4s linear infinite;
+    z-index: 4;
+  }
+  .vinyl::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 6px; height: 6px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: #ffd700;
+    box-shadow: 0 0 4px #ffd700;
+  }
+  @keyframes vinylSpin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* DJ Crossfader on bottom border */
+  .crossfader {
+    position: absolute;
+    bottom: -5px; right: 30px;
+    z-index: 4;
+  }
+  .cf-track {
+    width: 50px; height: 4px;
+    background: #222;
+    border-radius: 2px;
+    border: 1px solid rgba(255,175,30,0.4);
+    position: relative;
+  }
+  .cf-knob {
+    position: absolute;
+    top: -3px;
+    width: 12px; height: 10px;
+    background: linear-gradient(to bottom, #555, #333);
+    border: 1px solid rgba(255,175,30,0.7);
+    border-radius: 2px;
+    box-shadow: 0 0 4px rgba(255,165,0,0.45);
+    animation: cfSlide 2s ease-in-out infinite alternate;
+  }
+  @keyframes cfSlide {
+    0% { left: 2px; }
+    100% { left: 36px; }
+  }
+
+  /* Label */
+  #label {
+    position: absolute;
+    bottom: -28px; left: 0; right: 0;
+    text-align: center;
+    font-family: 'Audiowide', cursive;
+    font-size: 13px;
+    color: #ffd700;
+    text-shadow: 0 0 8px rgba(255,215,0,0.55), 0 0 18px rgba(255,140,0,0.25);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+
+<div id="frame-container">
+  <div id="frame-border"></div>
+  <canvas id="particle-canvas" width="384" height="260"></canvas>
+
+  <!-- Sound wave on top -->
+  <svg id="sound-wave" viewBox="0 0 344 12" preserveAspectRatio="none">
+    <defs>
+      <linearGradient id="waveGrad" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%"   stop-color="#ff8800"/>
+        <stop offset="50%"  stop-color="#ffd700"/>
+        <stop offset="100%" stop-color="#ff8800"/>
+      </linearGradient>
+    </defs>
+    <path id="wave-path" d="" stroke-dasharray="4 3"/>
+  </svg>
+
+  <!-- Equalizer bars -->
+  <div class="eq-container" id="eq-bars"></div>
+
+  <!-- Vinyl record -->
+  <div class="vinyl"></div>
+
+  <!-- DJ Crossfader -->
+  <div class="crossfader">
+    <div class="cf-track">
+      <div class="cf-knob"></div>
+    </div>
+  </div>
+
+  <!-- Label -->
+  <div id="label"></div>
+</div>
+
+<script>
+  const LABEL_TEXT = 'BEAT DROP';
+  document.getElementById('label').textContent = LABEL_TEXT;
+
+  /* Generate sound wave path */
+  (function generateWave() {
+    const w = 344, h = 12, mid = h / 2;
+    let d = `M 0 ${mid}`;
+    for (let x = 0; x <= w; x += 2) {
+      const y = mid + Math.sin(x * 0.08) * 3 + Math.sin(x * 0.04) * 1.5;
+      d += ` L ${x} ${y.toFixed(2)}`;
+    }
+    document.getElementById('wave-path').setAttribute('d', d);
+  })();
+
+  /* Generate equalizer bars */
+  (function generateEQ() {
+    const container = document.getElementById('eq-bars');
+    const count = 14;
+    for (let i = 0; i < count; i++) {
+      const bar = document.createElement('div');
+      bar.className = 'eq-bar';
+      const hMin = 4 + Math.random() * 4;
+      const hMax = 10 + Math.random() * 16;
+      const dur = 0.2 + Math.random() * 0.4;
+      bar.style.setProperty('--h-min', hMin + 'px');
+      bar.style.setProperty('--h-max', hMax + 'px');
+      bar.style.setProperty('--dur', dur + 's');
+      bar.style.animationDelay = (Math.random() * -0.5) + 's';
+      container.appendChild(bar);
+    }
+  })();
+
+  /* Note particles on Canvas */
+  (function initParticles() {
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
+    const W = 384, H = 260;
+    const BORDER = 24;
+    const colors = ['#ffd700', '#ff9500', '#ffcc44', '#ffffff'];
+    const notes = ['\u266A', '\u266B', '\u2022'];
+
+    class Particle {
+      constructor() { this.reset(); }
+      reset() {
+        // Spawn near edges only
+        const side = Math.floor(Math.random() * 4);
+        switch (side) {
+          case 0: this.x = Math.random() * W; this.y = Math.random() * BORDER; break;
+          case 1: this.x = Math.random() * W; this.y = H - Math.random() * BORDER; break;
+          case 2: this.x = Math.random() * BORDER; this.y = Math.random() * H; break;
+          case 3: this.x = W - Math.random() * BORDER; this.y = Math.random() * H; break;
+        }
+        this.vx = (Math.random() - 0.5) * 0.6;
+        this.vy = -0.3 - Math.random() * 0.5;
+        this.life = 80 + Math.random() * 120;
+        this.maxLife = this.life;
+        this.color = colors[Math.floor(Math.random() * colors.length)];
+        this.symbol = notes[Math.floor(Math.random() * notes.length)];
+        this.size = 7 + Math.random() * 6;
+      }
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        this.life--;
+        if (this.life <= 0) this.reset();
+        // Push away from center
+        const cx = W / 2, cy = H / 2;
+        const dx = this.x - cx, dy = this.y - cy;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 80) {
+          this.x += (dx / dist) * 0.8;
+          this.y += (dy / dist) * 0.8;
+        }
+      }
+      draw() {
+        const alpha = Math.min(1, this.life / this.maxLife * 2);
+        ctx.globalAlpha = alpha * 0.7;
+        ctx.fillStyle = this.color;
+        ctx.font = this.size + 'px Audiowide, sans-serif';
+        ctx.shadowColor = this.color;
+        ctx.shadowBlur = 6;
+        ctx.fillText(this.symbol, this.x, this.y);
+        ctx.shadowBlur = 0;
+      }
+    }
+
+    const particles = [];
+    for (let i = 0; i < 20; i++) particles.push(new Particle());
+
+    function animate() {
+      ctx.clearRect(0, 0, W, H);
+      for (const p of particles) { p.update(); p.draw(); }
+      ctx.globalAlpha = 1;
+      requestAnimationFrame(animate);
+    }
+    animate();
+  })();
+</script>
+</body>
+</html>

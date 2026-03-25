@@ -1,0 +1,57 @@
+=========================================
+  WARZONE TACTICAL - MARCO DE CAMARA
+  Manual de instalacion para OBS Studio
+=========================================
+
+ARCHIVOS INCLUIDOS:
+  - index.html      -> Horizontal (420x320, marco 384x260)
+  - vertical.html   -> Vertical   (320x480, marco 264x400)
+
+PASOS DE INSTALACION:
+---------------------
+
+1. Abrir OBS Studio.
+
+2. En la escena donde tengas tu webcam, agregar una nueva fuente:
+   -> Click en "+" en el panel de Fuentes
+   -> Seleccionar "Navegador" (Browser Source)
+   -> Nombrar la fuente: "Warzone Tactical Frame"
+
+3. Configurar la fuente del navegador:
+   -> Marcar "Archivo local"
+   -> Buscar el archivo:
+      - index.html      para orientacion horizontal
+      - vertical.html   para orientacion vertical
+   -> Ancho:  420  |  Alto: 320   (horizontal)
+      Ancho:  320  |  Alto: 480   (vertical)
+   -> Desmarcar "Controlar audio via OBS"
+   -> Marcar "Actualizar navegador cuando la escena se active"
+
+4. IMPORTANTE - ORDEN DE CAPAS:
+   -> El marco decorativo debe ir DEBAJO de tu webcam
+   -> Tu fuente de webcam real debe estar ENCIMA del marco
+   -> Orden correcto (de arriba a abajo):
+        Webcam (fuente real)
+        Warzone Tactical Frame (este marco)
+
+5. Ajustar posicion:
+   -> Centrar el marco con tu webcam
+   -> Redimensionar si es necesario manteniendo proporcion
+
+PERSONALIZACION:
+----------------
+- Texto del label: Editar "const LABEL_TEXT = 'WARZONE';"
+  al inicio del bloque <script> en el HTML.
+- El texto de la brujula, telemetro y contador de municion
+  se pueden editar directamente en el HTML.
+
+NOTAS:
+------
+- El fondo es transparente; no requiere chroma key.
+- El area central (zona de webcam) esta limpia, sin efectos.
+- Efectos incluidos: particulas de polvo, linea de escaneo
+  verde, flash rojo de alerta cada ~12 segundos.
+- Fuente utilizada: Share Tech Mono (Google Fonts, requiere
+  conexion a internet la primera vez).
+
+=========================================

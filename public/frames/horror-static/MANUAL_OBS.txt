@@ -1,0 +1,95 @@
+════════════════════════════════════════════════════════
+  HORROR STATIC — Marco de Camara Animado
+  Estetica: Terror / survival horror / estatica inquietante
+════════════════════════════════════════════════════════
+
+CONTENIDO
+─────────
+  index.html     → Marco horizontal (420 × 320 px)
+  vertical.html  → Marco vertical   (320 × 480 px)
+
+
+COMO USAR EN OBS
+────────────────
+
+1. Agregar Browser Source
+   - Click derecho en Sources → Add → Browser
+   - Nombre sugerido: "Cam Frame - Horror Static"
+
+2. Configurar el Browser Source
+   - Marcar "Local file" y seleccionar:
+     • index.html    para camara horizontal
+     • vertical.html para camara vertical
+   - Ancho:  420  (horizontal) o 320 (vertical)
+   - Alto:   320  (horizontal) o 480 (vertical)
+   - Marcar "Shutdown source when not visible" (ahorra CPU)
+   - Marcar "Refresh browser when scene becomes active"
+
+3. Orden de capas (MUY IMPORTANTE)
+   El marco va DEBAJO de tu webcam en la lista de sources:
+
+     Capa superior:  [Tu Webcam]         ← fuente real
+     Capa inferior:  [Cam Frame]         ← este marco
+
+   Asi la webcam se ve POR ENCIMA del marco decorativo.
+
+4. Ajustar la webcam
+   - Redimensiona tu webcam para que calce dentro del marco
+   - Horizontal: area interior aprox 348 × 224 px
+   - Vertical:   area interior aprox 228 × 364 px
+   - Centra la webcam sobre el marco
+
+5. Posicionar en la escena
+   - Mover ambos sources (marco + webcam) juntos
+   - Tip: agrupalos (click derecho → Group Selected Items)
+
+
+PERSONALIZAR TEXTO
+──────────────────
+
+El texto que aparece debajo del marco es editable.
+Abri el archivo HTML con un editor de texto (Notepad, VS Code, etc.)
+y busca esta linea al inicio del bloque <script>:
+
+   const LABEL_TEXT = 'FEAR';
+
+Cambia el contenido entre las comillas por lo que quieras.
+Ejemplos:
+
+   const LABEL_TEXT = 'SURVIVOR';
+   const LABEL_TEXT = 'RUN...';
+   const LABEL_TEXT = 'twitch.tv/tucuenta';
+
+Guarda el archivo y en OBS hace click derecho sobre el
+Browser Source → "Refresh" para ver el cambio.
+
+
+EFECTOS INCLUIDOS
+─────────────────
+  • Borde rojo sangre irregular con sombra interior
+  • Doble borde (exterior grueso + interior fino)
+  • 5 grietas CSS en el borde (segmentos desplazados)
+  • Esquina "rota" con piezas de borde desalineadas
+  • 4-5 goteos de sangre cayendo desde el borde superior (CSS animado)
+  • Ruido estatico (Canvas) — pixeles blancos/grises parpadeantes
+    SOLO en la zona del borde, nunca en el centro
+  • 2-3 rasguños diagonales rojos sobre el borde
+  • Textura de oxido/deterioro en las esquinas (gradientes radiales)
+  • Sacudon violento del marco (~cada 10 segundos, breve)
+  • Parpadeo/flicker del marco completo (~cada 8 segundos)
+  • Label "FEAR" en tipografia de terror debajo del marco
+
+
+FUENTE UTILIZADA
+────────────────
+  Creepster (Google Fonts) — estilo horror/terror
+
+
+NOTAS
+─────
+  • No requiere internet (excepto Google Fonts la primera vez)
+  • Fondo 100% transparente — no tapa nada fuera del marco
+  • Bajo consumo de CPU gracias a requestAnimationFrame
+  • Compatible con OBS 28+ y Streamlabs OBS
+  • La estatica es Canvas ligero, solo renderiza en el borde
+  • Ideal para streams de horror, survival, o tematica oscura

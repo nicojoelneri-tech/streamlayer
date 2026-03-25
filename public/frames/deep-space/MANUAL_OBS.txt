@@ -1,0 +1,57 @@
+============================================================
+  DEEP SPACE — Manual de configuración para OBS
+============================================================
+
+ARCHIVOS INCLUIDOS
+──────────────────
+  index.html      → Horizontal (420×320, marco 384×260)
+  vertical.html   → Vertical   (320×480, marco 264×400)
+
+INSTRUCCIONES DE INSTALACIÓN EN OBS
+────────────────────────────────────
+1. En OBS, en la escena deseada, pulsar "+" en Fuentes.
+2. Seleccionar "Navegador" (Browser Source).
+3. Configurar:
+     • Marcar "Archivo local" y seleccionar el .html correspondiente.
+     • Horizontal → Ancho: 420  |  Alto: 320
+     • Vertical   → Ancho: 320  |  Alto: 480
+4. IMPORTANTE: Activar la opción de fondo transparente
+   (puede aparecer como "Custom CSS" con body { background: transparent; }).
+5. Aceptar y posicionar la fuente en el canvas.
+
+ORDEN DE CAPAS (MUY IMPORTANTE)
+───────────────────────────────
+  Las fuentes reales (cámara, juego, chat) van ENCIMA del marco.
+  El marco decorativo va DEBAJO.
+
+  Orden de abajo hacia arriba:
+    1. Deep Space (este overlay)
+    2. Webcam / Cámara
+    3. Otras fuentes (chat, alertas, etc.)
+
+PERSONALIZACIÓN
+───────────────
+  • Texto del label: Buscar "const LABEL_TEXT = 'DEEP SPACE';"
+    en el <script> del archivo .html y cambiar el valor.
+  • Colores: Las variables CSS están al inicio del <style>:
+      --nebula-purple: #6b21a8
+      --star-blue: #3b82f6
+      --cosmic-teal: #06b6d4
+      --warm-nebula: #ec4899
+  • Cantidad de estrellas: Modificar el valor en el bucle
+    "for" donde se crean los objetos Star (por defecto 80/70).
+  • Intervalo de estrella fugaz: Modificar this.interval
+    en la clase ShootingStar (en ms, por defecto 10000).
+
+NOTAS
+─────
+  • No requiere dependencias externas salvo Google Fonts (Exo 2).
+  • El centro del marco queda completamente limpio para la webcam.
+  • Los efectos de estrellas y partículas solo aparecen fuera del
+    área central de la cámara.
+  • La estrella fugaz cruza cerca del borde cada ~10-14 segundos.
+  • Las nebulosas en las esquinas respiran suavemente con cambios
+    de opacidad muy sutiles.
+  • El anillo orbital pulsa lentamente alrededor del marco.
+
+============================================================

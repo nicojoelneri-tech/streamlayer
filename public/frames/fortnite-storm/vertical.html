@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=320, height=480">
+<title>Fortnite Storm - Vertical Camera Frame</title>
+<link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 320px;
+    height: 480px;
+    overflow: hidden;
+    background: transparent;
+    font-family: 'Russo One', sans-serif;
+  }
+
+  #frame-container {
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 260px; height: 400px;
+    transform: translate(-50%, -50%);
+  }
+
+  /* Outer border */
+  .frame-border {
+    position: absolute;
+    inset: 0;
+    border: 3px solid transparent;
+    border-image: linear-gradient(135deg, #9d4edd, #00b4d8, #7209b7, #00b4d8) 1;
+    pointer-events: none;
+  }
+
+  /* Inner border */
+  .frame-border-inner {
+    position: absolute;
+    inset: 5px;
+    border: 2px solid transparent;
+    border-image: linear-gradient(315deg, #00b4d8, #7209b7, #9d4edd, #7209b7) 1;
+    pointer-events: none;
+  }
+
+  /* Glow behind borders */
+  .frame-glow {
+    position: absolute;
+    inset: -2px;
+    border: 4px solid rgba(157, 78, 221, 0.3);
+    filter: blur(6px);
+    pointer-events: none;
+  }
+
+  /* Corner brackets */
+  .corner {
+    position: absolute;
+    width: 28px; height: 28px;
+    pointer-events: none;
+  }
+  .corner::before, .corner::after {
+    content: '';
+    position: absolute;
+    background: #00b4d8;
+    box-shadow: 0 0 8px #00b4d8, 0 0 16px rgba(0, 180, 216, 0.5);
+  }
+  .corner-tl { top: -4px; left: -4px; }
+  .corner-tl::before { top: 0; left: 0; width: 22px; height: 3px; }
+  .corner-tl::after  { top: 0; left: 0; width: 3px; height: 22px; }
+
+  .corner-tr { top: -4px; right: -4px; }
+  .corner-tr::before { top: 0; right: 0; width: 22px; height: 3px; }
+  .corner-tr::after  { top: 0; right: 0; width: 3px; height: 22px; }
+
+  .corner-bl { bottom: -4px; left: -4px; }
+  .corner-bl::before { bottom: 0; left: 0; width: 22px; height: 3px; }
+  .corner-bl::after  { bottom: 0; left: 0; width: 3px; height: 22px; }
+
+  .corner-br { bottom: -4px; right: -4px; }
+  .corner-br::before { bottom: 0; right: 0; width: 22px; height: 3px; }
+  .corner-br::after  { bottom: 0; right: 0; width: 3px; height: 22px; }
+
+  /* Shield bar on top */
+  .shield-bar {
+    position: absolute;
+    top: -12px;
+    left: 34px; right: 34px;
+    height: 8px;
+    display: flex;
+    gap: 3px;
+    pointer-events: none;
+  }
+  .shield-segment {
+    flex: 1;
+    background: rgba(0, 180, 216, 0.15);
+    border: 1px solid rgba(0, 180, 216, 0.3);
+    border-radius: 1px;
+    position: relative;
+    overflow: hidden;
+  }
+  .shield-segment.filled {
+    background: linear-gradient(180deg, #00b4d8, #0077b6);
+    border-color: #00b4d8;
+    box-shadow: 0 0 6px rgba(0, 180, 216, 0.6);
+  }
+  .shield-segment.filled::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 40%;
+    background: linear-gradient(180deg, rgba(255,255,255,0.35), transparent);
+  }
+
+  /* Bottom crown/star icon */
+  .bottom-icon {
+    position: absolute;
+    bottom: -3px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 28px; height: 20px;
+    pointer-events: none;
+    z-index: 5;
+  }
+  .bottom-icon svg {
+    width: 100%; height: 100%;
+    filter: drop-shadow(0 0 6px rgba(157, 78, 221, 0.8));
+  }
+
+  /* Shimmer sweep */
+  .shimmer-sweep {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .shimmer-sweep::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 40%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 180, 216, 0.12), rgba(157, 78, 221, 0.08), transparent);
+    animation: shimmer 4s ease-in-out infinite;
+    transform: skewX(-15deg);
+  }
+  @keyframes shimmer {
+    0%, 100% { left: -100%; }
+    50% { left: 160%; }
+  }
+
+  /* Canvas for particles */
+  #particle-canvas {
+    position: absolute;
+    inset: 0;
+    width: 320px;
+    height: 480px;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  /* Label below frame */
+  #label {
+    position: absolute;
+    left: 50%;
+    bottom: 10px;
+    transform: translateX(-50%);
+    font-family: 'Russo One', sans-serif;
+    font-size: 12px;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    text-shadow: 0 0 8px #9d4edd, 0 0 20px rgba(114, 9, 183, 0.6);
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 5;
+  }
+</style>
+</head>
+<body>
+<div id="frame-container">
+  <div class="frame-glow"></div>
+  <div class="frame-border"></div>
+  <div class="frame-border-inner"></div>
+
+  <div class="corner corner-tl"></div>
+  <div class="corner corner-tr"></div>
+  <div class="corner corner-bl"></div>
+  <div class="corner corner-br"></div>
+
+  <div class="shield-bar" id="shieldBar"></div>
+
+  <div class="bottom-icon">
+    <svg viewBox="0 0 28 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M14 1 L17 7 L23 7 L18 11 L20 17 L14 13 L8 17 L10 11 L5 7 L11 7 Z"
+            fill="#9d4edd" stroke="#00b4d8" stroke-width="0.8"/>
+      <path d="M7 3 L9 7 M21 3 L19 7 M3 8 L7 8 M25 8 L21 8"
+            stroke="#00b4d8" stroke-width="0.6" stroke-linecap="round" opacity="0.7"/>
+    </svg>
+  </div>
+
+  <div class="shimmer-sweep"></div>
+</div>
+
+<div id="label"></div>
+
+<canvas id="particle-canvas" width="320" height="480"></canvas>
+
+<script>
+  // ===== CONFIGURATION =====
+  const LABEL_TEXT = 'STORM ROYALE';
+
+  // Frame dimensions and position
+  const VIEWPORT_W = 320, VIEWPORT_H = 480;
+  const FRAME_W = 260, FRAME_H = 400;
+  const FRAME_X = (VIEWPORT_W - FRAME_W) / 2;
+  const FRAME_Y = (VIEWPORT_H - FRAME_H) / 2;
+  const MARGIN = 12;
+
+  // Apply label
+  document.getElementById('label').textContent = LABEL_TEXT;
+
+  // Build shield bar (75% filled = 7.5 of 10 segments)
+  const SHIELD_TOTAL = 10;
+  const SHIELD_FILLED = 7;
+  const shieldBar = document.getElementById('shieldBar');
+  for (let i = 0; i < SHIELD_TOTAL; i++) {
+    const seg = document.createElement('div');
+    seg.className = 'shield-segment' + (i < SHIELD_FILLED ? ' filled' : '');
+    shieldBar.appendChild(seg);
+  }
+
+  // ===== STORM PARTICLES (Canvas) =====
+  const canvas = document.getElementById('particle-canvas');
+  const ctx = canvas.getContext('2d');
+
+  const COLORS = [
+    'rgba(157, 78, 221, A)',
+    'rgba(114, 9, 183, A)',
+    'rgba(0, 180, 216, A)',
+    'rgba(200, 150, 255, A)',
+  ];
+
+  class StormParticle {
+    constructor() { this.reset(); }
+
+    reset() {
+      const edge = Math.random() * 4 | 0;
+      const pad = 6;
+      switch (edge) {
+        case 0: // top
+          this.x = FRAME_X + Math.random() * FRAME_W;
+          this.y = FRAME_Y - pad + Math.random() * MARGIN;
+          this.vx = (Math.random() - 0.5) * 0.8;
+          this.vy = -0.2 - Math.random() * 0.4;
+          break;
+        case 1: // bottom
+          this.x = FRAME_X + Math.random() * FRAME_W;
+          this.y = FRAME_Y + FRAME_H - MARGIN + Math.random() * (MARGIN + pad);
+          this.vx = (Math.random() - 0.5) * 0.8;
+          this.vy = 0.2 + Math.random() * 0.4;
+          break;
+        case 2: // left
+          this.x = FRAME_X - pad + Math.random() * MARGIN;
+          this.y = FRAME_Y + Math.random() * FRAME_H;
+          this.vx = -0.2 - Math.random() * 0.4;
+          this.vy = (Math.random() - 0.5) * 0.8;
+          break;
+        case 3: // right
+          this.x = FRAME_X + FRAME_W - MARGIN + Math.random() * (MARGIN + pad);
+          this.y = FRAME_Y + Math.random() * FRAME_H;
+          this.vx = 0.2 + Math.random() * 0.4;
+          this.vy = (Math.random() - 0.5) * 0.8;
+          break;
+      }
+      this.life = 0;
+      this.maxLife = 80 + Math.random() * 100;
+      this.size = 1.5 + Math.random() * 3;
+      this.colorIdx = Math.random() * COLORS.length | 0;
+      this.drift = (Math.random() - 0.5) * 0.02;
+    }
+
+    update() {
+      this.life++;
+      this.vx += this.drift;
+      this.vy += this.drift;
+      this.x += this.vx;
+      this.y += this.vy;
+      this.size *= 0.998;
+
+      const cx = FRAME_X + FRAME_W / 2;
+      const cy = FRAME_Y + FRAME_H / 2;
+      const safeW = FRAME_W - MARGIN * 4;
+      const safeH = FRAME_H - MARGIN * 4;
+      if (Math.abs(this.x - cx) < safeW / 2 && Math.abs(this.y - cy) < safeH / 2) {
+        this.life = this.maxLife;
+      }
+
+      if (this.life >= this.maxLife) this.reset();
+    }
+
+    draw() {
+      const alpha = Math.max(0, 1 - this.life / this.maxLife) * 0.7;
+      const col = COLORS[this.colorIdx].replace('A', alpha.toFixed(2));
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fillStyle = col;
+      ctx.shadowColor = col;
+      ctx.shadowBlur = 8;
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    }
+  }
+
+  const particles = [];
+  for (let i = 0; i < 80; i++) {
+    const p = new StormParticle();
+    p.life = Math.random() * p.maxLife;
+    particles.push(p);
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, VIEWPORT_W, VIEWPORT_H);
+    for (const p of particles) {
+      p.update();
+      p.draw();
+    }
+    requestAnimationFrame(animate);
+  }
+  animate();
+</script>
+</body>
+</html>

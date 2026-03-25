@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=320,height=480">
+<title>Vice City Neon — Camera Frame (Vertical)</title>
+<style>
+  /* ═══════════════════════════════════════════
+     VICE CITY NEON — Animated Camera Frame
+     Browser Source: 320 × 480, transparent bg
+     Webcam goes ABOVE this source in OBS
+  ═══════════════════════════════════════════ */
+
+  @import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap');
+
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{
+    width:320px;height:480px;
+    background:transparent;
+    overflow:hidden;
+  }
+
+  canvas#fx{
+    position:absolute;top:0;left:0;
+    width:320px;height:480px;
+    pointer-events:none;z-index:5;
+  }
+
+  .frame-wrap{
+    position:absolute;
+    left:50%;top:46%;
+    transform:translate(-50%,-50%);
+    width:260px;height:400px;
+  }
+
+  /* ── Neon outer border (pink) ── */
+  .border-outer{
+    position:absolute;inset:0;
+    border:3px solid #ff2d95;
+    border-radius:8px;
+    box-shadow:
+      0 0 6px #ff2d95,
+      0 0 16px rgba(255,45,149,.5),
+      0 0 30px rgba(255,45,149,.25);
+    animation:neonFlicker 6s infinite;
+  }
+
+  /* ── Neon inner border (cyan) ── */
+  .border-inner{
+    position:absolute;inset:5px;
+    border:2px solid #00fff7;
+    border-radius:5px;
+    box-shadow:
+      0 0 4px #00fff7,
+      0 0 12px rgba(0,255,247,.4),
+      inset 0 0 8px rgba(0,255,247,.1);
+    animation:neonFlicker 6s 0.15s infinite;
+  }
+
+  @keyframes neonFlicker{
+    0%,100%{opacity:1}
+    45%{opacity:1}
+    46%{opacity:.4}
+    47%{opacity:1}
+    48%{opacity:.6}
+    49%{opacity:1}
+    90%{opacity:1}
+    91%{opacity:.5}
+    92%{opacity:1}
+  }
+
+  /* ── Sunset glow at bottom ── */
+  .sunset-glow{
+    position:absolute;
+    bottom:-2px;left:10%;right:10%;
+    height:35px;
+    background:radial-gradient(ellipse at 50% 100%,rgba(255,107,53,.35) 0%,rgba(255,45,149,.15) 50%,transparent 100%);
+    border-radius:0 0 8px 8px;
+    pointer-events:none;
+    filter:blur(4px);
+  }
+
+  /* ── Chrome reflective line at top ── */
+  .chrome-line{
+    position:absolute;
+    top:10px;left:14px;right:14px;
+    height:1px;
+    background:linear-gradient(90deg,
+      transparent 0%,
+      rgba(255,255,255,.1) 15%,
+      rgba(255,255,255,.45) 40%,
+      rgba(255,255,255,.7) 50%,
+      rgba(255,255,255,.45) 60%,
+      rgba(255,255,255,.1) 85%,
+      transparent 100%
+    );
+    animation:chromeSweep 4s ease-in-out infinite;
+  }
+  @keyframes chromeSweep{
+    0%,100%{background-position:-260px 0}
+    50%{background-position:260px 0}
+  }
+
+  /* ── Palm tree silhouettes (CSS shapes) ── */
+  .palm{
+    position:absolute;bottom:-2px;z-index:3;
+    width:40px;height:52px;
+    pointer-events:none;
+  }
+  .palm-left{left:-4px;}
+  .palm-right{right:-4px;transform:scaleX(-1);}
+
+  .palm .trunk{
+    position:absolute;
+    bottom:0;left:50%;
+    width:4px;height:28px;
+    background:linear-gradient(to top,#1a0a2e,#2d1045);
+    transform:translateX(-50%) rotate(-4deg);
+    border-radius:2px;
+  }
+  .palm .frond{
+    position:absolute;
+    width:22px;height:8px;
+    background:#1a0a2e;
+    border-radius:50% 50% 0 0;
+    top:10px;
+  }
+  .palm .frond:nth-child(2){left:2px;transform:rotate(-30deg);transform-origin:right bottom;}
+  .palm .frond:nth-child(3){left:16px;transform:rotate(25deg);transform-origin:left bottom;}
+  .palm .frond:nth-child(4){left:7px;transform:rotate(-8deg);top:6px;width:26px;height:10px;}
+  .palm .frond:nth-child(5){left:10px;transform:rotate(12deg);top:8px;width:20px;height:8px;}
+
+  /* ── Label ── */
+  #label{
+    position:absolute;
+    bottom:-32px;left:0;right:0;
+    text-align:center;
+    font-family:'Permanent Marker',cursive;
+    font-size:15px;
+    color:#ff2d95;
+    text-shadow:
+      0 0 6px #ff2d95,
+      0 0 18px rgba(255,45,149,.5),
+      0 0 30px rgba(139,92,246,.3);
+    letter-spacing:4px;
+    animation:neonFlicker 6s 0.3s infinite;
+  }
+
+  /* ── Traveling light dot ── */
+  .travel-dot{
+    position:absolute;
+    width:6px;height:6px;
+    background:#ff2d95;
+    border-radius:50%;
+    box-shadow:0 0 6px #ff2d95,0 0 14px rgba(255,45,149,.6);
+    z-index:4;
+    offset-path:path('M8,0 L252,0 Q260,0 260,8 L260,392 Q260,400 252,400 L8,400 Q0,400 0,392 L0,8 Q0,0 8,0 Z');
+    animation:travelAround 6s linear infinite;
+  }
+  @keyframes travelAround{
+    0%{offset-distance:0%}
+    100%{offset-distance:100%}
+  }
+</style>
+</head>
+<body>
+<canvas id="fx" width="320" height="480"></canvas>
+
+<div class="frame-wrap">
+  <!-- Neon borders -->
+  <div class="border-outer"></div>
+  <div class="border-inner"></div>
+
+  <!-- Sunset glow -->
+  <div class="sunset-glow"></div>
+
+  <!-- Chrome reflective line -->
+  <div class="chrome-line"></div>
+
+  <!-- Traveling light dot -->
+  <div class="travel-dot"></div>
+
+  <!-- Palm trees -->
+  <div class="palm palm-left">
+    <div class="trunk"></div>
+    <div class="frond"></div>
+    <div class="frond"></div>
+    <div class="frond"></div>
+    <div class="frond"></div>
+  </div>
+  <div class="palm palm-right">
+    <div class="trunk"></div>
+    <div class="frond"></div>
+    <div class="frond"></div>
+    <div class="frond"></div>
+    <div class="frond"></div>
+  </div>
+
+  <!-- Label -->
+  <div id="label"></div>
+</div>
+
+<script>
+  // ═══ CONFIG ═══
+  const LABEL_TEXT = 'VICE CITY';
+
+  document.getElementById('label').textContent = LABEL_TEXT;
+
+  // ═══ Canvas star particles near borders ═══
+  const canvas = document.getElementById('fx');
+  const ctx = canvas.getContext('2d');
+  const W = 320, H = 480;
+
+  // Frame bounds (centered)
+  const fxL = (W - 260) / 2;
+  const fxR = fxL + 260;
+  const fxT = (H * 0.46) - 200;
+  const fxB = fxT + 400;
+
+  const MARGIN = 18;
+  const INNER = 8;
+
+  class Star {
+    constructor() { this.reset(); }
+    reset() {
+      const side = Math.random() * 4 | 0;
+      switch(side) {
+        case 0: // top
+          this.x = fxL + Math.random() * 260;
+          this.y = fxT - MARGIN + Math.random() * (MARGIN + INNER);
+          break;
+        case 1: // bottom
+          this.x = fxL + Math.random() * 260;
+          this.y = fxB - INNER + Math.random() * (MARGIN + INNER);
+          break;
+        case 2: // left
+          this.x = fxL - MARGIN + Math.random() * (MARGIN + INNER);
+          this.y = fxT + Math.random() * 400;
+          break;
+        case 3: // right
+          this.x = fxR - INNER + Math.random() * (MARGIN + INNER);
+          this.y = fxT + Math.random() * 400;
+          break;
+      }
+      this.size = 0.5 + Math.random() * 1.5;
+      this.alpha = 0;
+      this.maxAlpha = 0.4 + Math.random() * 0.6;
+      this.speed = 0.003 + Math.random() * 0.008;
+      this.phase = Math.random() * Math.PI * 2;
+      this.drift = (Math.random() - 0.5) * 0.15;
+      this.life = 0;
+      this.lifespan = 120 + Math.random() * 200;
+    }
+    update() {
+      this.life++;
+      this.y += this.drift - 0.12;
+      this.x += Math.sin(this.phase + this.life * 0.02) * 0.15;
+      const t = this.life / this.lifespan;
+      if (t < 0.2) this.alpha = this.maxAlpha * (t / 0.2);
+      else if (t > 0.7) this.alpha = this.maxAlpha * (1 - (t - 0.7) / 0.3);
+      else this.alpha = this.maxAlpha;
+      if (this.life >= this.lifespan) this.reset();
+    }
+    draw(c) {
+      c.globalAlpha = this.alpha;
+      c.fillStyle = '#fff';
+      c.beginPath();
+      c.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      c.fill();
+    }
+  }
+
+  const stars = [];
+  for (let i = 0; i < 30; i++) {
+    const s = new Star();
+    s.life = Math.random() * s.lifespan | 0;
+    stars.push(s);
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, W, H);
+    for (const s of stars) {
+      s.update();
+      s.draw(ctx);
+    }
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(animate);
+  }
+  animate();
+</script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+============================================================
+  AMONG SUSPECT — Marco de Camara para OBS
+============================================================
+
+ARCHIVOS INCLUIDOS:
+  - index.html       → Horizontal (420x320, marco 380x260)
+  - vertical.html    → Vertical   (320x480, marco 260x400)
+
+------------------------------------------------------------
+INSTRUCCIONES DE INSTALACION EN OBS
+------------------------------------------------------------
+
+1. Abrir OBS Studio.
+
+2. En la escena donde quieras el marco, añadir una nueva fuente:
+   Fuentes (+) → Navegador (Browser Source)
+
+3. Configurar la fuente del navegador:
+   - Marcar "Archivo local" (Local File)
+   - Seleccionar el archivo HTML correspondiente:
+     • index.html     para webcam horizontal
+     • vertical.html  para webcam vertical
+   - Ancho (Width):
+     • Horizontal: 420
+     • Vertical:   320
+   - Alto (Height):
+     • Horizontal: 320
+     • Vertical:   480
+   - FPS personalizados: 60 (recomendado)
+
+4. IMPORTANTE — Orden de capas:
+   - La fuente de tu webcam debe estar POR ENCIMA del marco.
+   - El marco va DEBAJO de la webcam en la lista de fuentes.
+   - Orden correcto (de arriba a abajo en OBS):
+       → Webcam (arriba)
+       → Among Suspect frame (abajo)
+
+5. Alinear la webcam para que encaje dentro del area
+   transparente central del marco.
+
+------------------------------------------------------------
+PERSONALIZACION
+------------------------------------------------------------
+
+- Texto de la etiqueta:
+  Abrir el archivo HTML con un editor de texto.
+  Buscar la linea:
+      const LABEL_TEXT = 'NOT SUS';
+  Cambiar 'NOT SUS' por el texto que quieras.
+
+- Colores y efectos:
+  Los colores principales estan definidos en el CSS:
+    #c51111  → Rojo (impostor)
+    #132ed1  → Azul
+    #38fedc  → Cyan (visor)
+    #f5f557  → Amarillo
+    #1a1a2e  → Fondo oscuro
+
+------------------------------------------------------------
+NOTAS
+------------------------------------------------------------
+
+- El fondo es transparente; no necesitas chroma key.
+- Las estrellas flotantes y el texto "EMERGENCY" son
+  animaciones automaticas, no requieren configuracion.
+- Requiere conexion a internet la primera vez para cargar
+  la fuente Google Fonts (VT323). Despues queda en cache.
+- Si el marco no se ve, verificar que el ancho y alto
+  coincidan con los valores indicados arriba.
+
+============================================================

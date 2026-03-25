@@ -1,0 +1,96 @@
+════════════════════════════════════════════════════════
+  LO-FI CHILL — Marco de Camara Animado
+  Estetica: Lo-fi hip hop / Chill / Dreamy pastel
+════════════════════════════════════════════════════════
+
+CONTENIDO
+─────────
+  index.html     → Marco horizontal (420 × 320 px)
+  vertical.html  → Marco vertical   (320 × 480 px)
+
+
+COMO USAR EN OBS
+────────────────
+
+1. Agregar Browser Source
+   - Click derecho en Sources → Add → Browser
+   - Nombre sugerido: "Cam Frame - Lo-Fi Chill"
+
+2. Configurar el Browser Source
+   - Marcar "Local file" y seleccionar:
+     • index.html    para camara horizontal
+     • vertical.html para camara vertical
+   - Ancho:  420  (horizontal) o 320 (vertical)
+   - Alto:   320  (horizontal) o 480 (vertical)
+   - Marcar "Shutdown source when not visible" (ahorra CPU)
+   - Marcar "Refresh browser when scene becomes active"
+
+3. Orden de capas (MUY IMPORTANTE)
+   El marco va DEBAJO de tu webcam en la lista de sources:
+
+     Capa superior:  [Tu Webcam]         ← fuente real
+     Capa inferior:  [Cam Frame]         ← este marco
+
+   Asi la webcam se ve POR ENCIMA del marco decorativo.
+
+4. Ajustar la webcam
+   - Redimensiona tu webcam para que calce dentro del marco
+   - Horizontal: area interior aprox 368 × 248 px
+   - Vertical:   area interior aprox 248 × 388 px
+   - Centra la webcam sobre el marco
+
+5. Posicionar en la escena
+   - Mover ambos sources (marco + webcam) juntos
+   - Tip: agrupalos (click derecho → Group Selected Items)
+
+
+PERSONALIZAR TEXTO
+──────────────────
+
+El texto que aparece debajo del marco es editable.
+Abri el archivo HTML con un editor de texto (Notepad, VS Code, etc.)
+y busca esta linea al inicio del bloque <script>:
+
+   const LABEL_TEXT = 'CHILL VIBES';
+
+Cambia el contenido entre las comillas por lo que quieras.
+Ejemplos:
+
+   const LABEL_TEXT = 'MI CANAL';
+   const LABEL_TEXT = 'STUDY WITH ME';
+   const LABEL_TEXT = 'twitch.tv/tucuenta';
+
+Guarda el archivo y en OBS hace click derecho sobre el
+Browser Source → "Refresh" para ver el cambio.
+
+
+EFECTOS INCLUIDOS
+─────────────────
+  • Borde exterior suave con esquinas redondeadas (12px),
+    linea pastel violeta (2px) con glow sutil
+  • Borde interior punteado en rosa suave, 4px de margen
+  • 12 estrellas (★) distribuidas en el borde, con parpadeo
+    suave independiente (twinkle)
+  • Notas musicales (♪ ♫) flotando lentamente hacia arriba
+    en los bordes laterales (Canvas, colores pastel)
+  • Icono de cassette geometrico en el borde inferior (CSS)
+  • 2 nubes decorativas en las esquinas superiores con
+    movimiento suave de flotacion
+  • Efecto "breathing glow" — pulso gentil de opacidad
+    en todo el marco
+  • Label personalizable con fuente redondeada
+
+
+FUENTE UTILIZADA
+────────────────
+  Quicksand 600 (Google Fonts) — redondeada, amigable
+
+
+NOTAS
+─────
+  • No requiere internet (excepto Google Fonts la primera vez)
+  • Fondo 100% transparente — no tapa nada fuera del marco
+  • El centro del marco queda completamente limpio para la webcam
+  • Bajo consumo de CPU gracias a requestAnimationFrame
+  • Compatible con OBS 28+ y Streamlabs OBS
+  • Ideal para streams de estudio, musica, just chatting o ASMR

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=420, height=320">
+<title>Anime Shonen - Camera Frame</title>
+<link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{
+    width:420px;height:320px;
+    overflow:hidden;
+    background:transparent;
+    font-family:'Black Ops One',cursive;
+  }
+
+  /* ── Frame wrapper: centered absolutely ── */
+  #frame-wrap{
+    position:absolute;
+    top:50%;left:50%;
+    width:384px;height:260px;
+    transform:translate(-50%,-50%);
+    animation:breathe 4s ease-in-out infinite;
+  }
+  @keyframes breathe{
+    0%,100%{opacity:1}
+    50%{opacity:.96}
+  }
+
+  /* ── Main border ── */
+  #frame{
+    position:absolute;top:0;left:0;width:100%;height:100%;
+    border:3px solid #1d1d1d;
+    border-radius:2px;
+    box-shadow:0 0 0 4px #e63946, 0 0 12px rgba(230,57,70,0.3);
+  }
+
+  /* ── Halftone overlay on border zone ── */
+  #frame::before{
+    content:'';position:absolute;top:-8px;left:-8px;right:-8px;bottom:-8px;
+    background-image:radial-gradient(circle,rgba(0,0,0,0.08) 1px,transparent 1px);
+    background-size:6px 6px;
+    pointer-events:none;
+    mask-image:
+      linear-gradient(to right,black 0,black 38px,transparent 38px,transparent calc(100% - 38px),black calc(100% - 38px)),
+      linear-gradient(to bottom,black 0,black 38px,transparent 38px,transparent calc(100% - 38px),black calc(100% - 38px));
+    mask-composite:add;
+    -webkit-mask-composite:source-over;
+  }
+
+  /* ── Speed lines from corners ── */
+  .speed-lines{
+    position:absolute;top:0;left:0;width:100%;height:100%;
+    pointer-events:none;overflow:hidden;
+  }
+  .speed-lines::before,.speed-lines::after{
+    content:'';position:absolute;width:120px;height:120px;
+  }
+  .speed-lines::before{
+    top:-10px;left:-10px;
+    background:repeating-linear-gradient(
+      -45deg,
+      transparent,transparent 3px,
+      rgba(230,57,70,0.15) 3px,rgba(230,57,70,0.15) 4px
+    );
+    clip-path:polygon(0 0,100% 0,0 100%);
+    animation:speedPulse 1.5s ease-in-out infinite;
+  }
+  .speed-lines::after{
+    bottom:-10px;right:-10px;top:auto;left:auto;
+    background:repeating-linear-gradient(
+      -45deg,
+      transparent,transparent 3px,
+      rgba(230,57,70,0.15) 3px,rgba(230,57,70,0.15) 4px
+    );
+    clip-path:polygon(100% 0,100% 100%,0 100%);
+    animation:speedPulse 1.5s ease-in-out infinite 0.75s;
+  }
+  @keyframes speedPulse{0%,100%{opacity:0.5}50%{opacity:1}}
+
+  /* ── Extra speed lines ── */
+  .speed-lines-extra{
+    position:absolute;top:0;left:0;width:100%;height:100%;
+    pointer-events:none;overflow:hidden;
+  }
+  .speed-lines-extra::before{
+    content:'';position:absolute;top:-10px;right:-10px;width:100px;height:100px;
+    background:repeating-linear-gradient(
+      45deg,
+      transparent,transparent 4px,
+      rgba(255,214,10,0.1) 4px,rgba(255,214,10,0.1) 5px
+    );
+    clip-path:polygon(100% 0,100% 100%,0 0);
+    animation:speedPulse 2s ease-in-out infinite 0.3s;
+  }
+  .speed-lines-extra::after{
+    content:'';position:absolute;bottom:-10px;left:-10px;width:100px;height:100px;
+    background:repeating-linear-gradient(
+      45deg,
+      transparent,transparent 4px,
+      rgba(255,214,10,0.1) 4px,rgba(255,214,10,0.1) 5px
+    );
+    clip-path:polygon(0 0,0 100%,100% 100%);
+    animation:speedPulse 2s ease-in-out infinite 1s;
+  }
+
+  /* ── Manga slash marks ── */
+  .slash-mark{position:absolute;pointer-events:none;}
+  .slash-mark.tr{
+    top:-2px;right:20px;width:40px;height:18px;
+    background:white;
+    clip-path:polygon(20% 0,100% 0,80% 100%,0 100%);
+    opacity:0.85;
+  }
+  .slash-mark.bl{
+    bottom:-2px;left:20px;width:40px;height:18px;
+    background:white;
+    clip-path:polygon(20% 0,100% 0,80% 100%,0 100%);
+    opacity:0.85;
+  }
+
+  /* ── Action burst star ── */
+  @keyframes burstPulse{
+    0%,100%{transform:scale(1) rotate(0deg);opacity:0.9}
+    50%{transform:scale(1.2) rotate(8deg);opacity:1}
+  }
+  #burst{
+    position:absolute;top:-16px;left:-16px;width:36px;height:36px;
+    animation:burstPulse 1.2s ease-in-out infinite;
+    z-index:5;
+  }
+  #burst::before,#burst::after{
+    content:'';position:absolute;top:0;left:0;width:100%;height:100%;
+    background:#ffd60a;
+    clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
+  }
+  #burst::after{transform:rotate(35deg);background:#ff006e;opacity:0.6;}
+
+  /* ── Enso circles on side borders ── */
+  .enso{
+    position:absolute;pointer-events:none;
+    border:2px solid rgba(255,255,255,0.12);
+    border-radius:50%;
+    border-right-color:transparent;
+    border-bottom-color:transparent;
+  }
+  .enso.left{left:-12px;top:50%;width:24px;height:24px;transform:translateY(-50%) rotate(-30deg);}
+  .enso.right{right:-12px;top:40%;width:20px;height:20px;transform:translateY(-50%) rotate(50deg);}
+  .enso.right2{
+    right:-10px;top:62%;width:16px;height:16px;
+    transform:translateY(-50%) rotate(120deg);
+    border-color:rgba(230,57,70,0.12);
+    border-right-color:transparent;
+    border-bottom-color:transparent;
+  }
+
+  /* ── Canvas for impact sparks ── */
+  #sparks{
+    position:absolute;top:-8px;left:-8px;
+    width:400px;height:276px;
+    pointer-events:none;z-index:4;
+  }
+
+  /* ── Label ── */
+  #label{
+    position:absolute;
+    bottom:-22px;left:50%;
+    transform:translateX(-50%);
+    font-family:'Black Ops One',cursive;
+    font-size:16px;
+    color:#fff;
+    letter-spacing:6px;
+    text-transform:uppercase;
+    text-shadow:
+      2px 2px 0 #1d1d1d,
+      -1px -1px 0 #1d1d1d,
+      0 0 8px rgba(230,57,70,0.6),
+      0 0 20px rgba(255,0,110,0.3);
+    white-space:nowrap;
+  }
+  #label::after{
+    content:'';display:block;margin:4px auto 0;
+    width:60%;height:2px;
+    background:linear-gradient(90deg,transparent,#e63946,#ffd60a,#e63946,transparent);
+  }
+</style>
+</head>
+<body>
+
+<div id="frame-wrap">
+  <div id="frame">
+    <div class="speed-lines"></div>
+    <div class="speed-lines-extra"></div>
+    <div class="slash-mark tr"></div>
+    <div class="slash-mark bl"></div>
+    <div id="burst"></div>
+    <div class="enso left"></div>
+    <div class="enso right"></div>
+    <div class="enso right2"></div>
+    <canvas id="sparks"></canvas>
+  </div>
+  <div id="label"></div>
+</div>
+
+<script>
+const LABEL_TEXT = 'SHONEN';
+document.getElementById('label').textContent = LABEL_TEXT;
+
+// Impact sparks on canvas
+const canvas = document.getElementById('sparks');
+const ctx = canvas.getContext('2d');
+canvas.width = 400;
+canvas.height = 276;
+
+const borderThickness = 38;
+const sparks = [];
+
+function randomBorderPos() {
+  const side = Math.floor(Math.random() * 4);
+  let x, y;
+  switch(side) {
+    case 0: x = Math.random() * canvas.width; y = Math.random() * borderThickness; break;
+    case 1: x = Math.random() * canvas.width; y = canvas.height - Math.random() * borderThickness; break;
+    case 2: x = Math.random() * borderThickness; y = Math.random() * canvas.height; break;
+    case 3: x = canvas.width - Math.random() * borderThickness; y = Math.random() * canvas.height; break;
+  }
+  return { x, y };
+}
+
+function spawnSpark() {
+  const pos = randomBorderPos();
+  const colors = ['#ffffff', '#ffd60a', '#ffffff', '#ffd60a', '#ff006e'];
+  sparks.push({
+    x: pos.x, y: pos.y,
+    r: Math.random() * 2.5 + 1,
+    life: 1,
+    decay: Math.random() * 0.03 + 0.02,
+    color: colors[Math.floor(Math.random() * colors.length)]
+  });
+}
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  if (Math.random() < 0.15) spawnSpark();
+  if (Math.random() < 0.05) spawnSpark();
+
+  for (let i = sparks.length - 1; i >= 0; i--) {
+    const s = sparks[i];
+    s.life -= s.decay;
+    if (s.life <= 0) { sparks.splice(i, 1); continue; }
+    ctx.save();
+    ctx.globalAlpha = s.life;
+    ctx.fillStyle = s.color;
+    ctx.shadowColor = s.color;
+    ctx.shadowBlur = 6;
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.r * s.life, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = s.color;
+    ctx.lineWidth = 0.5;
+    ctx.beginPath();
+    ctx.moveTo(s.x - s.r * 2, s.y); ctx.lineTo(s.x + s.r * 2, s.y);
+    ctx.moveTo(s.x, s.y - s.r * 2); ctx.lineTo(s.x, s.y + s.r * 2);
+    ctx.stroke();
+    ctx.restore();
+  }
+  requestAnimationFrame(animate);
+}
+animate();
+</script>
+</body>
+</html>

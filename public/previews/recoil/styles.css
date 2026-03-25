@@ -150,6 +150,30 @@ html, body {
   box-shadow: 0 0 6px rgba(230,57,70,0.4);
 }
 
+/* ── Accent sweep on panel top bars ── */
+.rc-panel::after {
+  z-index: 10;
+}
+.rc-panel::before {
+  overflow: hidden;
+}
+.rc-sweep-bar {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 3;
+}
+.rc-sweep-bar::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -60px;
+  width: 60px; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+  animation: rcSweep 4s ease-in-out infinite;
+}
+
 /* ── Divider ── */
 .rc-divider {
   height: 1px;
@@ -227,10 +251,23 @@ html, body {
 }
 
 @keyframes rcGlitch {
-  0%, 100% { transform: translate(0); }
-  25%      { transform: translate(-1px, 1px); }
-  50%      { transform: translate(1px, 0); }
-  75%      { transform: translate(-1px, -1px); }
+  0%, 88%, 100% { transform: translate(0); clip-path: none; }
+  90% { transform: translate(-2px, 1px); }
+  92% { transform: translate(3px, 0); }
+  94% { transform: translate(-1px, -2px); }
+  96% { transform: translate(2px, 1px); }
+}
+
+@keyframes rcBorderTravel {
+  0%   { background-position: 0% 0%; }
+  100% { background-position: 300% 0%; }
+}
+
+@keyframes rcScanLine {
+  0%, 100% { top: -2px; opacity: 0; }
+  5%       { opacity: 1; }
+  95%      { opacity: 1; }
+  99%      { top: 100%; opacity: 0; }
 }
 
 @keyframes rcTicker {
@@ -239,8 +276,33 @@ html, body {
 }
 
 @keyframes rcSweep {
-  0%   { left: -100px; }
-  100% { left: 100%; }
+  0%, 70%  { left: -100px; }
+  100%     { left: 100%; }
+}
+
+@keyframes rcDash {
+  0%   { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: -26; }
+}
+
+@keyframes rcScanDrift {
+  0%   { background-position: 0 0; }
+  100% { background-position: 0 40px; }
+}
+
+@keyframes rcCornerGlow {
+  0%, 100% { opacity: 0.8; filter: drop-shadow(0 0 0px transparent); }
+  50%      { opacity: 1; filter: drop-shadow(0 0 4px rgba(230,57,70,0.5)); }
+}
+
+@keyframes rcDataPulse {
+  0%, 100% { box-shadow: 0 0 3px rgba(230,57,70,0.2); }
+  50%      { box-shadow: 0 0 8px rgba(230,57,70,0.5); }
+}
+
+@keyframes rcGradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50%      { background-position: 100% 50%; }
 }
 
 @keyframes rcAlertFlash {

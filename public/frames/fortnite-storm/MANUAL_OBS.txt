@@ -1,0 +1,89 @@
+=============================================
+  FORTNITE STORM — Marco de Cámara para OBS
+=============================================
+
+TEMA: Fortnite Battle Royale — energía de tormenta púrpura/azul, barra de escudo, estilo Victory Royale.
+FUENTE: Russo One (Google Fonts, se carga automáticamente).
+
+---------------------------------------------
+TAMAÑOS
+---------------------------------------------
+  Horizontal (index.html):
+    Viewport: 420 x 320 px
+    Marco:    380 x 260 px
+
+  Vertical (vertical.html):
+    Viewport: 320 x 480 px
+    Marco:    260 x 400 px
+
+---------------------------------------------
+CONFIGURACIÓN EN OBS
+---------------------------------------------
+1. En OBS, añadir fuente → "Navegador" (Browser Source).
+2. Marcar "Archivo local" y seleccionar el HTML correspondiente:
+     - Horizontal: index.html
+     - Vertical:   vertical.html
+3. Configurar el ancho y alto según el viewport indicado arriba.
+4. Marcar la casilla "Desactivar cuando no sea visible" (opcional, ahorra recursos).
+5. Asegurarse de que el fondo esté transparente (sin color de fondo personalizado).
+
+---------------------------------------------
+ORDEN DE CAPAS (de abajo hacia arriba)
+---------------------------------------------
+  1. Fuentes reales (juego, pantalla compartida, etc.)
+  2. Captura de webcam
+  3. >>> Fortnite Storm frame (este overlay) <<<
+  4. Alertas, chat u otros widgets
+
+  IMPORTANTE: El marco va ENCIMA de la webcam, nunca debajo.
+
+---------------------------------------------
+PERSONALIZAR TEXTO
+---------------------------------------------
+Para cambiar el texto de la etiqueta inferior:
+
+  1. Abrir el archivo HTML en un editor de texto.
+  2. Buscar esta línea cerca del inicio del bloque <script>:
+
+       const LABEL_TEXT = 'STORM ROYALE';
+
+  3. Cambiar 'STORM ROYALE' por el texto deseado. Ejemplos:
+       const LABEL_TEXT = 'MI CANAL';
+       const LABEL_TEXT = 'FORTNITE LIVE';
+       const LABEL_TEXT = 'BATTLE PASS';
+
+  4. Guardar el archivo y refrescar la fuente en OBS.
+
+---------------------------------------------
+EFECTOS INCLUIDOS
+---------------------------------------------
+  - Borde doble con gradiente eléctrico púrpura-azul
+  - Brillo difuso (glow) alrededor del marco
+  - Esquinas angulares tipo L-bracket con resplandor azul eléctrico
+  - Barra de escudo segmentada en la parte superior (~75% llena)
+  - Partículas de tormenta púrpura/violeta flotando por los bordes (Canvas)
+  - Barrido de brillo azul (shimmer sweep) periódico sobre el marco
+  - Icono de estrella/corona estilo Victory Royale en el borde inferior
+  - Etiqueta de texto con sombra de neón púrpura
+
+---------------------------------------------
+PALETA DE COLORES
+---------------------------------------------
+  Púrpura:         #9d4edd
+  Azul eléctrico:  #00b4d8
+  Violeta tormenta:#7209b7
+  Acentos blancos: #ffffff
+
+---------------------------------------------
+NOTAS
+---------------------------------------------
+  - No se requieren dependencias externas más allá de Google Fonts.
+  - El centro del marco queda completamente limpio para la webcam.
+  - Las partículas solo aparecen cerca de los bordes del marco.
+  - Si la fuente Russo One no carga, el navegador usará sans-serif.
+  - Para ajustar la cantidad de partículas, buscar el número 80 en el
+    bucle "for (let i = 0; i < 80; i++)" y cambiarlo.
+  - La barra de escudo muestra 7 de 10 segmentos llenos. Para cambiarla,
+    modificar la constante SHIELD_FILLED en el script.
+
+=============================================

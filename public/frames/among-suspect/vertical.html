@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=320, height=480">
+<title>Among Suspect - Camera Frame (Vertical)</title>
+<link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 320px; height: 480px;
+    overflow: hidden; background: transparent;
+    font-family: 'VT323', monospace;
+  }
+  canvas#stars {
+    position: absolute; top: 0; left: 0;
+    width: 320px; height: 480px;
+    pointer-events: none; z-index: 0;
+  }
+  .frame-wrapper {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 260px; height: 400px;
+    z-index: 1;
+  }
+  .frame-border {
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%;
+    border-radius: 14px;
+    border: 6px solid #1a1a2e;
+    overflow: visible;
+    animation: wobbleFrame 4s ease-in-out infinite;
+  }
+  @keyframes wobbleFrame {
+    0%, 100% { border-radius: 14px; }
+    25% { border-radius: 16px 12px 15px 13px; }
+    50% { border-radius: 13px 15px 12px 16px; }
+    75% { border-radius: 15px 13px 16px 12px; }
+  }
+  .accent-segment {
+    position: absolute; border-radius: 3px;
+    animation: segmentColor 3s linear infinite;
+  }
+  .accent-segment.top {
+    top: -3px; left: 30px; width: 70px; height: 6px;
+    animation-delay: 0s;
+  }
+  .accent-segment.right {
+    top: 80px; right: -3px; width: 6px; height: 80px;
+    animation-delay: -0.75s;
+  }
+  .accent-segment.bottom {
+    bottom: -3px; left: 100px; width: 70px; height: 6px;
+    animation-delay: -1.5s;
+  }
+  .accent-segment.left {
+    top: 200px; left: -3px; width: 6px; height: 80px;
+    animation-delay: -2.25s;
+  }
+  @keyframes segmentColor {
+    0%, 100% { background: #c51111; }
+    25% { background: #132ed1; }
+    50% { background: #38fedc; }
+    75% { background: #f5f557; }
+  }
+  /* Visor shape - top-right */
+  .visor {
+    position: absolute;
+    top: -8px; right: 24px;
+    width: 65px; height: 28px;
+    background: linear-gradient(135deg, #38fedc 0%, #2ac5c5 60%, #1a9e9e 100%);
+    border-radius: 8px 8px 18px 18px;
+    border: 3px solid #1a1a2e;
+    box-shadow: 0 0 12px rgba(56, 254, 220, 0.5), inset 0 -4px 8px rgba(0,0,0,0.2);
+    z-index: 5;
+    animation: visorGlow 2s ease-in-out infinite alternate;
+  }
+  .visor::after {
+    content: '';
+    position: absolute;
+    top: 4px; left: 8px;
+    width: 18px; height: 7px;
+    background: rgba(255,255,255,0.4);
+    border-radius: 50%;
+    transform: rotate(-15deg);
+  }
+  @keyframes visorGlow {
+    0% { box-shadow: 0 0 12px rgba(56, 254, 220, 0.4); }
+    100% { box-shadow: 0 0 20px rgba(56, 254, 220, 0.7); }
+  }
+  /* Colored crew dots */
+  .crew-dot {
+    position: absolute; width: 12px; height: 12px;
+    border-radius: 50%;
+    border: 2px solid #1a1a2e;
+    z-index: 4;
+    animation: dotBounce 2.5s ease-in-out infinite;
+  }
+  .crew-dot.red { background: #c51111; top: -6px; left: 110px; animation-delay: 0s; }
+  .crew-dot.blue { background: #132ed1; right: -6px; top: 280px; animation-delay: -0.8s; }
+  .crew-dot.yellow { background: #f5f557; left: -6px; top: 120px; animation-delay: -1.6s; }
+  @keyframes dotBounce {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.3); }
+  }
+  /* Emergency button */
+  .emergency-btn {
+    position: absolute;
+    bottom: -12px; left: 50%;
+    transform: translateX(-50%);
+    width: 24px; height: 24px;
+    background: #c51111;
+    border-radius: 50%;
+    border: 3px solid #1a1a2e;
+    z-index: 5;
+    box-shadow: 0 0 8px rgba(197,17,17,0.5);
+    animation: btnPulse 1.5s ease-in-out infinite;
+  }
+  .emergency-btn::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 8px; height: 8px;
+    background: white;
+    border-radius: 50%;
+  }
+  @keyframes btnPulse {
+    0%, 100% { box-shadow: 0 0 8px rgba(197,17,17,0.4); }
+    50% { box-shadow: 0 0 16px rgba(197,17,17,0.8); }
+  }
+  /* Emergency text flash */
+  .emergency-text {
+    position: absolute;
+    top: 10px; left: 50%;
+    transform: translateX(-50%);
+    color: #c51111;
+    font-family: 'VT323', monospace;
+    font-size: 16px;
+    letter-spacing: 3px;
+    text-shadow: 0 0 6px rgba(197,17,17,0.8);
+    opacity: 0;
+    z-index: 6;
+    pointer-events: none;
+  }
+  .emergency-text.flash {
+    animation: emergFlash 2s ease-out forwards;
+  }
+  @keyframes emergFlash {
+    0% { opacity: 0; transform: translateX(-50%) scale(0.8); }
+    10% { opacity: 1; transform: translateX(-50%) scale(1.1); }
+    20% { opacity: 1; transform: translateX(-50%) scale(1); }
+    80% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+  /* Label */
+  #label {
+    position: absolute;
+    bottom: -2px; left: 50%;
+    transform: translateX(-50%);
+    background: #1a1a2e;
+    color: #38fedc;
+    font-family: 'VT323', monospace;
+    font-size: 24px;
+    padding: 2px 16px;
+    border-radius: 0 0 10px 10px;
+    border: 3px solid #1a1a2e;
+    border-top: none;
+    letter-spacing: 3px;
+    text-shadow: 0 0 8px rgba(56, 254, 220, 0.6);
+    white-space: nowrap;
+    z-index: 5;
+    animation: labelGlow 2s ease-in-out infinite alternate;
+  }
+  @keyframes labelGlow {
+    0% { text-shadow: 0 0 8px rgba(56, 254, 220, 0.4); }
+    100% { text-shadow: 0 0 16px rgba(56, 254, 220, 0.8), 0 0 24px rgba(56, 254, 220, 0.3); }
+  }
+</style>
+</head>
+<body>
+<canvas id="stars" width="320" height="480"></canvas>
+<div class="frame-wrapper">
+  <div class="frame-border">
+    <div class="accent-segment top"></div>
+    <div class="accent-segment right"></div>
+    <div class="accent-segment bottom"></div>
+    <div class="accent-segment left"></div>
+    <div class="visor"></div>
+    <div class="crew-dot red"></div>
+    <div class="crew-dot blue"></div>
+    <div class="crew-dot yellow"></div>
+    <div class="emergency-btn"></div>
+    <div class="emergency-text" id="emergText">EMERGENCY</div>
+  </div>
+  <div id="label"></div>
+</div>
+<script>
+  const LABEL_TEXT = 'NOT SUS';
+
+  document.getElementById('label').textContent = LABEL_TEXT;
+
+  // Emergency text flash every ~15s
+  const emergEl = document.getElementById('emergText');
+  function triggerEmergency() {
+    emergEl.classList.remove('flash');
+    void emergEl.offsetWidth;
+    emergEl.classList.add('flash');
+    setTimeout(() => emergEl.classList.remove('flash'), 2200);
+  }
+  triggerEmergency();
+  setInterval(triggerEmergency, 15000);
+
+  // Stars / space particles on Canvas
+  const canvas = document.getElementById('stars');
+  const ctx = canvas.getContext('2d');
+  const W = 320, H = 480;
+  const fx = (W - 260) / 2 + 14;
+  const fy = (H - 400) / 2 + 14;
+  const fw = 260 - 28;
+  const fh = 400 - 28;
+
+  class Star {
+    constructor() { this.reset(); }
+    reset() {
+      let tries = 0;
+      do {
+        this.x = Math.random() * W;
+        this.y = Math.random() * H;
+        tries++;
+      } while (this.insideFrame() && tries < 50);
+      this.size = Math.random() * 2 + 0.5;
+      this.alpha = Math.random() * 0.7 + 0.3;
+      this.speed = Math.random() * 0.3 + 0.1;
+      this.twinkle = Math.random() * Math.PI * 2;
+      this.twinkleSpeed = Math.random() * 0.03 + 0.01;
+    }
+    insideFrame() {
+      return this.x > fx && this.x < fx + fw && this.y > fy && this.y < fy + fh;
+    }
+    update() {
+      this.y += this.speed;
+      this.twinkle += this.twinkleSpeed;
+      if (this.y > H) { this.y = 0; this.x = Math.random() * W; }
+      if (this.insideFrame()) this.y = fy + fh + 1;
+    }
+    draw() {
+      const a = this.alpha * (0.5 + 0.5 * Math.sin(this.twinkle));
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255,255,255,${a})`;
+      ctx.fill();
+    }
+  }
+
+  const stars = Array.from({ length: 45 }, () => new Star());
+
+  function animate() {
+    ctx.clearRect(0, 0, W, H);
+    for (const s of stars) { s.update(); s.draw(); }
+    requestAnimationFrame(animate);
+  }
+  animate();
+</script>
+</body>
+</html>

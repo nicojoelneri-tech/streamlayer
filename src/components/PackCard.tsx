@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { ShoppingCart, Eye } from 'lucide-react'
 import type { OverlayPack } from '../types'
@@ -6,20 +7,41 @@ import { STYLES } from '../data/styles'
 import { formatPrice } from '../utils/formatPrice'
 import LivePreview from './LivePreview'
 
+function useIsMobile(breakpoint = 768) {
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < breakpoint)
+  useEffect(() => {
+    const mq = window.matchMedia(`(max-width: ${breakpoint - 1}px)`)
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches)
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [breakpoint])
+  return isMobile
+}
+
 export default function PackCard({ pack }: { pack: OverlayPack }) {
   const addToCart = useStore((s) => s.addToCart)
   const cart = useStore((s) => s.cart)
   const inCart = cart.includes(pack.id)
   const styleInfo = STYLES.find((s) => s.id === pack.style)
+  const isMobile = useIsMobile()
+
+  const isHeavyPreview = pack.previewUrl && pack.category === 'pack'
+  const useStaticFallback = isMobile && isHeavyPreview
 
   return (
     <div className="group flex flex-col overflow-hidden rounded-xl border border-surface-800 bg-surface-900/50 transition-all hover:border-surface-600 hover:shadow-lg hover:shadow-primary-900/20">
       {/* Preview area */}
       <div
         className="relative overflow-hidden bg-surface-900"
-        style={{ aspectRatio: pack.previewUrl ? undefined : '16/9' }}
+        style={{ aspectRatio: (pack.previewUrl && !useStaticFallback) ? undefined : '16/9' }}
       >
-        {pack.previewUrl ? (
+        {useStaticFallback && pack.previewImages?.[0] ? (
+          <img
+            src={pack.previewImages[0]}
+            alt={pack.name}
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        ) : pack.previewUrl ? (
           <LivePreview
             src={pack.previewUrl}
             title={pack.name}

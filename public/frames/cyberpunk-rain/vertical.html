@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=320, height=480">
+<title>Cyberpunk Rain - Vertical 320x480</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --neon-yellow: #fcee09;
+    --hot-red: #ff003c;
+    --cyan: #00f0ff;
+    --dark: #0a0a0a;
+  }
+  body {
+    width: 320px; height: 480px;
+    background: transparent;
+    overflow: hidden;
+    font-family: 'Orbitron', monospace;
+  }
+
+  /* ── Main frame container ── */
+  #frame {
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 264px; height: 400px;
+    transform: translate(-50%, -50%);
+  }
+
+  /* ── Neon yellow border ── */
+  #frame::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 2px solid var(--neon-yellow);
+    box-shadow:
+      0 0 6px var(--neon-yellow),
+      0 0 18px var(--neon-yellow),
+      0 0 40px rgba(252,238,9,0.3),
+      inset 0 0 6px rgba(252,238,9,0.15);
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  /* ── Red accent stripe left ── */
+  #frame::after {
+    content: '';
+    position: absolute;
+    left: -5px; top: 8%;
+    width: 3px; height: 84%;
+    background: var(--hot-red);
+    box-shadow: 0 0 8px var(--hot-red), 0 0 20px rgba(255,0,60,0.5);
+    z-index: 3;
+    pointer-events: none;
+  }
+
+  /* ── Circuit traces (L-shaped corner lines) ── */
+  .circuit {
+    position: absolute;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .circuit-tl {
+    top: -12px; left: -12px;
+    width: 36px; height: 36px;
+    border-top: 1px solid rgba(252,238,9,0.25);
+    border-left: 1px solid rgba(252,238,9,0.25);
+    box-shadow: 0 0 4px rgba(252,238,9,0.1);
+  }
+  .circuit-tr {
+    top: -12px; right: -12px;
+    width: 36px; height: 36px;
+    border-top: 1px solid rgba(252,238,9,0.25);
+    border-right: 1px solid rgba(252,238,9,0.25);
+    box-shadow: 0 0 4px rgba(252,238,9,0.1);
+  }
+  .circuit-bl {
+    bottom: -12px; left: -12px;
+    width: 36px; height: 36px;
+    border-bottom: 1px solid rgba(252,238,9,0.25);
+    border-left: 1px solid rgba(252,238,9,0.25);
+    box-shadow: 0 0 4px rgba(252,238,9,0.1);
+  }
+  .circuit-br {
+    bottom: -12px; right: -12px;
+    width: 36px; height: 36px;
+    border-bottom: 1px solid rgba(252,238,9,0.25);
+    border-right: 1px solid rgba(252,238,9,0.25);
+    box-shadow: 0 0 4px rgba(252,238,9,0.1);
+  }
+  .circuit-tl::after {
+    content:''; position:absolute;
+    top:12px; left:12px;
+    width:16px; height:16px;
+    border-top:1px solid rgba(252,238,9,0.15);
+    border-left:1px solid rgba(252,238,9,0.15);
+  }
+  .circuit-br::after {
+    content:''; position:absolute;
+    bottom:12px; right:12px;
+    width:16px; height:16px;
+    border-bottom:1px solid rgba(252,238,9,0.15);
+    border-right:1px solid rgba(252,238,9,0.15);
+  }
+
+  /* ── Warning hazard stripes (top-right corner) ── */
+  .hazard-stripes {
+    position: absolute;
+    top: -1px; right: -1px;
+    width: 44px; height: 10px;
+    background: repeating-linear-gradient(
+      -45deg,
+      var(--neon-yellow) 0px,
+      var(--neon-yellow) 3px,
+      var(--dark) 3px,
+      var(--dark) 6px
+    );
+    opacity: 0.7;
+    z-index: 4;
+    pointer-events: none;
+  }
+
+  /* ── DANGER icon (bottom-left) ── */
+  .danger-icon {
+    position: absolute;
+    bottom: 6px; left: 8px;
+    z-index: 5;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+  .danger-triangle {
+    width: 0; height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 11px solid var(--hot-red);
+    filter: drop-shadow(0 0 4px rgba(255,0,60,0.6));
+    position: relative;
+  }
+  .danger-triangle::after {
+    content: '!';
+    position: absolute;
+    top: 2px; left: -2px;
+    font-size: 6px;
+    font-weight: 900;
+    color: var(--dark);
+    font-family: 'Orbitron', monospace;
+  }
+  .danger-text {
+    font-size: 6px;
+    font-weight: 700;
+    color: var(--hot-red);
+    letter-spacing: 1px;
+    text-shadow: 0 0 6px rgba(255,0,60,0.6);
+  }
+
+  /* ── Scanlines ── */
+  .scanlines {
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      to bottom,
+      transparent 0px,
+      transparent 2px,
+      rgba(0,0,0,0.15) 2px,
+      rgba(0,0,0,0.15) 4px
+    );
+    z-index: 10;
+    pointer-events: none;
+  }
+
+  /* ── Glitch layers ── */
+  .glitch-layer {
+    position: absolute;
+    inset: 0;
+    border: 2px solid transparent;
+    z-index: 11;
+    pointer-events: none;
+    opacity: 0;
+  }
+  .glitch-red {
+    border-color: var(--hot-red);
+    box-shadow: 0 0 8px var(--hot-red);
+  }
+  .glitch-cyan {
+    border-color: var(--cyan);
+    box-shadow: 0 0 8px var(--cyan);
+  }
+
+  /* ── Canvas for rain and katakana ── */
+  #rain-canvas {
+    position: absolute;
+    inset: 0;
+    width: 320px; height: 480px;
+    z-index: 6;
+    pointer-events: none;
+  }
+
+  /* ── Label ── */
+  #label {
+    position: absolute;
+    bottom: 4px;
+    left: 50%; transform: translateX(-50%);
+    font-family: 'Orbitron', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    color: var(--neon-yellow);
+    text-shadow:
+      0 0 6px var(--neon-yellow),
+      0 0 18px rgba(252,238,9,0.4);
+    z-index: 12;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+</style>
+</head>
+<body>
+  <div id="frame">
+    <div class="circuit circuit-tl"></div>
+    <div class="circuit circuit-tr"></div>
+    <div class="circuit circuit-bl"></div>
+    <div class="circuit circuit-br"></div>
+    <div class="hazard-stripes"></div>
+    <div class="danger-icon">
+      <div class="danger-triangle"></div>
+      <span class="danger-text">DANGER</span>
+    </div>
+    <div class="scanlines"></div>
+    <div class="glitch-layer glitch-red" id="glitchRed"></div>
+    <div class="glitch-layer glitch-cyan" id="glitchCyan"></div>
+  </div>
+  <div id="label"></div>
+  <canvas id="rain-canvas" width="320" height="480"></canvas>
+
+<script>
+// ── Configuration ──
+const LABEL_TEXT = 'CYBERPUNK';
+
+// ── Dimensions ──
+const VW = 320, VH = 480;
+const FW = 264, FH = 400;
+const FX = (VW - FW) / 2;
+const FY = (VH - FH) / 2;
+const EDGE_WIDTH = 18;
+
+// ── Label ──
+document.getElementById('label').textContent = LABEL_TEXT;
+
+// ── Canvas Setup ──
+const canvas = document.getElementById('rain-canvas');
+const ctx = canvas.getContext('2d');
+
+// ── Rain Drops ──
+class RainDrop {
+  constructor(side) {
+    this.side = side;
+    this.reset(true);
+  }
+  reset(init) {
+    if (this.side === 'left') {
+      this.x = FX - EDGE_WIDTH + Math.random() * (EDGE_WIDTH + 6);
+    } else {
+      this.x = FX + FW - 6 + Math.random() * (EDGE_WIDTH + 6);
+    }
+    this.y = init ? Math.random() * VH : -Math.random() * 50;
+    this.len = 10 + Math.random() * 24;
+    this.speed = 2.5 + Math.random() * 3.5;
+    this.alpha = 0.3 + Math.random() * 0.5;
+  }
+  update() {
+    this.y += this.speed;
+    if (this.y > VH + 10) this.reset(false);
+  }
+  draw(ctx) {
+    ctx.strokeStyle = `rgba(0,240,255,${this.alpha})`;
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(this.x, this.y);
+    ctx.lineTo(this.x, this.y + this.len);
+    ctx.stroke();
+  }
+}
+
+const drops = [];
+for (let i = 0; i < 24; i++) drops.push(new RainDrop('left'));
+for (let i = 0; i < 24; i++) drops.push(new RainDrop('right'));
+
+// ── Katakana Characters ──
+const KATAKANA = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+
+class KatakanaChar {
+  constructor() { this.reset(true); }
+  reset(init) {
+    this.x = FX + FW - 4 + Math.random() * (EDGE_WIDTH + 8);
+    this.y = init ? Math.random() * VH : -20;
+    this.char = KATAKANA[Math.floor(Math.random() * KATAKANA.length)];
+    this.speed = 0.4 + Math.random() * 0.8;
+    this.alpha = 0.08 + Math.random() * 0.12;
+    this.size = 10 + Math.random() * 6;
+  }
+  update() {
+    this.y += this.speed;
+    if (this.y > VH + 20) this.reset(false);
+  }
+  draw(ctx) {
+    ctx.font = `${this.size}px 'Orbitron', monospace`;
+    ctx.fillStyle = `rgba(0,240,255,${this.alpha})`;
+    ctx.fillText(this.char, this.x, this.y);
+  }
+}
+
+const katakanas = [];
+for (let i = 0; i < 3; i++) katakanas.push(new KatakanaChar());
+
+// ── Glitch Effect ──
+const glitchRed = document.getElementById('glitchRed');
+const glitchCyan = document.getElementById('glitchCyan');
+const GLITCH_INTERVAL = 7000;
+let lastGlitch = performance.now();
+
+function triggerGlitch() {
+  const dur = 150 + Math.random() * 200;
+  const steps = 3 + Math.floor(Math.random() * 4);
+  let step = 0;
+  const interval = setInterval(() => {
+    const ox1 = (Math.random() - 0.5) * 8;
+    const oy1 = (Math.random() - 0.5) * 4;
+    const ox2 = (Math.random() - 0.5) * 8;
+    const oy2 = (Math.random() - 0.5) * 4;
+    glitchRed.style.opacity = '0.7';
+    glitchCyan.style.opacity = '0.7';
+    glitchRed.style.transform = `translate(${ox1}px, ${oy1}px)`;
+    glitchCyan.style.transform = `translate(${ox2}px, ${oy2}px)`;
+    step++;
+    if (step >= steps) {
+      clearInterval(interval);
+      glitchRed.style.opacity = '0';
+      glitchCyan.style.opacity = '0';
+      glitchRed.style.transform = 'none';
+      glitchCyan.style.transform = 'none';
+    }
+  }, dur / steps);
+}
+
+// ── Animation Loop ──
+function animate(now) {
+  ctx.clearRect(0, 0, VW, VH);
+
+  for (const d of drops) { d.update(); d.draw(ctx); }
+  for (const k of katakanas) { k.update(); k.draw(ctx); }
+
+  if (now - lastGlitch > GLITCH_INTERVAL + Math.random() * 2000) {
+    triggerGlitch();
+    lastGlitch = now;
+  }
+
+  requestAnimationFrame(animate);
+}
+requestAnimationFrame(animate);
+</script>
+</body>
+</html>

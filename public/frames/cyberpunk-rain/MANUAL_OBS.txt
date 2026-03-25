@@ -1,0 +1,53 @@
+============================================================
+  CYBERPUNK RAIN — Manual de configuración para OBS
+============================================================
+
+ARCHIVOS INCLUIDOS
+──────────────────
+  index.html      → Horizontal (420×320, marco 384×260)
+  vertical.html   → Vertical   (320×480, marco 264×400)
+
+INSTRUCCIONES DE INSTALACIÓN EN OBS
+────────────────────────────────────
+1. En OBS, en la escena deseada, pulsar "+" en Fuentes.
+2. Seleccionar "Navegador" (Browser Source).
+3. Configurar:
+     • Marcar "Archivo local" y seleccionar el .html correspondiente.
+     • Horizontal → Ancho: 420  |  Alto: 320
+     • Vertical   → Ancho: 320  |  Alto: 480
+4. IMPORTANTE: Activar la opción de fondo transparente
+   (puede aparecer como "Custom CSS" con body { background: transparent; }).
+5. Aceptar y posicionar la fuente en el canvas.
+
+ORDEN DE CAPAS (MUY IMPORTANTE)
+───────────────────────────────
+  Las fuentes reales (cámara, juego, chat) van ENCIMA del marco.
+  El marco decorativo va DEBAJO.
+
+  Orden de abajo hacia arriba:
+    1. Cyberpunk Rain (este overlay)
+    2. Webcam / Cámara
+    3. Otras fuentes (chat, alertas, etc.)
+
+PERSONALIZACIÓN
+───────────────
+  • Texto del label: Buscar "const LABEL_TEXT = 'CYBERPUNK';"
+    en el <script> del archivo .html y cambiar el valor.
+  • Colores: Las variables CSS están al inicio del <style>:
+      --neon-yellow: #fcee09
+      --hot-red: #ff003c
+      --cyan: #00f0ff
+      --dark: #0a0a0a
+  • Cantidad de gotas de lluvia: Modificar los valores en los
+    bucles "for" donde se crean los objetos RainDrop.
+  • Intervalo de glitch: Modificar GLITCH_INTERVAL (en ms, por defecto 7000).
+
+NOTAS
+─────
+  • No requiere dependencias externas salvo Google Fonts (Orbitron).
+  • El centro del marco queda completamente limpio para la webcam.
+  • Los efectos de lluvia y katakana solo aparecen en los bordes laterales.
+  • El efecto glitch ocurre aproximadamente cada 7 segundos.
+  • Las scanlines simulan un monitor CRT cyberpunk.
+
+============================================================

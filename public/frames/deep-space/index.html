@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=420, height=320">
+<title>Deep Space - 420x320</title>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --nebula-purple: #6b21a8;
+    --star-blue: #3b82f6;
+    --cosmic-teal: #06b6d4;
+    --warm-nebula: #ec4899;
+    --white: #ffffff;
+  }
+  body {
+    width: 420px; height: 320px;
+    background: transparent;
+    overflow: hidden;
+    font-family: 'Exo 2', sans-serif;
+  }
+
+  /* ── Main frame container ── */
+  #frame {
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 384px; height: 260px;
+    transform: translate(-50%, -50%);
+  }
+
+  /* ── Blue border with purple glow ── */
+  #frame::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 2px solid var(--star-blue);
+    border-radius: 4px;
+    box-shadow:
+      0 0 6px var(--nebula-purple),
+      0 0 16px rgba(107,33,168,0.4),
+      0 0 30px rgba(107,33,168,0.15),
+      inset 0 0 4px rgba(59,130,246,0.1);
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  /* ── Canvas for stars & shooting star ── */
+  #starfield {
+    position: absolute;
+    inset: 0;
+    width: 420px; height: 320px;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  /* ── Nebula wisps (corners) ── */
+  .nebula {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .nebula-tl {
+    width: 120px; height: 100px;
+    top: -30px; left: -30px;
+    background: radial-gradient(ellipse at center, rgba(107,33,168,0.06) 0%, transparent 70%);
+    animation: nebulaBreathe 6s ease-in-out infinite;
+  }
+  .nebula-br {
+    width: 140px; height: 110px;
+    bottom: -30px; right: -30px;
+    background: radial-gradient(ellipse at center, rgba(236,72,153,0.06) 0%, transparent 70%);
+    animation: nebulaBreathe 7s ease-in-out infinite 2s;
+  }
+  .nebula-tr {
+    width: 100px; height: 80px;
+    top: -20px; right: -10px;
+    background: radial-gradient(ellipse at center, rgba(107,33,168,0.04) 0%, transparent 70%);
+    animation: nebulaBreathe 8s ease-in-out infinite 4s;
+  }
+  @keyframes nebulaBreathe {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+  }
+
+  /* ── HUD corner brackets ── */
+  .hud-corner {
+    position: absolute;
+    width: 14px; height: 14px;
+    z-index: 3;
+    pointer-events: none;
+  }
+  .hud-tl { top: -2px; left: -2px; border-top: 2px solid var(--cosmic-teal); border-left: 2px solid var(--cosmic-teal); }
+  .hud-tr { top: -2px; right: -2px; border-top: 2px solid var(--cosmic-teal); border-right: 2px solid var(--cosmic-teal); }
+  .hud-bl { bottom: -2px; left: -2px; border-bottom: 2px solid var(--cosmic-teal); border-left: 2px solid var(--cosmic-teal); }
+  .hud-br { bottom: -2px; right: -2px; border-bottom: 2px solid var(--cosmic-teal); border-right: 2px solid var(--cosmic-teal); }
+  .hud-corner::after {
+    content: '';
+    position: absolute;
+    width: 3px; height: 3px;
+    border-radius: 50%;
+    background: var(--cosmic-teal);
+    box-shadow: 0 0 4px var(--cosmic-teal);
+  }
+  .hud-tl::after { top: 2px; left: 2px; }
+  .hud-tr::after { top: 2px; right: 2px; }
+  .hud-bl::after { bottom: 2px; left: 2px; }
+  .hud-br::after { bottom: 2px; right: 2px; }
+
+  /* ── HUD dot indicators along top border ── */
+  .hud-dots {
+    position: absolute;
+    top: -1px; left: 30px; right: 30px;
+    height: 2px;
+    z-index: 3;
+    pointer-events: none;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+  }
+  .hud-dot {
+    width: 3px; height: 3px;
+    border-radius: 50%;
+    background: var(--cosmic-teal);
+    opacity: 0.5;
+    box-shadow: 0 0 3px var(--cosmic-teal);
+    animation: hudDotPulse 3s ease-in-out infinite;
+  }
+  .hud-dot:nth-child(2) { animation-delay: 0.5s; }
+  .hud-dot:nth-child(3) { animation-delay: 1s; }
+  .hud-dot:nth-child(4) { animation-delay: 1.5s; }
+  .hud-dot:nth-child(5) { animation-delay: 2s; }
+  @keyframes hudDotPulse {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.9; }
+  }
+
+  /* ── Planet / Moon ── */
+  .planet {
+    position: absolute;
+    right: -4px; top: 50%;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #e2e8f0 0%, #e2e8f0 50%, #1e293b 50%, #1e293b 100%);
+    box-shadow: 0 0 4px rgba(226,232,240,0.3);
+    z-index: 3;
+    pointer-events: none;
+    transform: translateY(-50%);
+  }
+
+  /* ── Constellation dots (left side) ── */
+  .constellation {
+    position: absolute;
+    left: -6px; top: 40px;
+    width: 20px; height: 120px;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .const-dot {
+    position: absolute;
+    width: 2px; height: 2px;
+    border-radius: 50%;
+    background: var(--white);
+    box-shadow: 0 0 2px var(--white);
+  }
+  .const-dot:nth-child(1) { left: 8px; top: 0; }
+  .const-dot:nth-child(2) { left: 3px; top: 28px; }
+  .const-dot:nth-child(3) { left: 12px; top: 52px; }
+  .const-dot:nth-child(4) { left: 5px; top: 80px; }
+  .const-dot:nth-child(5) { left: 14px; top: 105px; }
+  .const-line {
+    position: absolute;
+    background: rgba(255,255,255,0.08);
+    transform-origin: top left;
+    height: 1px;
+    z-index: 1;
+  }
+  .const-line:nth-child(6) { left: 9px; top: 1px; width: 29px; transform: rotate(100deg); }
+  .const-line:nth-child(7) { left: 4px; top: 29px; width: 26px; transform: rotate(67deg); }
+  .const-line:nth-child(8) { left: 13px; top: 53px; width: 30px; transform: rotate(110deg); }
+  .const-line:nth-child(9) { left: 6px; top: 81px; width: 27px; transform: rotate(72deg); }
+
+  /* ── Orbital ring ── */
+  .orbital-ring {
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 410px; height: 280px;
+    transform: translate(-50%, -50%);
+    border: 1px dashed rgba(59,130,246,0.08);
+    border-radius: 50%;
+    z-index: 0;
+    pointer-events: none;
+    animation: orbitalPulse 8s ease-in-out infinite;
+  }
+  @keyframes orbitalPulse {
+    0%, 100% { opacity: 0.3; border-color: rgba(59,130,246,0.06); }
+    50% { opacity: 1; border-color: rgba(59,130,246,0.12); }
+  }
+
+  /* ── Label ── */
+  #label {
+    position: absolute;
+    bottom: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 600;
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--star-blue);
+    text-shadow: 0 0 6px rgba(59,130,246,0.5), 0 0 14px rgba(107,33,168,0.3);
+    z-index: 4;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+</style>
+</head>
+<body>
+<canvas id="starfield" width="420" height="320"></canvas>
+
+<div id="frame">
+  <!-- Nebula wisps -->
+  <div class="nebula nebula-tl"></div>
+  <div class="nebula nebula-br"></div>
+  <div class="nebula nebula-tr"></div>
+
+  <!-- HUD corners -->
+  <div class="hud-corner hud-tl"></div>
+  <div class="hud-corner hud-tr"></div>
+  <div class="hud-corner hud-bl"></div>
+  <div class="hud-corner hud-br"></div>
+
+  <!-- HUD dots along top -->
+  <div class="hud-dots">
+    <div class="hud-dot"></div>
+    <div class="hud-dot"></div>
+    <div class="hud-dot"></div>
+    <div class="hud-dot"></div>
+    <div class="hud-dot"></div>
+  </div>
+
+  <!-- Planet -->
+  <div class="planet"></div>
+
+  <!-- Constellation -->
+  <div class="constellation">
+    <div class="const-dot"></div>
+    <div class="const-dot"></div>
+    <div class="const-dot"></div>
+    <div class="const-dot"></div>
+    <div class="const-dot"></div>
+    <div class="const-line"></div>
+    <div class="const-line"></div>
+    <div class="const-line"></div>
+    <div class="const-line"></div>
+  </div>
+
+  <!-- Orbital ring -->
+  <div class="orbital-ring"></div>
+</div>
+
+<div id="label"></div>
+
+<script>
+  const LABEL_TEXT = 'DEEP SPACE';
+  document.getElementById('label').textContent = LABEL_TEXT;
+
+  /* ── Canvas setup ── */
+  const canvas = document.getElementById('starfield');
+  const ctx = canvas.getContext('2d');
+  const W = 420, H = 320;
+  const FRAME = { x: (W - 384) / 2, y: (H - 260) / 2, w: 384, h: 260 };
+  const MARGIN = 6;
+  const INNER = {
+    x: FRAME.x + MARGIN,
+    y: FRAME.y + MARGIN,
+    w: FRAME.w - MARGIN * 2,
+    h: FRAME.h - MARGIN * 2
+  };
+
+  /* ── Stars ── */
+  class Star {
+    constructor() { this.reset(); }
+    reset() {
+      // Place only near borders, not in center
+      let placed = false;
+      while (!placed) {
+        this.x = Math.random() * W;
+        this.y = Math.random() * H;
+        // Reject if inside inner frame area
+        if (this.x > INNER.x && this.x < INNER.x + INNER.w &&
+            this.y > INNER.y && this.y < INNER.y + INNER.h) continue;
+        placed = true;
+      }
+      this.size = Math.random() * 1.5 + 0.3;
+      this.baseAlpha = Math.random() * 0.6 + 0.2;
+      this.alpha = this.baseAlpha;
+      this.twinkleSpeed = Math.random() * 0.02 + 0.005;
+      this.twinklePhase = Math.random() * Math.PI * 2;
+      this.slowBlink = Math.random() < 0.3; // 30% do slow blink
+    }
+    update(t) {
+      if (this.slowBlink) {
+        this.alpha = this.baseAlpha * (0.3 + 0.7 * Math.abs(Math.sin(t * 0.0008 + this.twinklePhase)));
+      } else {
+        this.alpha = this.baseAlpha * (0.5 + 0.5 * Math.sin(t * this.twinkleSpeed + this.twinklePhase));
+      }
+    }
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255,255,255,${this.alpha})`;
+      ctx.fill();
+    }
+  }
+
+  const stars = [];
+  for (let i = 0; i < 80; i++) stars.push(new Star());
+
+  /* ── Shooting star ── */
+  class ShootingStar {
+    constructor(intervalMs) {
+      this.active = false;
+      this.timer = 0;
+      this.interval = intervalMs || 8000;
+      this.schedule();
+    }
+    schedule() {
+      this.timer = performance.now() + this.interval + Math.random() * 5000;
+    }
+    launch(t) {
+      this.active = true;
+      this.startTime = t;
+      this.duration = 500 + Math.random() * 350;
+      // Always spawn clearly ABOVE the top frame border
+      const fromRight = Math.random() < 0.5;
+      if (fromRight) {
+        // from top-right area, travel left-downward
+        this.sx = W * 0.55 + Math.random() * W * 0.45;
+        this.sy = -12 + Math.random() * 18;
+        this.ex = this.sx - 130 - Math.random() * 110;
+        this.ey = FRAME.y + 5 + Math.random() * 22;
+      } else {
+        // from top-left area, travel right-downward
+        this.sx = Math.random() * W * 0.45;
+        this.sy = -12 + Math.random() * 18;
+        this.ex = this.sx + 130 + Math.random() * 110;
+        this.ey = FRAME.y + 5 + Math.random() * 22;
+      }
+    }
+    update(t) {
+      if (!this.active && t > this.timer) this.launch(t);
+      if (!this.active) return;
+      const progress = (t - this.startTime) / this.duration;
+      if (progress > 1) {
+        this.active = false;
+        this.schedule();
+        return;
+      }
+      const x = this.sx + (this.ex - this.sx) * progress;
+      const y = this.sy + (this.ey - this.sy) * progress;
+      const tailLen = 30;
+      const dx = this.ex - this.sx;
+      const dy = this.ey - this.sy;
+      const len = Math.sqrt(dx * dx + dy * dy);
+      const nx = dx / len;
+      const ny = dy / len;
+      const alpha = progress < 0.2 ? progress / 0.2 : progress > 0.7 ? (1 - progress) / 0.3 : 1;
+      const grad = ctx.createLinearGradient(x - nx * tailLen, y - ny * tailLen, x, y);
+      grad.addColorStop(0, `rgba(255,255,255,0)`);
+      grad.addColorStop(1, `rgba(255,255,255,${alpha * 0.9})`);
+      ctx.beginPath();
+      ctx.moveTo(x - nx * tailLen, y - ny * tailLen);
+      ctx.lineTo(x, y);
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+      // Head glow
+      ctx.beginPath();
+      ctx.arc(x, y, 2, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255,255,255,${alpha * 0.8})`;
+      ctx.fill();
+    }
+  }
+
+  const shootingStar = new ShootingStar(8000);
+  const shootingStar2 = new ShootingStar(11000);
+  // Offset the 2nd one so they don't fire simultaneously at start
+  shootingStar2.timer = performance.now() + 13000 + Math.random() * 5000;
+
+  /* ── Animation loop ── */
+  function animate(t) {
+    ctx.clearRect(0, 0, W, H);
+    for (const s of stars) { s.update(t); s.draw(); }
+    shootingStar.update(t);
+    shootingStar2.update(t);
+    requestAnimationFrame(animate);
+  }
+  requestAnimationFrame(animate);
+</script>
+</body>
+</html>

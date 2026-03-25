@@ -1,0 +1,107 @@
+=====================================================
+  ROCKET BOOST - MARCO DE CAMARA PARA OBS
+=====================================================
+
+DESCRIPCION
+-----------
+Marco animado inspirado en Rocket League con estetica
+de velocidad y boost. Bordes angulares con cortes
+diagonales en esquina superior-derecha e inferior-
+izquierda, lado izquierdo naranja (equipo naranja) y
+derecho azul (equipo azul). Incluye medidor de boost
+segmentado, lineas de velocidad, particulas de chispas
+de boost en las esquinas inferiores, flash de impacto
+aleatorio y divisor central bicolor.
+
+Fuente: Russo One (Google Fonts, se carga automatica).
+Paleta: Naranja (#ff7b00), Azul (#0066ff), Blanco,
+        Amarillo boost (#ffdd00), Oscuro (#1a1a2e).
+
+=====================================================
+  ARCHIVOS
+=====================================================
+
+index.html      -> Horizontal (420x320, marco 384x260)
+vertical.html   -> Vertical   (320x480, marco 264x400)
+
+=====================================================
+  CONFIGURACION EN OBS
+=====================================================
+
+1. Abrir OBS Studio.
+
+2. En la escena deseada, agregar fuente:
+   (+) -> Navegador (Browser Source)
+
+3. Configurar la fuente del navegador:
+
+   HORIZONTAL (index.html):
+     - Marcar "Archivo local" y seleccionar: index.html
+     - Ancho: 420
+     - Alto:  320
+     - FPS:   60 (recomendado para animaciones fluidas)
+
+   VERTICAL (vertical.html):
+     - Marcar "Archivo local" y seleccionar: vertical.html
+     - Ancho: 320
+     - Alto:  480
+     - FPS:   60
+
+4. En ambos casos:
+   - Desmarcar "Desactivar fuente cuando no este visible"
+     (para mantener las animaciones sincronizadas).
+   - Marcar "Actualizar navegador cuando la escena se active"
+     si se desea reiniciar las animaciones al cambiar de escena.
+
+5. IMPORTANTE - ORDEN DE CAPAS:
+   El marco (Browser Source) debe ir POR DEBAJO de la
+   fuente real de la webcam en la lista de fuentes.
+   La webcam se coloca ENCIMA del marco.
+
+   Orden correcto (de arriba a abajo en OBS):
+     [Webcam]          <- encima
+     [Marco Overlay]   <- debajo
+
+6. Ajustar posicion:
+   - Centrar la webcam sobre el area limpia del marco.
+   - Redimensionar la webcam para que encaje dentro del
+     borde visible del marco.
+
+=====================================================
+  PERSONALIZACION
+=====================================================
+
+TEXTO DEL LABEL:
+  Abrir el archivo HTML correspondiente con un editor
+  de texto. Buscar al inicio del bloque <script>:
+
+    const LABEL_TEXT = 'ROCKET BOOST';
+
+  Cambiar 'ROCKET BOOST' por el texto deseado.
+  El texto se muestra debajo del marco.
+
+COLORES:
+  Los colores principales estan definidos en el CSS:
+    #ff7b00  -> Naranja (borde izquierdo, particulas)
+    #0066ff  -> Azul (borde derecho, particulas)
+    #ffdd00  -> Amarillo boost (medidor, indicador 100)
+    #1a1a2e  -> Oscuro (fondo medidor de boost)
+
+=====================================================
+  NOTAS
+=====================================================
+
+- El fondo es 100% transparente para integrarse en OBS.
+- No requiere archivos externos excepto Google Fonts
+  (necesita conexion a internet la primera vez).
+- Las particulas de boost solo aparecen cerca de los
+  bordes inferiores; el centro queda completamente
+  limpio para la webcam.
+- El flash de impacto blanco ocurre aproximadamente
+  cada 7-9 segundos en una esquina aleatoria.
+- Las lineas de velocidad se deslizan por los bordes
+  laterales continuamente.
+- El medidor de boost en el borde inferior muestra
+  ~60% lleno con gradiente naranja-amarillo segmentado.
+
+=====================================================
