@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920,height=1080">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .alert-wrap {
+      position: absolute;
+      top: 110px;
+      left: 50%; transform: translateX(-50%);
+      width: 520px;
+    }
+
+    .alert-box {
+      background: rgba(20, 4, 30, 0.95);
+      border: 2px solid var(--magenta);
+      box-shadow: var(--glow-magenta);
+      padding: 20px 24px;
+      text-align: center;
+      position: relative;
+      animation: vgAlertFlash 1.5s ease-in-out infinite;
+      clip-path: polygon(
+        14px 0, calc(100% - 14px) 0,
+        100% 14px, 100% calc(100% - 14px),
+        calc(100% - 14px) 100%, 14px 100%,
+        0 calc(100% - 14px), 0 14px
+      );
+    }
+
+    .alert-box::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(
+        0deg, transparent, transparent 2px,
+        rgba(64,224,255,0.02) 2px, rgba(64,224,255,0.02) 4px
+      );
+      pointer-events: none;
+    }
+
+    /* Warning icon */
+    .alert-icon {
+      font-size: 20px;
+      margin-bottom: 6px;
+      animation: vgPulse 1s ease-in-out infinite;
+    }
+
+    .alert-title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 18px;
+      letter-spacing: 4px;
+      color: var(--magenta);
+      margin-bottom: 6px;
+    }
+
+    .alert-text {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .alert-sub {
+      font-size: 10px;
+      color: var(--text-dim);
+      letter-spacing: 1px;
+    }
+
+    /* Corner marks */
+    .ac { position: absolute; pointer-events: none; }
+    .ac::before, .ac::after {
+      content: ''; position: absolute;
+      background: var(--magenta);
+      box-shadow: 0 0 4px var(--magenta);
+    }
+    .ac--tl { top: 2px; left: 12px; }
+    .ac--tl::before { width: 14px; height: 2px; }
+    .ac--tl::after  { width: 2px; height: 14px; }
+
+    .ac--br { bottom: 2px; right: 12px; }
+    .ac--br::before { width: 14px; height: 2px; bottom: 0; right: 0; }
+    .ac--br::after  { width: 2px; height: 14px; bottom: 0; right: 0; }
+  </style>
+</head>
+<body>
+  <div class="alert-wrap">
+    <div class="alert-box">
+      <div class="alert-icon">⚠</div>
+      <div class="alert-title" data-config="alertTitle">⚠ ALERT</div>
+      <div class="alert-text" data-config="alertText">Nuevo evento detectado en el grid</div>
+      <div class="alert-sub" data-config="alertSub">voidgrid://alert_sys</div>
+
+      <span class="ac ac--tl"></span>
+      <span class="ac ac--br"></span>
+    </div>
+  </div>
+
+  <script src="../config/config.js"></script>
+  <script src="../shared.js"></script>
+</body>
+</html>

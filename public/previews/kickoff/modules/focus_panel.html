@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920,height=1080">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .panel-wrap { position: absolute; left: 14px; top: 114px; width: 280px; }
+    .panel {
+      background: var(--bg-panel); border: 1px solid var(--border-mid);
+      box-shadow: var(--glow-green); padding: 14px 12px; position: relative;
+      clip-path: polygon(var(--cut) 0, 100% 0, 100% calc(100% - var(--cut)),
+        calc(100% - var(--cut)) 100%, 0 100%, 0 var(--cut));
+    }
+    .panel::before {
+      content: ''; position: absolute;
+      top: 0; left: var(--cut); right: 0; height: 3px;
+      background: var(--grad-main); z-index: 2;
+    }
+    .panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+    .panel-title-row { display: flex; align-items: center; gap: 0; }
+    .pt-live {
+      background: linear-gradient(90deg, #00e676, #00b854);
+      color: #fff; padding: 0 8px; line-height: 18px;
+      font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+      clip-path: polygon(0 0, calc(100% - 4px) 0, 100% 100%, 0 100%);
+    }
+    .pt-name {
+      background: rgba(0,0,0,0.5); color: rgba(255,255,255,0.7);
+      padding: 0 10px 0 8px; line-height: 18px;
+      font-size: 10px; font-weight: 600; letter-spacing: 1.5px;
+      border: 1px solid rgba(255,255,255,0.08); border-left: none;
+      clip-path: polygon(0 0, calc(100% - 4px) 0, 100% 100%, 0 100%);
+    }
+    .panel-divider { height: 1px;
+      background: linear-gradient(90deg, var(--green), var(--cyan), transparent);
+      margin-bottom: 12px; }
+
+    .data-item { margin-bottom: 6px; }
+    .data-item:last-child { margin-bottom: 0; }
+    .data-label { font-size: 10px; font-weight: 600; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--text-dim); margin-bottom: 2px;
+      display: flex; align-items: center; gap: 6px; }
+    .data-zone { height: 36px; border-bottom: 1px solid var(--border-dim); }
+    .data-prefix { display: inline-block; width: 3px; height: 10px; flex-shrink: 0; }
+    .data-prefix--green { background: var(--green); }
+    .data-prefix--cyan  { background: var(--cyan); }
+    .data-prefix--amber { background: var(--amber); }
+
+    /* Shimmer */
+    .pan-shim { position: absolute; inset: 0; overflow: hidden; pointer-events: none;
+      clip-path: polygon(var(--cut) 0, 100% 0, 100% calc(100% - var(--cut)),
+        calc(100% - var(--cut)) 100%, 0 100%, 0 var(--cut)); z-index: 5; }
+    .pan-shim::before {
+      content: ''; position: absolute; top: -100%; left: -60px;
+      width: 40px; height: 400%;
+      background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.04) 48%,
+        rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.04) 52%, transparent 70%);
+      transform: rotate(25deg); animation: koShimmer 6s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body>
+  <div class="panel-wrap">
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title-row">
+          <div class="pt-live" data-config="sideTag">LIVE</div>
+          <div class="pt-name" data-config="sideTitle">MATCH INFO</div>
+        </div>
+      </div>
+      <div class="panel-divider"></div>
+
+      <div class="data-item">
+        <div class="data-label"><span class="data-prefix data-prefix--green"></span><span data-config="sideLabel1">ULTIMO FOLLOW</span></div>
+        <div class="data-zone"></div>
+      </div>
+      <div class="data-item">
+        <div class="data-label"><span class="data-prefix data-prefix--cyan"></span><span data-config="sideLabel2">REDES</span></div>
+        <div class="data-zone"></div>
+      </div>
+      <div class="data-item">
+        <div class="data-label"><span class="data-prefix data-prefix--amber"></span><span data-config="sideLabel3">ULTIMO SUB</span></div>
+        <div class="data-zone"></div>
+      </div>
+    </div>
+    <div class="pan-shim"></div>
+  </div>
+  <script src="../config/config.js"></script>
+  <script src="../shared.js"></script>
+</body>
+</html>

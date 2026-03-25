@@ -1,0 +1,265 @@
+/* ================================================================
+   VOIDGRID PHANTOM — Cyber-Space Gaming Overlay
+   Palette: Electric purple + hot pink on deep space void
+   Typography: Rajdhani (bold geometric sans)
+   Geometry: Diagonal corner cuts via clip-path
+   ================================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Orbitron:wght@500;700;900&display=swap');
+
+/* ── Design Tokens ── */
+:root {
+  --green:        #b040ff;
+  --cyan:         #ff60b0;
+  --magenta:      #40e0ff;
+  --amber:        #e060ff;
+
+  --bg-void:      rgba(10, 4, 20, 0.92);
+  --bg-panel:     rgba(14, 6, 30, 0.88);
+  --bg-glass:     rgba(176, 64, 255, 0.05);
+
+  --border-dim:   rgba(176, 64, 255, 0.18);
+  --border-mid:   rgba(176, 64, 255, 0.40);
+  --border-bright:rgba(176, 64, 255, 0.70);
+
+  --text:         #f0e8ff;
+  --text-mid:     rgba(240, 232, 255, 0.60);
+  --text-dim:     rgba(240, 232, 255, 0.30);
+
+  --glow-green:   0 0 8px rgba(176, 64, 255, 0.35), 0 0 20px rgba(176, 64, 255, 0.12);
+  --glow-cyan:    0 0 8px rgba(255, 96, 176, 0.35), 0 0 20px rgba(255, 96, 176, 0.12);
+  --glow-magenta: 0 0 8px rgba(64, 224, 255, 0.35), 0 0 20px rgba(64, 224, 255, 0.12);
+
+  --cut: 14px;   /* diagonal corner cut size */
+  --radius: 2px; /* micro radius on non-cut edges */
+
+  --font-body:    'Rajdhani', sans-serif;
+  --font-display: 'Orbitron', sans-serif;
+}
+
+/* ── Reset ── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+  width: 1920px; height: 1080px; overflow: hidden;
+  background: transparent;
+  font-family: var(--font-body);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Clip-path: octagonal cut corners ── */
+.vg-clip {
+  clip-path: polygon(
+    var(--cut) 0, calc(100% - var(--cut)) 0,
+    100% var(--cut), 100% calc(100% - var(--cut)),
+    calc(100% - var(--cut)) 100%, var(--cut) 100%,
+    0 calc(100% - var(--cut)), 0 var(--cut)
+  );
+}
+
+/* Clip only top-left and bottom-right */
+.vg-clip-tl-br {
+  clip-path: polygon(
+    var(--cut) 0, 100% 0,
+    100% calc(100% - var(--cut)),
+    calc(100% - var(--cut)) 100%, 0 100%,
+    0 var(--cut)
+  );
+}
+
+/* ── Base Panel ── */
+.vg-panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-mid);
+  box-shadow: var(--glow-green);
+  position: relative;
+  clip-path: polygon(
+    var(--cut) 0, calc(100% - var(--cut)) 0,
+    100% var(--cut), 100% calc(100% - var(--cut)),
+    calc(100% - var(--cut)) 100%, var(--cut) 100%,
+    0 calc(100% - var(--cut)), 0 var(--cut)
+  );
+}
+
+.vg-panel::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(176,64,255,0.04) 0%, transparent 40%);
+  pointer-events: none;
+}
+
+/* ── Corner Marks (decorative L-brackets at cut edges) ── */
+.vg-corner {
+  position: absolute;
+  width: 20px; height: 20px;
+  pointer-events: none;
+}
+.vg-corner::before, .vg-corner::after {
+  content: '';
+  position: absolute;
+  background: var(--green);
+  box-shadow: 0 0 6px var(--green);
+}
+.vg-corner--tl { top: 2px; left: 12px; }
+.vg-corner--tl::before { width: 16px; height: 2px; top: 0; left: 0; }
+.vg-corner--tl::after  { width: 2px; height: 16px; top: 0; left: 0; }
+
+.vg-corner--tr { top: 2px; right: 12px; }
+.vg-corner--tr::before { width: 16px; height: 2px; top: 0; right: 0; }
+.vg-corner--tr::after  { width: 2px; height: 16px; top: 0; right: 0; }
+
+.vg-corner--bl { bottom: 2px; left: 12px; }
+.vg-corner--bl::before { width: 16px; height: 2px; bottom: 0; left: 0; }
+.vg-corner--bl::after  { width: 2px; height: 16px; bottom: 0; left: 0; }
+
+.vg-corner--br { bottom: 2px; right: 12px; }
+.vg-corner--br::before { width: 16px; height: 2px; bottom: 0; right: 0; }
+.vg-corner--br::after  { width: 2px; height: 16px; bottom: 0; right: 0; }
+
+/* ── Scanlines overlay ── */
+.vg-scanlines::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(176, 64, 255, 0.015) 2px,
+    rgba(176, 64, 255, 0.015) 4px
+  );
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* ── Hex dot decoration ── */
+.vg-hex {
+  display: inline-block;
+  width: 8px; height: 9px;
+  background: var(--green);
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  opacity: 0.7;
+}
+
+/* ── Divider ── */
+.vg-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border-mid), transparent);
+  margin: 8px 0;
+}
+
+/* ── Status dot ── */
+.vg-dot {
+  display: inline-block;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 6px var(--green);
+  animation: vgPulse 2s ease-in-out infinite;
+}
+.vg-dot--cyan  { background: var(--cyan);    box-shadow: 0 0 6px var(--cyan); }
+.vg-dot--mag   { background: var(--magenta); box-shadow: 0 0 6px var(--magenta); }
+
+/* ── Typography ── */
+.vg-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.vg-label {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-mid);
+}
+
+.vg-tag {
+  display: inline-block;
+  padding: 2px 10px;
+  background: rgba(176, 64, 255, 0.12);
+  border: 1px solid var(--border-dim);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--green);
+  clip-path: polygon(6px 0, calc(100% - 6px) 0, 100% 50%, calc(100% - 6px) 100%, 6px 100%, 0 50%);
+}
+
+/* ── Animations ── */
+@keyframes vgPulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.4; }
+}
+
+@keyframes vgGlow {
+  0%, 100% { box-shadow: var(--glow-green); }
+  50%      { box-shadow: 0 0 14px rgba(176,64,255,0.5), 0 0 30px rgba(176,64,255,0.18); }
+}
+
+@keyframes vgFlicker {
+  0%, 100% { opacity: 1; }
+  92%      { opacity: 1; }
+  93%      { opacity: 0.7; }
+  94%      { opacity: 1; }
+  97%      { opacity: 0.85; }
+  98%      { opacity: 1; }
+}
+
+@keyframes vgGlitch {
+  0%, 100% { transform: translate(0); filter: none; }
+  20%      { transform: translate(-2px, 1px); filter: hue-rotate(90deg); }
+  40%      { transform: translate(1px, -1px); }
+  60%      { transform: translate(-1px, 0); filter: hue-rotate(-90deg); }
+  80%      { transform: translate(2px, 1px); }
+}
+
+@keyframes vgTicker {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes vgScanSweep {
+  0%   { top: -4px; }
+  100% { top: 100%; }
+}
+
+@keyframes vgBorderTrace {
+  0%   { stroke-dashoffset: 200; }
+  100% { stroke-dashoffset: 0; }
+}
+
+@keyframes vgAlertFlash {
+  0%, 100% { border-color: var(--magenta); box-shadow: var(--glow-magenta); }
+  50%      { border-color: rgba(64,224,255,0.3); box-shadow: none; }
+}
+
+@keyframes vgShimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes vgProgressBar {
+  0%   { width: 0; }
+  100% { width: 85%; }
+}
+
+@keyframes vgFadeLoop {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.5; }
+}
+
+@keyframes vgRecBlink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+/* ── Highlight class for ticker ── */
+.hl {
+  color: var(--cyan);
+  font-weight: 700;
+}

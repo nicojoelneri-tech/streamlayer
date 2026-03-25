@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920,height=1080">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .alert-wrap { position: absolute; top: 150px; left: 50%; transform: translateX(-50%); width: 480px; }
+    .alert-box {
+      background: rgba(8,16,12,0.95); border: 2px solid var(--green);
+      box-shadow: var(--glow-green); padding: 18px 22px;
+      text-align: center; position: relative;
+      clip-path: polygon(var(--cut) 0, 100% 0, 100% calc(100% - var(--cut)),
+        calc(100% - var(--cut)) 100%, 0 100%, 0 var(--cut));
+    }
+    .alert-box::before { content: ''; position: absolute; top: 0; left: var(--cut); right: 0;
+      height: 3px; background: var(--grad-main); z-index: 2; }
+    .alert-icon { font-size: 18px; margin-bottom: 4px; animation: koPulse 1s ease-in-out infinite; }
+    .alert-title { font-weight: 700; font-size: 22px; letter-spacing: 4px;
+      background: var(--grad-main); -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 4px; }
+    .alert-text { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+    .alert-sub { font-size: 10px; color: var(--text-dim); letter-spacing: 1px; }
+  </style>
+</head>
+<body>
+  <div class="alert-wrap">
+    <div class="alert-box">
+      <div class="alert-icon">⚡</div>
+      <div class="alert-title" data-config="alertTitle">⚡ GOLAZO</div>
+      <div class="alert-text" data-config="alertText">Nuevo evento en la transmisión</div>
+      <div class="alert-sub" data-config="alertSub">kickoff://alert</div>
+    </div>
+  </div>
+  <script src="../config/config.js"></script>
+  <script src="../shared.js"></script>
+</body>
+</html>

@@ -31,3 +31,5 @@ dist-ssr
 *.png
 !public/**/*.png
 !src/**/*.png
+
+.vercel

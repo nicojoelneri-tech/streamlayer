@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920,height=1080">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .cam-wrap {
+      position: absolute;
+      left: 14px; top: 80px;
+      width: 200px; height: 320px;
+    }
+
+    .cam-frame {
+      position: absolute;
+      inset: 0;
+      border: 2px solid var(--border-mid);
+      box-shadow: var(--glow-green);
+      background: transparent;
+      clip-path: polygon(
+        12px 0, calc(100% - 12px) 0,
+        100% 12px, 100% calc(100% - 12px),
+        calc(100% - 12px) 100%, 12px 100%,
+        0 calc(100% - 12px), 0 12px
+      );
+    }
+
+    .cc { position: absolute; pointer-events: none; }
+    .cc::before, .cc::after {
+      content: ''; position: absolute;
+      background: var(--green);
+      box-shadow: 0 0 4px var(--green);
+    }
+    .cc--tl { top: 2px; left: 10px; }
+    .cc--tl::before { width: 14px; height: 2px; }
+    .cc--tl::after  { width: 2px; height: 14px; }
+
+    .cc--tr { top: 2px; right: 10px; }
+    .cc--tr::before { width: 14px; height: 2px; right: 0; }
+    .cc--tr::after  { width: 2px; height: 14px; right: 0; }
+
+    .cc--bl { bottom: 2px; left: 10px; }
+    .cc--bl::before { width: 14px; height: 2px; bottom: 0; }
+    .cc--bl::after  { width: 2px; height: 14px; bottom: 0; }
+
+    .cc--br { bottom: 2px; right: 10px; }
+    .cc--br::before { width: 14px; height: 2px; bottom: 0; right: 0; }
+    .cc--br::after  { width: 2px; height: 14px; bottom: 0; right: 0; }
+
+    .rec {
+      position: absolute;
+      top: -22px; left: 0;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      animation: vgRecBlink 1.2s step-end infinite;
+    }
+    .rec-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--magenta);
+      box-shadow: 0 0 6px var(--magenta);
+    }
+    .rec-text {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: var(--magenta);
+    }
+
+    .cam-scan::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(
+        0deg, transparent, transparent 2px,
+        rgba(176,64,255,0.012) 2px, rgba(176,64,255,0.012) 4px
+      );
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="cam-wrap">
+    <div class="rec">
+      <span class="rec-dot"></span>
+      <span class="rec-text">REC</span>
+    </div>
+    <div class="cam-frame cam-scan">
+      <span class="cc cc--tl"></span>
+      <span class="cc cc--tr"></span>
+      <span class="cc cc--bl"></span>
+      <span class="cc cc--br"></span>
+    </div>
+  </div>
+
+  <script src="../config/config.js"></script>
+  <script src="../shared.js"></script>
+</body>
+</html>

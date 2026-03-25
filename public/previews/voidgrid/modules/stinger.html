@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920,height=1080">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 1920px; height: 1080px; overflow: hidden; background: transparent; }
+    canvas { position: absolute; top: 0; left: 0; }
+  </style>
+</head>
+<body>
+  <canvas id="stg" width="1920" height="1080"></canvas>
+  <script>
+    (function () {
+      var c = document.getElementById('stg');
+      var ctx = c.getContext('2d');
+      var W = 1920, H = 1080;
+
+      var TOTAL = 1000; // ms
+      var FILL  = 450;
+      var HOLD  = 150;
+      var CLEAR = 400;
+
+      var startTime = null;
+
+      function easeInOut(t) {
+        return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+      }
+
+      function drawNoise(x1, x2, intensity) {
+        if (x2 <= x1) return;
+        var imgData = ctx.createImageData(x2 - x1, H);
+        var d = imgData.data;
+        for (var i = 0; i < d.length; i += 4) {
+          if (Math.random() < intensity) {
+            var bright = Math.random() * 200 + 55;
+            // Tint green
+            d[i]     = bright * 0.3;
+            d[i + 1] = bright;
+            d[i + 2] = bright * 0.5;
+            d[i + 3] = 255;
+          } else {
+            d[i + 3] = 0;
+          }
+        }
+        ctx.putImageData(imgData, x1, 0);
+      }
+
+      function drawGlitchLines(count) {
+        for (var i = 0; i < count; i++) {
+          var y = Math.random() * H;
+          var h = Math.random() * 4 + 1;
+          ctx.fillStyle = 'rgba(0, 255, 102, ' + (Math.random() * 0.4 + 0.1) + ')';
+          ctx.fillRect(0, y, W, h);
+        }
+      }
+
+      function frame(ts) {
+        if (!startTime) startTime = ts;
+        var elapsed = ts - startTime;
+
+        ctx.clearRect(0, 0, W, H);
+
+        if (elapsed < FILL) {
+          // Sweep left to right
+          var p = easeInOut(elapsed / FILL);
+          var edge = Math.floor(p * W);
+          drawNoise(0, edge, 0.45);
+          drawGlitchLines(Math.floor(p * 8));
+
+        } else if (elapsed < FILL + HOLD) {
+          // Full screen noise, lower intensity
+          drawNoise(0, W, 0.3);
+          drawGlitchLines(4);
+
+          // Bright center flash
+          var grad = ctx.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, 500);
+          grad.addColorStop(0, 'rgba(0, 255, 102, 0.08)');
+          grad.addColorStop(1, 'rgba(0, 255, 102, 0)');
+          ctx.fillStyle = grad;
+          ctx.fillRect(0, 0, W, H);
+
+        } else if (elapsed < TOTAL) {
+          // Clear left to right
+          var p = easeInOut((elapsed - FILL - HOLD) / CLEAR);
+          var edge = Math.floor(p * W);
+          drawNoise(edge, W, 0.35);
+          drawGlitchLines(Math.floor((1 - p) * 6));
+
+        }
+        // After TOTAL: transparent (done)
+
+        if (elapsed < TOTAL) {
+          requestAnimationFrame(frame);
+        }
+      }
+
+      requestAnimationFrame(frame);
+    })();
+  </script>
+</body>
+</html>

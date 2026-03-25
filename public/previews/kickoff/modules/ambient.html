@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920,height=1080">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    html,body{width:1920px;height:1080px;overflow:hidden;background:transparent}
+    canvas{position:absolute;top:0;left:0}
+  </style>
+</head>
+<body>
+  <canvas id="amb" width="1920" height="1080"></canvas>
+  <script>
+    (function(){
+      var c=document.getElementById('amb'),ctx=c.getContext('2d'),W=1920,H=1080;
+      var sx1=302,sx2=1618,sy1=114,sy2=1024;
+      function inSafe(x,y){return x>sx1&&x<sx2&&y>sy1&&y<sy2;}
+
+      // Confetti particles (matching pro_league style)
+      var confetti=[];
+      for(var i=0;i<50;i++){
+        confetti.push({
+          x:Math.random()*W, y:Math.random()*H,
+          w:2+Math.random()*4, h:1.5+Math.random()*3,
+          vy:0.3+Math.random()*0.6, vx:(Math.random()-0.5)*0.3,
+          rot:Math.random()*Math.PI*2,
+          rotSpeed:(Math.random()-0.5)*0.06,
+          wobble:Math.random()*Math.PI*2,
+          wobbleSpeed:0.02+Math.random()*0.03,
+          wobbleAmp:0.2+Math.random()*0.5,
+          a:0.15+Math.random()*0.3
+        });
+      }
+
+      function draw(){
+        ctx.clearRect(0,0,W,H);
+        for(var i=0;i<confetti.length;i++){
+          var p=confetti[i];
+          p.wobble+=p.wobbleSpeed;
+          p.x+=p.vx+Math.sin(p.wobble)*p.wobbleAmp;
+          p.y+=p.vy;
+          p.rot+=p.rotSpeed;
+          if(p.y>H+20){p.y=-20;p.x=Math.random()*W;}
+          var alpha=inSafe(p.x,p.y)?p.a*0.2:p.a;
+          ctx.save();
+          ctx.translate(p.x,p.y);
+          ctx.rotate(p.rot);
+          ctx.fillStyle='rgba(255,255,255,'+alpha+')';
+          ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+          ctx.restore();
+        }
+        requestAnimationFrame(draw);
+      }
+      draw();
+    })();
+  </script>
+</body>
+</html>

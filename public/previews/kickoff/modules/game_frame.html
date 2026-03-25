@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920,height=1080">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .game-wrap {
+      position: absolute;
+      left: 302px; top: 114px;
+      width: 1316px; height: 910px;
+    }
+
+    .game-frame {
+      position: absolute; inset: 0;
+      clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px);
+    }
+
+    /* SVG border matching pro_league style */
+    .frame-border { position: absolute; inset: 0; pointer-events: none; }
+    .frame-border svg { width: 100%; height: 100%; }
+    .frame-line {
+      fill: none; stroke-width: 2.5;
+      stroke: url(#koGrad);
+      filter: drop-shadow(0 0 3px rgba(0,230,118,0.3)) drop-shadow(0 0 6px rgba(0,176,255,0.2));
+    }
+    .frame-inner-line {
+      fill: none; stroke-width: 0.8;
+      stroke: rgba(255,255,255,0.10);
+    }
+
+    /* Gradient stripes on edges */
+    .stripe { position: absolute; background: var(--grad-main); pointer-events: none; }
+    .stripe-top { top: -1px; left: 14px; right: 0; height: 3px;
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 4px 100%); }
+    .stripe-bottom { bottom: -1px; left: 0; right: 14px; height: 3px;
+      clip-path: polygon(0 0, calc(100% - 4px) 0, 100% 100%, 0 100%); }
+
+    /* Bottom glow line */
+    .glow-line {
+      position: absolute; bottom: 0; left: 0; right: 14px; height: 1px;
+      background: var(--grad-main); opacity: 0.4;
+      animation: koLineGlow 3s ease-in-out infinite;
+    }
+
+    /* Diagonal accent lines (field lines feel) */
+    .diag { position: absolute; width: 1px; pointer-events: none;
+      background: linear-gradient(180deg, rgba(0,176,255,0.2), transparent);
+      transform: rotate(25deg); }
+    .d1 { top: 8px; right: 40px; height: 40px; animation: koDiagFade 4s ease-in-out infinite; }
+    .d2 { top: 8px; right: 70px; height: 30px; animation: koDiagFade 4s ease-in-out infinite 0.5s; }
+    .d3 { top: 8px; right: 100px; height: 22px; animation: koDiagFade 4s ease-in-out infinite 1s; }
+
+    /* Edge labels */
+    .edge { position: absolute; font-size: 10px; font-weight: 600;
+      letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-dim); pointer-events: none; }
+    .edge-tl { top: 8px; left: 20px; }
+    .edge-tr { top: 8px; right: 20px; color: rgba(0,176,255,0.3); }
+    .edge-bot { bottom: 16px; left: 20px; font-style: italic; }
+
+    /* Corner cuts SVG */
+    .cc { position: absolute; width: 18px; height: 18px; pointer-events: none; }
+    .cc-tl { top: -1px; left: -1px; }
+    .cc-br { bottom: -1px; right: -1px; }
+    .cc line { fill: none; stroke-width: 2; stroke: var(--green);
+      filter: drop-shadow(0 0 3px rgba(0,230,118,0.4)); }
+  </style>
+</head>
+<body>
+  <div class="game-wrap">
+    <div class="game-frame">
+      <!-- SVG border -->
+      <div class="frame-border">
+        <svg viewBox="0 0 1316 910" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="koGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#00e676"/>
+              <stop offset="50%" stop-color="#33ff8c"/>
+              <stop offset="100%" stop-color="#00b0ff"/>
+            </linearGradient>
+          </defs>
+          <polygon class="frame-line" points="14,0 1316,0 1316,896 1302,910 0,910 0,14"/>
+        </svg>
+      </div>
+      <!-- Inner trim -->
+      <div style="position:absolute;inset:5px;pointer-events:none;">
+        <svg viewBox="0 0 1306 900" preserveAspectRatio="none" style="width:100%;height:100%">
+          <polygon class="frame-inner-line" points="10,0 1306,0 1306,890 1296,900 0,900 0,10"/>
+        </svg>
+      </div>
+
+      <!-- Stripes -->
+      <div class="stripe stripe-top"></div>
+      <div class="stripe stripe-bottom"></div>
+      <div class="glow-line"></div>
+
+      <!-- Diagonal accents -->
+      <div class="diag d1"></div>
+      <div class="diag d2"></div>
+      <div class="diag d3"></div>
+
+      <!-- Corner cuts -->
+      <div class="cc cc-tl"><svg viewBox="0 0 18 18"><line x1="0" y1="18" x2="18" y2="0"/></svg></div>
+      <div class="cc cc-br"><svg viewBox="0 0 18 18"><line x1="0" y1="18" x2="18" y2="0"/></svg></div>
+
+      <!-- Edge labels -->
+      <span class="edge edge-tl" data-config="gameEdgeLeft">CAM 1</span>
+      <span class="edge edge-tr" data-config="gameEdgeRight">BROADCAST</span>
+      <span class="edge edge-bot" data-config="gameEdgeBottom">// match feed</span>
+    </div>
+
+    <!-- Shimmer -->
+    <div class="ko-shimmer" style="position:absolute;inset:0;pointer-events:none;overflow:hidden;
+      clip-path:polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px);"></div>
+  </div>
+  <script src="../config/config.js"></script>
+  <script src="../shared.js"></script>
+</body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920,height=1080">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .panel-wrap {
+      position: absolute;
+      right: 14px; top: 80px;
+      width: 250px;
+    }
+
+    .panel {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-mid);
+      box-shadow: var(--glow-green);
+      padding: 16px 14px;
+      clip-path: polygon(
+        12px 0, calc(100% - 12px) 0,
+        100% 12px, 100% calc(100% - 12px),
+        calc(100% - 12px) 100%, 12px 100%,
+        0 calc(100% - 12px), 0 12px
+      );
+      position: relative;
+    }
+
+    .panel::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(
+        0deg, transparent, transparent 2px,
+        rgba(0,255,102,0.012) 2px, rgba(0,255,102,0.012) 4px
+      );
+      pointer-events: none;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .panel-title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: 3px;
+      color: var(--green);
+    }
+
+    .panel-tag {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .panel-tag-text {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      color: var(--text-mid);
+    }
+
+    .panel-divider {
+      height: 1px;
+      background: linear-gradient(90deg, var(--border-mid), transparent);
+      margin-bottom: 14px;
+    }
+
+    /* Data items — label + empty zone for StreamElements source */
+    .data-item {
+      margin-bottom: 6px;
+    }
+    .data-item:last-child { margin-bottom: 0; }
+
+    .data-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 2px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Empty zone where the user places a StreamElements source in OBS */
+    .data-zone {
+      height: 36px;
+      border-bottom: 1px solid var(--border-dim);
+    }
+
+    /* Prefix marker */
+    .data-prefix {
+      display: inline-block;
+      width: 3px; height: 10px;
+      flex-shrink: 0;
+    }
+    .data-prefix--green  { background: var(--green); box-shadow: 0 0 4px var(--green); }
+    .data-prefix--cyan   { background: var(--cyan);  box-shadow: 0 0 4px var(--cyan); }
+    .data-prefix--amber  { background: var(--amber); box-shadow: 0 0 4px var(--amber); }
+
+    /* Corner marks */
+    .pc { position: absolute; pointer-events: none; }
+    .pc::before, .pc::after {
+      content: ''; position: absolute;
+      background: var(--cyan);
+      box-shadow: 0 0 4px var(--cyan);
+    }
+    .pc--tl { top: 2px; left: 10px; }
+    .pc--tl::before { width: 14px; height: 2px; }
+    .pc--tl::after  { width: 2px; height: 14px; }
+
+    .pc--br { bottom: 2px; right: 10px; }
+    .pc--br::before { width: 14px; height: 2px; bottom: 0; right: 0; }
+    .pc--br::after  { width: 2px; height: 14px; bottom: 0; right: 0; }
+  </style>
+</head>
+<body>
+  <div class="panel-wrap">
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-title" data-config="sideTitle">DATA LINK</span>
+        <div class="panel-tag">
+          <span class="vg-dot" style="width:5px;height:5px;"></span>
+          <span class="panel-tag-text" data-config="sideTag">ONLINE</span>
+        </div>
+      </div>
+      <div class="panel-divider"></div>
+
+      <div class="data-item">
+        <div class="data-label"><span class="data-prefix data-prefix--green"></span><span data-config="sideLabel1">ULTIMO FOLLOW</span></div>
+        <div class="data-zone"></div>
+      </div>
+
+      <div class="data-item">
+        <div class="data-label"><span class="data-prefix data-prefix--cyan"></span><span data-config="sideLabel2">REDES</span></div>
+        <div class="data-zone"></div>
+      </div>
+
+      <div class="data-item">
+        <div class="data-label"><span class="data-prefix data-prefix--amber"></span><span data-config="sideLabel3">ULTIMO SUB</span></div>
+        <div class="data-zone"></div>
+      </div>
+
+      <span class="pc pc--tl"></span>
+      <span class="pc pc--br"></span>
+    </div>
+  </div>
+
+  <script src="../config/config.js"></script>
+  <script src="../shared.js"></script>
+</body>
+</html>

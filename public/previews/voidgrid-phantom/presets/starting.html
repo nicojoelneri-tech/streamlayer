@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920,height=1080">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+    }
+
+    .card {
+      width: 560px;
+      padding: 44px 40px;
+      background: var(--bg-void);
+      border: 1px solid var(--border-mid);
+      box-shadow: var(--glow-green);
+      text-align: center;
+      position: relative;
+      clip-path: polygon(
+        18px 0, calc(100% - 18px) 0,
+        100% 18px, 100% calc(100% - 18px),
+        calc(100% - 18px) 100%, 18px 100%,
+        0 calc(100% - 18px), 0 18px
+      );
+    }
+
+    .card::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(
+        0deg, transparent, transparent 2px,
+        rgba(176,64,255,0.015) 2px, rgba(176,64,255,0.015) 4px
+      );
+      pointer-events: none;
+    }
+
+    .tag {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      color: var(--text-dim);
+      margin-bottom: 16px;
+    }
+
+    .heading {
+      font-family: var(--font-display);
+      font-weight: 900;
+      font-size: 36px;
+      letter-spacing: 4px;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .accent {
+      font-family: var(--font-display);
+      font-weight: 900;
+      font-size: 36px;
+      letter-spacing: 4px;
+      color: var(--green);
+      text-shadow: 0 0 20px rgba(176,64,255,0.4);
+      margin-bottom: 20px;
+    }
+
+    /* Progress bar */
+    .progress-wrap {
+      width: 100%;
+      height: 4px;
+      background: rgba(176,64,255,0.1);
+      border-radius: 2px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+    .progress-bar {
+      height: 100%;
+      background: var(--green);
+      box-shadow: 0 0 8px var(--green);
+      width: 0;
+      animation: vgProgressBar 4s ease-out forwards;
+    }
+
+    .sub {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-mid);
+      margin-bottom: 20px;
+    }
+
+    .chips {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .chip {
+      padding: 4px 14px;
+      background: rgba(176,64,255,0.08);
+      border: 1px solid var(--border-dim);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      color: var(--green);
+      clip-path: polygon(6px 0, calc(100% - 6px) 0, 100% 50%, calc(100% - 6px) 100%, 6px 100%, 0 50%);
+    }
+    .chip--blink {
+      animation: vgPulse 1s ease-in-out infinite;
+    }
+
+    .note {
+      font-size: 10px;
+      color: var(--text-dim);
+      letter-spacing: 1px;
+    }
+
+    /* Corner marks */
+    .sc { position: absolute; pointer-events: none; z-index: 2; }
+    .sc::before, .sc::after {
+      content: ''; position: absolute;
+      background: var(--green);
+      box-shadow: 0 0 4px var(--green);
+    }
+    .sc--tl { top: 4px; left: 16px; }
+    .sc--tl::before { width: 18px; height: 2px; }
+    .sc--tl::after  { width: 2px; height: 18px; }
+
+    .sc--br { bottom: 4px; right: 16px; }
+    .sc--br::before { width: 18px; height: 2px; bottom: 0; right: 0; }
+    .sc--br::after  { width: 2px; height: 18px; bottom: 0; right: 0; }
+
+    /* Background canvas for particles */
+    canvas {
+      position: fixed; top: 0; left: 0;
+      z-index: -1;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="bg" width="1920" height="1080"></canvas>
+
+  <div class="card">
+    <div class="tag" data-config="startingTag">// initializing</div>
+    <div class="heading" data-config="startingTitle">Conectando</div>
+    <div class="accent" data-config="startingAccent">Al Grid</div>
+    <div class="progress-wrap"><div class="progress-bar"></div></div>
+    <div class="sub" data-config="startingSub">Preparando todos los sistemas del stream...</div>
+    <div class="chips">
+      <span class="chip" data-config="startingChip1">OVERLAY ✓</span>
+      <span class="chip" data-config="startingChip2">AUDIO ✓</span>
+      <span class="chip chip--blink" data-config="startingChip3">SCENE ..</span>
+    </div>
+    <div class="note" data-config="startingNote">VOIDGRID PHANTOM v1.0 // init</div>
+
+    <span class="sc sc--tl"></span>
+    <span class="sc sc--br"></span>
+  </div>
+
+  <script src="../config/config.js"></script>
+  <script src="../shared.js"></script>
+  <script>
+    (function () {
+      var c = document.getElementById('bg');
+      var ctx = c.getContext('2d');
+      var W = 1920, H = 1080;
+      var particles = [];
+      for (var i = 0; i < 60; i++) {
+        particles.push({
+          x: Math.random() * W, y: Math.random() * H,
+          r: Math.random() * 1.2 + 0.3,
+          a: Math.random() * 0.4 + 0.1,
+          vy: -(Math.random() * 0.3 + 0.1),
+          vx: (Math.random() - 0.5) * 0.2
+        });
+      }
+      function draw() {
+        ctx.clearRect(0, 0, W, H);
+        for (var i = 0; i < particles.length; i++) {
+          var p = particles[i];
+          p.x += p.vx; p.y += p.vy;
+          if (p.y < -10) { p.y = H + 10; p.x = Math.random() * W; }
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(176, 64, 255, ' + p.a + ')';
+          ctx.fill();
+        }
+        requestAnimationFrame(draw);
+      }
+      draw();
+    })();
+  </script>
+</body>
+</html>

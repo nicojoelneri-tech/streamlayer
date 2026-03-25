@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920,height=1080">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 1920px; height: 1080px; overflow: hidden; background: transparent; }
+    canvas { position: absolute; top: 0; left: 0; }
+  </style>
+</head>
+<body>
+  <canvas id="amb" width="1920" height="1080"></canvas>
+  <script>
+    (function () {
+      var c = document.getElementById('amb');
+      var ctx = c.getContext('2d');
+      var W = 1920, H = 1080;
+
+      // Star field
+      var stars = [];
+      for (var i = 0; i < 120; i++) {
+        stars.push({
+          x: Math.random() * W,
+          y: Math.random() * H,
+          r: Math.random() * 1.5 + 0.3,
+          a: Math.random() * 0.6 + 0.2,
+          speed: Math.random() * 0.0008 + 0.0003,
+          phase: Math.random() * Math.PI * 2
+        });
+      }
+
+      // Nebula particles (slow floating)
+      var nebula = [];
+      for (var i = 0; i < 35; i++) {
+        nebula.push({
+          x: Math.random() * W,
+          y: Math.random() * H,
+          r: Math.random() * 40 + 15,
+          vx: (Math.random() - 0.5) * 0.15,
+          vy: (Math.random() - 0.5) * 0.1,
+          hue: Math.random() > 0.5 ? 150 : 280, // green or purple
+          a: Math.random() * 0.025 + 0.008
+        });
+      }
+
+      // Gameplay safe zone (sparse particles here)
+      var safeX1 = 302, safeX2 = 1648, safeY1 = 80, safeY2 = 1020;
+
+      function inSafe(x, y) {
+        return x > safeX1 && x < safeX2 && y > safeY1 && y < safeY2;
+      }
+
+      var t = 0;
+
+      function draw() {
+        ctx.clearRect(0, 0, W, H);
+        t += 0.016;
+
+        // Draw nebula clouds
+        for (var i = 0; i < nebula.length; i++) {
+          var n = nebula[i];
+          n.x += n.vx;
+          n.y += n.vy;
+
+          if (n.x < -60) n.x = W + 60;
+          if (n.x > W + 60) n.x = -60;
+          if (n.y < -60) n.y = H + 60;
+          if (n.y > H + 60) n.y = -60;
+
+          var alpha = inSafe(n.x, n.y) ? n.a * 0.3 : n.a;
+          var grad = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.r);
+          grad.addColorStop(0, 'hsla(' + n.hue + ', 80%, 50%, ' + alpha + ')');
+          grad.addColorStop(1, 'hsla(' + n.hue + ', 80%, 50%, 0)');
+          ctx.fillStyle = grad;
+          ctx.fillRect(n.x - n.r, n.y - n.r, n.r * 2, n.r * 2);
+        }
+
+        // Draw stars
+        for (var i = 0; i < stars.length; i++) {
+          var s = stars[i];
+          var flicker = Math.sin(t * 2 + s.phase) * 0.3 + 0.7;
+          var alpha = s.a * flicker;
+
+          if (inSafe(s.x, s.y)) alpha *= 0.25;
+
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(200, 255, 220, ' + alpha + ')';
+          ctx.fill();
+
+          // Glow for brighter stars
+          if (s.r > 1) {
+            ctx.beginPath();
+            ctx.arc(s.x, s.y, s.r * 3, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(0, 255, 102, ' + (alpha * 0.15) + ')';
+            ctx.fill();
+          }
+        }
+
+        requestAnimationFrame(draw);
+      }
+
+      draw();
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920,height=1080">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .hud {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 74px;
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      gap: 8px;
+    }
+
+    /* Left block: stream mode + status */
+    .hud-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 280px;
+    }
+    .hud-mode {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: rgba(176,64,255,0.10);
+      border: 1px solid var(--border-mid);
+      clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 50%, calc(100% - 8px) 100%, 8px 100%, 0 50%);
+    }
+    .hud-mode-text {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 2px;
+      color: var(--green);
+    }
+    .hud-status {
+      font-size: 11px;
+      color: var(--text-mid);
+      letter-spacing: 1px;
+      font-weight: 600;
+    }
+
+    /* Center: title with glow */
+    .hud-center {
+      flex: 1;
+      text-align: center;
+      position: relative;
+    }
+    .hud-title {
+      font-family: var(--font-display);
+      font-weight: 900;
+      font-size: 28px;
+      letter-spacing: 6px;
+      color: var(--green);
+      text-shadow: 0 0 20px rgba(176,64,255,0.4), 0 0 40px rgba(176,64,255,0.15);
+      animation: vgFlicker 8s ease-in-out infinite;
+      position: relative;
+    }
+    .hud-title::before,
+    .hud-title::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      pointer-events: none;
+    }
+    .hud-title::before {
+      color: var(--cyan);
+      clip: rect(0, 9999px, 2px, 0);
+      animation: vgGlitch 4s linear infinite;
+    }
+    .hud-title::after {
+      color: var(--magenta);
+      clip: rect(0, 9999px, 2px, 0);
+      animation: vgGlitch 3s linear infinite reverse;
+    }
+
+    /* Right block: channel + game */
+    .hud-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 280px;
+      justify-content: flex-end;
+    }
+    .hud-channel {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--cyan);
+      letter-spacing: 2px;
+    }
+    .hud-game-box {
+      padding: 6px 16px;
+      background: var(--bg-panel);
+      border: 1px solid rgba(255,96,176,0.35);
+      box-shadow: var(--glow-cyan);
+      clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 50%, calc(100% - 8px) 100%, 8px 100%, 0 50%);
+    }
+    .hud-game {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      color: var(--cyan);
+    }
+
+    /* Bottom border line */
+    .hud-line {
+      position: absolute;
+      bottom: 0; left: 14px; right: 14px;
+      height: 1px;
+      background: linear-gradient(90deg,
+        var(--green), var(--border-mid) 30%,
+        var(--border-dim) 50%,
+        var(--border-mid) 70%, var(--cyan)
+      );
+    }
+
+    /* Decorative hexes */
+    .hud-hex-left, .hud-hex-right {
+      position: absolute;
+      bottom: -4px;
+    }
+    .hud-hex-left  { left: 296px; }
+    .hud-hex-right { right: 264px; }
+  </style>
+</head>
+<body>
+  <div class="hud">
+    <div class="hud-left">
+      <div class="hud-mode">
+        <span class="vg-dot"></span>
+        <span class="hud-mode-text" data-config="streamMode">LIVE</span>
+      </div>
+      <span class="hud-status" data-config="statusLine">SIGNAL ACTIVE</span>
+    </div>
+
+    <div class="hud-center">
+      <div class="hud-title" data-config="hudCenter" data-text="VOIDGRID">VOIDGRID</div>
+    </div>
+
+    <div class="hud-right">
+      <span class="hud-channel" data-config="channelName">STREAMER</span>
+      <div class="hud-game-box">
+        <span class="hud-game" data-config="gameLabel">GAME TITLE</span>
+      </div>
+    </div>
+
+    <div class="hud-line"></div>
+    <div class="hud-hex-left"><span class="vg-hex"></span></div>
+    <div class="hud-hex-right"><span class="vg-hex" style="background:var(--cyan)"></span></div>
+  </div>
+
+  <script src="../config/config.js"></script>
+  <script src="../shared.js"></script>
+  <script>
+    var t = document.querySelector('.hud-title');
+    if (t) t.setAttribute('data-text', t.textContent);
+  </script>
+</body>
+</html>

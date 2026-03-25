@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920,height=1080">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .ticker-wrap {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 50px; display: flex; align-items: center; overflow: hidden;
+    }
+    .ticker-line {
+      position: absolute; top: 0; left: 14px; right: 14px; height: 2px;
+      background: var(--grad-main); opacity: 0.4;
+      animation: koLineGlow 3s ease-in-out infinite;
+    }
+    .ticker-tag {
+      flex-shrink: 0; margin-left: 14px;
+      display: flex; align-items: center; gap: 0;
+    }
+    .tt-live {
+      background: linear-gradient(90deg, #00e676, #00b854);
+      color: #fff; padding: 0 10px; line-height: 20px;
+      font-size: 10px; font-weight: 700; letter-spacing: 2px;
+      clip-path: polygon(0 0, calc(100% - 5px) 0, 100% 100%, 0 100%);
+    }
+    .ticker-scroll { flex: 1; overflow: hidden; margin: 0 12px; }
+    .ticker-track {
+      display: flex; gap: 36px; white-space: nowrap;
+      animation: koTicker 80s linear infinite;
+    }
+    .ticker-track span {
+      font-size: 13px; font-weight: 500; letter-spacing: 0.5px;
+      color: var(--text-mid);
+      display: flex; align-items: center; gap: 36px;
+    }
+    .ticker-track span::after {
+      content: ''; display: inline-block; width: 4px; height: 4px;
+      background: var(--green); border-radius: 50%; opacity: 0.4;
+    }
+    .hl { color: var(--green); font-weight: 700; }
+  </style>
+</head>
+<body>
+  <div class="ticker-wrap">
+    <div class="ticker-line"></div>
+    <div class="ticker-tag">
+      <div class="tt-live" data-config="tickerTag">INFO</div>
+    </div>
+    <div class="ticker-scroll">
+      <div class="ticker-track" data-config-list="tickerItems"></div>
+    </div>
+  </div>
+  <script src="../config/config.js"></script>
+  <script src="../shared.js"></script>
+</body>
+</html>

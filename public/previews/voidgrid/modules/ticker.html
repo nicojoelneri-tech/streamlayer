@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920,height=1080">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .ticker-wrap {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 54px;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    /* Top border line */
+    .ticker-line {
+      position: absolute;
+      top: 0; left: 14px; right: 14px;
+      height: 1px;
+      background: linear-gradient(90deg,
+        var(--green), var(--border-dim) 40%,
+        var(--border-dim) 60%, var(--cyan)
+      );
+    }
+
+    /* Tag */
+    .ticker-tag {
+      flex-shrink: 0;
+      margin-left: 14px;
+      padding: 4px 14px;
+      background: rgba(0,255,102,0.10);
+      border: 1px solid var(--border-dim);
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: var(--green);
+      clip-path: polygon(6px 0, calc(100% - 6px) 0, 100% 50%, calc(100% - 6px) 100%, 6px 100%, 0 50%);
+    }
+
+    /* Scrolling area */
+    .ticker-scroll {
+      flex: 1;
+      overflow: hidden;
+      margin: 0 12px;
+    }
+
+    .ticker-track {
+      display: flex;
+      gap: 40px;
+      white-space: nowrap;
+      animation: vgTicker 80s linear infinite;
+    }
+
+    .ticker-track span {
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      color: var(--text-mid);
+      display: flex;
+      align-items: center;
+      gap: 40px;
+    }
+
+    .ticker-track span::after {
+      content: '';
+      display: inline-block;
+      width: 5px; height: 6px;
+      background: var(--green);
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      opacity: 0.4;
+    }
+
+    /* Hex markers on edges */
+    .ticker-hex-left {
+      position: absolute;
+      top: -4px; left: 296px;
+    }
+    .ticker-hex-right {
+      position: absolute;
+      top: -4px; right: 264px;
+    }
+
+    .hl { color: var(--cyan); font-weight: 700; }
+  </style>
+</head>
+<body>
+  <div class="ticker-wrap">
+    <div class="ticker-line"></div>
+    <div class="ticker-hex-left"><span class="vg-hex"></span></div>
+    <div class="ticker-hex-right"><span class="vg-hex" style="background:var(--cyan)"></span></div>
+
+    <div class="ticker-tag" data-config="tickerTag">GRID</div>
+
+    <div class="ticker-scroll">
+      <div class="ticker-track" data-config-list="tickerItems"></div>
+    </div>
+  </div>
+
+  <script src="../config/config.js"></script>
+  <script src="../shared.js"></script>
+</body>
+</html>

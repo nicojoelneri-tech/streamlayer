@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920,height=1080">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .cam-wrap { position: absolute; left: 14px; bottom: 60px; width: 200px; height: 320px; }
+    .cam-frame { position: absolute; inset: 0;
+      clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px); }
+    .cam-svg { position: absolute; inset: 0; pointer-events: none; }
+    .cam-svg svg { width: 100%; height: 100%; }
+    .cam-line { fill: none; stroke-width: 2.5; stroke: url(#camGrad);
+      filter: drop-shadow(0 0 3px rgba(255,230,0,0.3)); }
+    .cam-stripe-top { position: absolute; top: -1px; left: 10px; right: 0; height: 3px;
+      background: var(--grad-main); clip-path: polygon(0 0, 100% 0, 100% 100%, 3px 100%); }
+    .cam-stripe-bot { position: absolute; bottom: -1px; left: 0; right: 10px; height: 3px;
+      background: var(--grad-main); clip-path: polygon(0 0, calc(100% - 3px) 0, 100% 100%, 0 100%); }
+    .cam-hud { position: absolute; top: -14px; left: 12px;
+      display: flex; align-items: center; gap: 0; height: 16px;
+      font-size: 8px; font-weight: 700; letter-spacing: 1px; }
+    .cam-hud-live { background: linear-gradient(90deg, #ffe600, #ccb800);
+      color: #fff; padding: 0 8px; line-height: 16px;
+      clip-path: polygon(0 0, calc(100% - 4px) 0, 100% 100%, 0 100%); }
+    .cam-hud-info { background: rgba(0,0,0,0.7); color: rgba(255,255,255,0.6);
+      padding: 0 8px 0 6px; line-height: 16px;
+      border: 1px solid rgba(255,255,255,0.08); border-left: none;
+      clip-path: polygon(0 0, calc(100% - 4px) 0, 100% 100%, 0 100%); }
+    .cc { position: absolute; width: 14px; height: 14px; pointer-events: none; }
+    .cc-tl { top: -1px; left: -1px; }
+    .cc-br { bottom: -1px; right: -1px; }
+    .cc line { fill: none; stroke-width: 2; stroke: var(--green);
+      filter: drop-shadow(0 0 3px rgba(255,230,0,0.4)); }
+  </style>
+</head>
+<body>
+  <div class="cam-wrap">
+    <div class="cam-hud"><div class="cam-hud-live">LIVE</div><div class="cam-hud-info">CAM</div></div>
+    <div class="cam-frame">
+      <div class="cam-svg">
+        <svg viewBox="0 0 200 320" preserveAspectRatio="none">
+          <defs><linearGradient id="camGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#ffe600"/><stop offset="100%" stop-color="#9b30ff"/>
+          </linearGradient></defs>
+          <polygon class="cam-line" points="10,0 200,0 200,310 190,320 0,320 0,10"/>
+        </svg>
+      </div>
+      <div class="cam-stripe-top"></div>
+      <div class="cam-stripe-bot"></div>
+      <div class="cc cc-tl"><svg viewBox="0 0 14 14"><line x1="0" y1="14" x2="14" y2="0"/></svg></div>
+      <div class="cc cc-br"><svg viewBox="0 0 14 14"><line x1="0" y1="14" x2="14" y2="0"/></svg></div>
+    </div>
+  </div>
+  <script src="../config/config.js"></script>
+  <script src="../shared.js"></script>
+</body>
+</html>

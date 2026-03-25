@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920,height=1080">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    html,body{width:1920px;height:1080px;overflow:hidden;background:transparent}
+    canvas{position:absolute;top:0;left:0}
+  </style>
+</head>
+<body>
+  <canvas id="stg" width="1920" height="1080"></canvas>
+  <script>
+    (function(){
+      var c=document.getElementById('stg'),ctx=c.getContext('2d'),W=1920,H=1080;
+      var TOTAL=1000,FILL=450,HOLD=150,CLEAR=400;
+      var startTime=null;
+
+      function easeInOut(t){return t<0.5?2*t*t:1-Math.pow(-2*t+2,2)/2;}
+
+      // Diagonal wipe with green/cyan gradient
+      function drawWipe(progress,alpha){
+        var bandW=350;
+        var center=-bandW+progress*(W+bandW*2);
+        for(var y=0;y<H;y+=2){
+          var offset=(y/H)*180;
+          var x=center+offset;
+          var w=bandW+Math.random()*30;
+          // Green to cyan gradient based on y position
+          var r=0, g=Math.floor(180+75*(y/H)), b=Math.floor(100+155*(y/H));
+          ctx.fillStyle='rgba('+r+','+g+','+b+','+(alpha*(0.6+Math.random()*0.4))+')';
+          ctx.fillRect(x-w/2,y,w,2);
+        }
+      }
+
+      function frame(ts){
+        if(!startTime)startTime=ts;
+        var elapsed=ts-startTime;
+        ctx.clearRect(0,0,W,H);
+
+        if(elapsed<FILL){
+          var p=easeInOut(elapsed/FILL);
+          drawWipe(p,0.85);
+        } else if(elapsed<FILL+HOLD){
+          ctx.fillStyle='rgba(8,16,12,0.95)';
+          ctx.fillRect(0,0,W,H);
+          // Green flash center
+          var grad=ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,500);
+          grad.addColorStop(0,'rgba(0,230,118,0.08)');
+          grad.addColorStop(1,'rgba(0,176,255,0)');
+          ctx.fillStyle=grad;
+          ctx.fillRect(0,0,W,H);
+        } else if(elapsed<TOTAL){
+          var p=easeInOut((elapsed-FILL-HOLD)/CLEAR);
+          drawWipe(1-p,0.7*(1-p));
+        }
+
+        if(elapsed<TOTAL)requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    })();
+  </script>
+</body>
+</html>

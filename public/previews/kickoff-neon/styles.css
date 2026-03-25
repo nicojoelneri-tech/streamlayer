@@ -1,0 +1,218 @@
+/* ================================================================
+   KICKOFF NEON — Football Broadcast Overlay
+   Palette: Hot pink (#ff0050) + Broadcast cyan (#00e5ff)
+   Typography: Rajdhani (sports broadcast feel)
+   Geometry: Diagonal cuts top-left + bottom-right (pro_league style)
+   ================================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&display=swap');
+
+:root {
+  --green:        #ff0050;
+  --green-soft:   #ff4d6a;
+  --cyan:         #00e5ff;
+  --cyan-soft:    #66ecff;
+  --amber:        #ffca28;
+  --white:        #ffffff;
+
+  --bg-dark:      rgba(8, 12, 16, 0.92);
+  --bg-panel:     rgba(12, 18, 24, 0.88);
+  --bg-glass:     rgba(255, 0, 80, 0.04);
+
+  --border-dim:   rgba(255, 0, 80, 0.14);
+  --border-mid:   rgba(255, 0, 80, 0.32);
+  --border-bright:rgba(255, 0, 80, 0.55);
+
+  --text:         rgba(255, 255, 255, 0.94);
+  --text-mid:     rgba(255, 255, 255, 0.60);
+  --text-dim:     rgba(255, 255, 255, 0.30);
+
+  --grad-main:    linear-gradient(135deg, #ff0050, #ff4d6a, #00e5ff);
+  --glow-green:   0 0 8px rgba(255,0,80,0.25), 0 0 20px rgba(255,0,80,0.08);
+  --glow-cyan:    0 0 8px rgba(0,229,255,0.25), 0 0 20px rgba(0,229,255,0.08);
+
+  --cut: 12px;
+
+  --font-body:    'Rajdhani', sans-serif;
+  --font-display: 'Rajdhani', sans-serif;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+  width: 1920px; height: 1080px; overflow: hidden;
+  background: transparent;
+  font-family: var(--font-body);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Clip-path: pro_league diagonal (TL + BR cut) ── */
+.ko-clip {
+  clip-path: polygon(
+    var(--cut) 0, 100% 0,
+    100% calc(100% - var(--cut)),
+    calc(100% - var(--cut)) 100%, 0 100%,
+    0 var(--cut)
+  );
+}
+
+/* ── Base Panel ── */
+.ko-panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-mid);
+  box-shadow: var(--glow-green);
+  position: relative;
+  clip-path: polygon(
+    var(--cut) 0, 100% 0,
+    100% calc(100% - var(--cut)),
+    calc(100% - var(--cut)) 100%, 0 100%,
+    0 var(--cut)
+  );
+}
+
+/* Gradient stripe top accent (broadcast bar) */
+.ko-panel::before {
+  content: '';
+  position: absolute;
+  top: 0; left: var(--cut); right: 0;
+  height: 3px;
+  background: var(--grad-main);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ── Shimmer sweep (holographic broadcast effect) ── */
+.ko-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.ko-shimmer::after {
+  content: '';
+  position: absolute;
+  top: -100%; left: -100px;
+  width: 60px; height: 400%;
+  background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.05) 45%,
+    rgba(255,255,255,0.10) 50%, rgba(255,255,255,0.05) 55%, transparent 70%);
+  transform: rotate(25deg);
+  animation: koShimmer 5s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 5;
+}
+@keyframes koShimmer {
+  0%   { left: -100px; }
+  100% { left: calc(100% + 100px); }
+}
+
+/* ── Corner marks (matching pro_league diagonal) ── */
+.ko-corner {
+  position: absolute;
+  width: 16px; height: 16px;
+  pointer-events: none;
+}
+.ko-corner svg { width: 100%; height: 100%; }
+.ko-corner line {
+  fill: none; stroke-width: 2;
+  stroke: url(#koCornerGrad);
+  filter: drop-shadow(0 0 3px rgba(255,0,80,0.4));
+}
+
+/* ── Stripe accents (broadcast bars on edges) ── */
+.ko-stripe {
+  position: absolute;
+  background: var(--grad-main);
+  pointer-events: none;
+}
+
+/* ── Divider ── */
+.ko-divider {
+  height: 1px;
+  background: linear-gradient(90deg, var(--green), var(--cyan), transparent);
+  margin: 8px 0;
+}
+
+/* ── Status dot ── */
+.ko-dot {
+  display: inline-block;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 6px var(--green);
+  animation: koPulse 2s ease-in-out infinite;
+}
+
+/* ── Tag (broadcast style) ── */
+.ko-tag {
+  display: inline-block;
+  padding: 0 10px;
+  line-height: 18px;
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  clip-path: polygon(0 0, calc(100% - 5px) 0, 100% 100%, 0 100%);
+}
+.ko-tag--green {
+  background: linear-gradient(90deg, #ff0050, #cc0040);
+  color: #fff;
+}
+.ko-tag--dark {
+  background: rgba(0,0,0,0.7);
+  color: rgba(255,255,255,0.7);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-left: none;
+}
+
+/* ── Stat badge (small indicator) ── */
+.ko-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px; height: 20px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(0,0,0,0.5);
+  font-size: 8px; font-weight: 700;
+  color: rgba(0,229,255,0.7);
+}
+
+/* ── Animations ── */
+@keyframes koPulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.35; }
+}
+
+@keyframes koGlow {
+  0%, 100% { opacity: 0.3; }
+  50%      { opacity: 0.8; }
+}
+
+@keyframes koTicker {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes koProgressBar {
+  0%   { width: 0; }
+  100% { width: 85%; }
+}
+
+@keyframes koFadeLoop {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.45; }
+}
+
+@keyframes koRecBlink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+@keyframes koDiagFade {
+  0%, 100% { opacity: 0.15; }
+  50%      { opacity: 0.5; }
+}
+
+@keyframes koLineGlow {
+  0%, 100% { opacity: 0.3; }
+  50%      { opacity: 0.7; }
+}
+
+.hl { color: var(--green); font-weight: 700; }

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920,height=1080">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .sb-wrap {
+      position: absolute;
+      top: 74px; left: 50%;
+      transform: translateX(-50%);
+      display: flex; align-items: stretch;
+      height: 34px;
+      font-weight: 700;
+    }
+
+    /* League tag */
+    .sb-league {
+      background: linear-gradient(90deg, #ffe600, #ccb800);
+      color: #fff;
+      padding: 0 14px;
+      display: flex; align-items: center;
+      font-size: 10px; letter-spacing: 2px;
+      clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 100%, 0 100%);
+    }
+
+    /* Team 1 */
+    .sb-team {
+      background: rgba(0,0,0,0.75);
+      padding: 0 18px;
+      display: flex; align-items: center;
+      font-size: 14px; letter-spacing: 2px;
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-left: none;
+    }
+    .sb-team--away { border-right: none; border-left: 1px solid rgba(255,255,255,0.08); }
+
+    /* Score */
+    .sb-score {
+      background: rgba(0,0,0,0.85);
+      padding: 0 14px;
+      display: flex; align-items: center; gap: 10px;
+      border: 1px solid rgba(255,230,0,0.25);
+      border-left: none; border-right: none;
+    }
+    .sb-num {
+      font-size: 20px; letter-spacing: 1px;
+      background: var(--grad-main); -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .sb-dash { font-size: 14px; color: rgba(255,255,255,0.3); }
+
+    /* Time / Half */
+    .sb-time-wrap {
+      background: rgba(0,0,0,0.75);
+      padding: 0 14px;
+      display: flex; align-items: center; gap: 8px;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-left: none;
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 8px 100%);
+    }
+    .sb-half {
+      font-size: 10px; letter-spacing: 1.5px;
+      color: var(--green);
+    }
+    .sb-time {
+      font-size: 14px; letter-spacing: 1px;
+      color: rgba(255,255,255,0.7);
+    }
+
+    /* Shimmer over entire scoreboard */
+    .sb-shimmer {
+      position: absolute; inset: 0;
+      overflow: hidden; pointer-events: none;
+    }
+    .sb-shimmer::before {
+      content: '';
+      position: absolute;
+      top: -100%; left: -60px;
+      width: 40px; height: 400%;
+      background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.06) 48%,
+        rgba(255,255,255,0.12) 50%, rgba(255,255,255,0.06) 52%, transparent 70%);
+      transform: rotate(25deg);
+      animation: koShimmer 6s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body>
+  <div class="sb-wrap">
+    <div class="sb-league" data-config="matchLeague">PRO LEAGUE</div>
+    <div class="sb-team" data-config="matchTeam1">LOCAL</div>
+    <div class="sb-score">
+      <span class="sb-num" data-config="matchScore1">2</span>
+      <span class="sb-dash">—</span>
+      <span class="sb-num" data-config="matchScore2">1</span>
+    </div>
+    <div class="sb-team sb-team--away" data-config="matchTeam2">VISITANTE</div>
+    <div class="sb-time-wrap">
+      <span class="sb-half" data-config="matchHalf">2T</span>
+      <span class="sb-time" data-config="matchTime">67:34</span>
+    </div>
+    <div class="sb-shimmer"></div>
+  </div>
+  <script src="../config/config.js"></script>
+  <script src="../shared.js"></script>
+</body>
+</html>

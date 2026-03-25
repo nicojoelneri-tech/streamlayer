@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920,height=1080">
+  <title>KICKOFF NEON — Preview</title>
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    html,body{width:1920px;height:1080px;overflow:hidden;background:#100a10}
+    .bg{position:absolute;inset:0;
+      background:radial-gradient(ellipse at 35% 55%,rgba(80,0,30,0.12) 0%,transparent 55%),
+        radial-gradient(ellipse at 70% 35%,rgba(0,60,100,0.08) 0%,transparent 50%),
+        linear-gradient(180deg,#0e080c 0%,#140c18 50%,#100a10 100%)}
+    .game-placeholder{position:absolute;left:302px;top:114px;width:1316px;height:910px;
+      background:linear-gradient(135deg,rgba(20,10,16,0.5),rgba(16,8,14,0.5));
+      display:flex;align-items:center;justify-content:center;z-index:0}
+    .cam-placeholder{position:absolute;left:14px;bottom:60px;width:280px;height:200px;
+      background:linear-gradient(135deg,rgba(24,12,18,0.6),rgba(18,8,14,0.6));
+      display:flex;align-items:center;justify-content:center;z-index:5}
+    .chat-placeholder{position:absolute;right:14px;top:114px;width:280px;height:860px;z-index:5}
+    .placeholder-text{font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;
+      letter-spacing:4px;color:rgba(255,0,80,0.08);text-transform:uppercase}
+    .chat-msg{padding:5px 12px;font-family:'Rajdhani',sans-serif;font-size:13px;
+      color:rgba(255,255,255,0.08);border-bottom:1px solid rgba(255,0,80,0.03)}
+    .chat-msg b{color:rgba(255,0,80,0.12)}
+    iframe{position:absolute;top:0;left:0;width:1920px;height:1080px;border:none;background:transparent}
+    .controls{position:fixed;bottom:10px;right:10px;z-index:9999;display:flex;gap:6px;font-family:'Segoe UI',sans-serif}
+    .controls button{padding:6px 14px;background:rgba(0,0,0,0.7);border:1px solid rgba(255,0,80,0.35);
+      color:#ff0050;font-size:13px;cursor:pointer;border-radius:4px}
+    .controls button:hover{background:rgba(255,0,80,0.12)}
+    .tabs{position:fixed;top:10px;right:10px;z-index:9999;display:flex;gap:6px;font-family:'Segoe UI',sans-serif}
+    .tabs button{padding:6px 16px;background:rgba(0,0,0,0.7);border:1px solid rgba(255,0,80,0.25);
+      color:#aaa;font-size:12px;cursor:pointer;border-radius:4px;letter-spacing:1px}
+    .tabs button.active{color:#ff0050;border-color:#ff0050;background:rgba(255,0,80,0.08)}
+    .tabs button:hover{color:#ff0050}
+    .scene{display:none}.scene.active{display:block}
+  </style>
+</head>
+<body>
+  <div class="scene active" id="scene-gameplay">
+    <div class="bg"></div>
+    <div class="game-placeholder"><span class="placeholder-text">Game Capture</span></div>
+    <div class="cam-placeholder"><span class="placeholder-text" style="font-size:12px">Webcam</span></div>
+    <div class="chat-placeholder">
+      <div class="chat-msg"><b>Fan1:</b> goool!</div>
+      <div class="chat-msg"><b>Mod:</b> bienvenidos</div>
+      <div class="chat-msg"><b>Viewer:</b> que partido</div>
+      <div class="chat-msg"><b>Sub:</b> vamos!</div>
+    </div>
+    <iframe src="modules/ambient.html"></iframe>
+    <iframe src="modules/top_hud.html"></iframe>
+    <iframe src="modules/scoreboard.html"></iframe>
+    <iframe src="modules/game_frame.html"></iframe>
+    <iframe src="modules/focus_panel.html"></iframe>
+    <iframe src="modules/chat_frame.html"></iframe>
+    <iframe src="modules/camera_frame.html"></iframe>
+    <iframe src="modules/ticker.html"></iframe>
+  </div>
+
+  <div class="scene" id="scene-jc">
+    <div class="bg"></div>
+    <div class="cam-placeholder" style="left:14px;top:114px;bottom:auto;width:1614px;height:910px">
+      <span class="placeholder-text">Webcam (Full)</span></div>
+    <div class="chat-placeholder">
+      <div class="chat-msg"><b>Fan1:</b> hola!</div>
+      <div class="chat-msg"><b>Viewer:</b> que onda</div>
+    </div>
+    <iframe src="modules/top_hud.html"></iframe>
+    <iframe src="modules/just_chatting_camera.html"></iframe>
+    <iframe src="modules/chat_frame.html"></iframe>
+    <iframe src="modules/ticker.html"></iframe>
+  </div>
+
+  <div class="scene" id="scene-starting"><div class="bg"></div><iframe src="presets/starting.html"></iframe></div>
+  <div class="scene" id="scene-brb"><div class="bg"></div><iframe src="presets/brb.html"></iframe></div>
+  <div class="scene" id="scene-ending"><div class="bg"></div><iframe src="presets/ending.html"></iframe></div>
+
+  <div class="tabs">
+    <button class="active" onclick="showScene('gameplay', this)">GAMEPLAY</button>
+    <button onclick="showScene('jc', this)">JUST CHATTING</button>
+    <button onclick="showScene('starting', this)">STARTING</button>
+    <button onclick="showScene('brb', this)">BRB</button>
+    <button onclick="showScene('ending', this)">ENDING</button>
+  </div>
+  <div class="controls">
+    <button onclick="setZoom(0.5)">50%</button>
+    <button onclick="setZoom(0.65)">65%</button>
+    <button onclick="setZoom(0.8)">80%</button>
+    <button onclick="setZoom(1)">100%</button>
+  </div>
+  <script>
+    function showScene(id){
+      document.querySelectorAll('.scene').forEach(function(s){s.classList.remove('active')});
+      document.getElementById('scene-'+id).classList.add('active');
+      document.querySelectorAll('.tabs button').forEach(function(b){b.classList.remove('active')});
+      if(btn) btn.classList.add('active');
+    }
+    function setZoom(z){document.body.style.transform='scale('+z+')';document.body.style.transformOrigin='top left'}
+    (function(){var z=Math.min(window.innerWidth/1920,window.innerHeight/1080);//setZoom(z);
+    //window.addEventListener('resize',function(){var z=Math.min(window.innerWidth/1920,window.innerHeight/1080);setZoom(z)})//})();
+  </script>
+</body>
+</html>

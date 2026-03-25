@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920,height=1080">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .game-wrap {
+      position: absolute;
+      left: 302px; top: 80px;
+      width: 1346px; height: 940px;
+    }
+
+    .game-frame {
+      position: absolute;
+      inset: 0;
+      border: 2px solid var(--border-mid);
+      box-shadow: var(--glow-green);
+      background: transparent;
+      clip-path: polygon(
+        18px 0, calc(100% - 18px) 0,
+        100% 18px, 100% calc(100% - 18px),
+        calc(100% - 18px) 100%, 18px 100%,
+        0 calc(100% - 18px), 0 18px
+      );
+    }
+
+    /* Corner L-marks */
+    .gc { position: absolute; pointer-events: none; }
+    .gc::before, .gc::after {
+      content: ''; position: absolute;
+      background: var(--green);
+      box-shadow: 0 0 6px var(--green);
+    }
+    .gc--tl { top: 4px; left: 16px; }
+    .gc--tl::before { width: 24px; height: 2px; }
+    .gc--tl::after  { width: 2px; height: 24px; }
+
+    .gc--tr { top: 4px; right: 16px; }
+    .gc--tr::before { width: 24px; height: 2px; right: 0; }
+    .gc--tr::after  { width: 2px; height: 24px; right: 0; }
+
+    .gc--bl { bottom: 4px; left: 16px; }
+    .gc--bl::before { width: 24px; height: 2px; bottom: 0; }
+    .gc--bl::after  { width: 2px; height: 24px; bottom: 0; }
+
+    .gc--br { bottom: 4px; right: 16px; }
+    .gc--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+    .gc--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+    /* Edge labels */
+    .edge-label {
+      position: absolute;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      pointer-events: none;
+    }
+    .edge-tl { top: 8px; left: 44px; }
+    .edge-tr { top: 8px; right: 44px; color: rgba(255,170,0,0.4); }
+    .edge-bot { bottom: 8px; left: 44px; font-style: italic; }
+
+    /* SVG circuit connections */
+    .connections {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: visible;
+    }
+    .conn-line {
+      fill: none;
+      stroke: var(--border-dim);
+      stroke-width: 1;
+      stroke-dasharray: 6 4;
+    }
+    .conn-node {
+      fill: var(--green);
+      opacity: 0.6;
+      animation: vgPulse 3s ease-in-out infinite;
+    }
+    .conn-node--cyan {
+      fill: var(--cyan);
+      animation-delay: 1.5s;
+    }
+
+    /* Gradient fades on edges (where connections exit) */
+    .fade-left {
+      position: absolute;
+      left: -60px; top: 0;
+      width: 60px; height: 100%;
+      background: linear-gradient(90deg, transparent, transparent);
+    }
+  </style>
+</head>
+<body>
+  <div class="game-wrap">
+    <div class="game-frame">
+      <span class="gc gc--tl"></span>
+      <span class="gc gc--tr"></span>
+      <span class="gc gc--bl"></span>
+      <span class="gc gc--br"></span>
+
+      <span class="edge-label edge-tl" data-config="gameEdgeLeft">SECTOR-01</span>
+      <span class="edge-label edge-tr" data-config="gameEdgeRight">FEED://MAIN</span>
+      <span class="edge-label edge-bot" data-config="gameEdgeBottom">// stream output</span>
+    </div>
+
+    <!-- SVG circuit traces connecting to adjacent modules -->
+    <svg class="connections" viewBox="0 0 1346 940" xmlns="http://www.w3.org/2000/svg">
+      <!-- Left trace: to camera/chat area -->
+      <path class="conn-line" d="M 0 120 L -40 120"/>
+      <circle class="conn-node" cx="0" cy="120" r="3"/>
+
+      <path class="conn-line" d="M 0 500 L -40 500"/>
+      <circle class="conn-node conn-node--cyan" cx="0" cy="500" r="3"/>
+
+      <!-- Right trace: to focus panel -->
+      <path class="conn-line" d="M 1346 180 L 1386 180"/>
+      <circle class="conn-node conn-node--cyan" cx="1346" cy="180" r="3"/>
+
+      <path class="conn-line" d="M 1346 600 L 1386 600"/>
+      <circle class="conn-node" cx="1346" cy="600" r="3"/>
+
+      <!-- Top trace: to HUD -->
+      <path class="conn-line" d="M 400 0 L 400 -30"/>
+      <circle class="conn-node" cx="400" cy="0" r="2.5"/>
+
+      <path class="conn-line" d="M 900 0 L 900 -30"/>
+      <circle class="conn-node conn-node--cyan" cx="900" cy="0" r="2.5"/>
+
+      <!-- Bottom trace: to ticker -->
+      <path class="conn-line" d="M 600 940 L 600 970"/>
+      <circle class="conn-node" cx="600" cy="940" r="2.5"/>
+    </svg>
+  </div>
+
+  <script src="../config/config.js"></script>
+  <script src="../shared.js"></script>
+</body>
+</html>

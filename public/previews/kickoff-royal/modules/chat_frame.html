@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920,height=1080">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .chat-wrap { position: absolute; right: 14px; top: 114px; width: 280px; height: 910px; }
+    .chat-panel {
+      position: absolute; inset: 0;
+      background: var(--bg-panel); border: 1px solid var(--border-mid);
+      box-shadow: var(--glow-green);
+      display: flex; flex-direction: column;
+      clip-path: polygon(var(--cut) 0, 100% 0, 100% calc(100% - var(--cut)),
+        calc(100% - var(--cut)) 100%, 0 100%, 0 var(--cut));
+    }
+    .chat-panel::before {
+      content: ''; position: absolute;
+      top: 0; left: var(--cut); right: 0; height: 3px;
+      background: var(--grad-main); z-index: 2;
+    }
+    .chat-header { padding: 12px 14px 8px; flex-shrink: 0; }
+    .chat-title-row { display: flex; align-items: center; gap: 0; }
+    .chat-tag-live {
+      background: linear-gradient(90deg, #ffe600, #ccb800);
+      color: #fff; padding: 0 8px; line-height: 18px;
+      font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+      clip-path: polygon(0 0, calc(100% - 4px) 0, 100% 100%, 0 100%);
+    }
+    .chat-tag-name {
+      background: rgba(0,0,0,0.5); color: rgba(255,255,255,0.7);
+      padding: 0 10px 0 8px; line-height: 18px;
+      font-size: 10px; font-weight: 600; letter-spacing: 1.5px;
+      border: 1px solid rgba(255,255,255,0.08); border-left: none;
+      clip-path: polygon(0 0, calc(100% - 4px) 0, 100% 100%, 0 100%);
+    }
+    .chat-sub { font-size: 10px; font-weight: 500; color: var(--text-dim);
+      letter-spacing: 1px; margin-top: 4px; }
+    .chat-divider { height: 1px;
+      background: linear-gradient(90deg, var(--green), var(--cyan), transparent);
+      margin: 0 14px; flex-shrink: 0; }
+    .chat-body { flex: 1; }
+    /* Shimmer */
+    .chat-shim { position: absolute; inset: 0; overflow: hidden; pointer-events: none;
+      clip-path: polygon(var(--cut) 0, 100% 0, 100% calc(100% - var(--cut)),
+        calc(100% - var(--cut)) 100%, 0 100%, 0 var(--cut)); z-index: 5; }
+    .chat-shim::before {
+      content: ''; position: absolute; top: -100%; left: -60px;
+      width: 40px; height: 400%;
+      background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.04) 48%,
+        rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.04) 52%, transparent 70%);
+      transform: rotate(25deg); animation: koShimmer 7s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-wrap">
+    <div class="chat-panel">
+      <div class="chat-header">
+        <div class="chat-title-row">
+          <div class="chat-tag-live" data-config="chatTitle">CHAT</div>
+          <div class="chat-tag-name" data-config="chatSubtitle">canal abierto</div>
+        </div>
+      </div>
+      <div class="chat-divider"></div>
+      <div class="chat-body"></div>
+    </div>
+    <div class="chat-shim"></div>
+  </div>
+  <script src="../config/config.js"></script>
+  <script src="../shared.js"></script>
+</body>
+</html>
