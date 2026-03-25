@@ -49,6 +49,8 @@
       font-size: 20px;
       letter-spacing: 4px;
       color: var(--red);
+      text-shadow: 0 0 10px rgba(230,57,70,0.3);
+      animation: rcFlicker 6s ease-in-out infinite;
     }
     .chat-sub {
       font-size: 10px;
@@ -56,13 +58,21 @@
       color: var(--text-dim);
       letter-spacing: 1px;
       margin-top: 3px;
+      animation: rcFadeLoop 4s ease-in-out infinite;
     }
 
     .chat-divider {
       height: 1px;
       background: linear-gradient(90deg, var(--red), var(--border-dim), transparent);
+      background-size: 200% 100%;
+      animation: rcGradientShift 5s ease-in-out infinite;
       margin: 0 14px;
       flex-shrink: 0;
+    }
+
+    /* Panel glow breathing */
+    .chat-panel {
+      animation: rcGlow 5s ease-in-out infinite;
     }
 
     .chat-body { flex: 1; }
@@ -82,8 +92,36 @@
     .chat-edge {
       position: absolute;
       left: -6px; top: 30px; bottom: 30px;
-      width: 1px;
+      width: 0;
       border-left: 1px dashed var(--border-dim);
+      background-image: repeating-linear-gradient(
+        180deg, var(--border-dim) 0, var(--border-dim) 8px, transparent 8px, transparent 13px
+      );
+      background-size: 1px 100%;
+      animation: rcScanDrift 6s linear infinite;
+    }
+
+    /* Sweep on accent bar */
+    .chat-sweep {
+      position: absolute;
+      top: 0; left: 0; width: 60px; height: 2px;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 3;
+    }
+    .chat-sweep::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -60px;
+      width: 60px; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+      animation: rcSweep 4.5s ease-in-out infinite;
+    }
+
+    /* Scanlines drift */
+    .chat-panel::after {
+      background-size: 100% 40px;
+      animation: rcScanDrift 10s linear infinite;
     }
   </style>
 </head>
@@ -91,6 +129,7 @@
   <div class="chat-wrap">
     <div class="chat-edge"></div>
     <div class="chat-panel">
+      <div class="chat-sweep"></div>
       <div class="chat-header">
         <div class="chat-title-row">
           <span class="rc-diamond" style="width:5px;height:5px;"></span>

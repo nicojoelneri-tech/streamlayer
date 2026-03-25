@@ -23,6 +23,30 @@
       );
     }
 
+    /* Traveling border light */
+    .game-border-light {
+      position: absolute; inset: -1px;
+      pointer-events: none;
+      z-index: 2;
+      clip-path: polygon(
+        0 0, calc(100% - 18px) 0,
+        100% 18px, 100% 100%,
+        18px 100%, 0 calc(100% - 18px)
+      );
+    }
+    .game-border-light::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border: 2px solid transparent;
+      background: conic-gradient(from 0deg, transparent 0%, transparent 85%, rgba(230,57,70,0.5) 92%, rgba(255,255,255,0.4) 95%, transparent 100%) border-box;
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      animation: rcBorderTravel 6s linear infinite;
+      background-size: 300% 300%;
+    }
+
     /* Top-left accent bar */
     .game-frame::before {
       content: '';
@@ -31,10 +55,27 @@
       width: 80px; height: 2px;
       background: var(--red);
       box-shadow: 0 0 8px rgba(230,57,70,0.4);
+      overflow: hidden;
+    }
+
+    /* Scanline drift on game frame */
+    .game-frame::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(
+        0deg, transparent, transparent 3px,
+        rgba(230,57,70,0.006) 3px, rgba(230,57,70,0.006) 4px
+      );
+      background-size: 100% 40px;
+      animation: rcScanDrift 8s linear infinite;
+      pointer-events: none;
     }
 
     /* Corners */
-    .gc { position: absolute; pointer-events: none; }
+    .gc { position: absolute; pointer-events: none; animation: rcCornerGlow 3s ease-in-out infinite; }
+    .gc:nth-child(2) { animation-delay: 0.8s; }
+    .gc:nth-child(3) { animation-delay: 1.6s; }
+    .gc:nth-child(4) { animation-delay: 2.4s; }
     .gc::before, .gc::after {
       content: ''; position: absolute;
       background: var(--red);
@@ -64,9 +105,9 @@
       text-transform: uppercase;
       pointer-events: none;
     }
-    .edge-tl { top: 8px; left: 28px; color: var(--text-dim); }
-    .edge-tr { top: 22px; right: 28px; color: rgba(92,138,173,0.35); }
-    .edge-bot { bottom: 20px; left: 28px; color: var(--text-dim); font-style: italic; }
+    .edge-tl { top: 8px; left: 28px; color: var(--text-dim); animation: rcFlicker 6s ease-in-out infinite; }
+    .edge-tr { top: 22px; right: 28px; color: rgba(92,138,173,0.35); animation: rcFlicker 7s ease-in-out infinite 2s; }
+    .edge-bot { bottom: 20px; left: 28px; color: var(--text-dim); font-style: italic; animation: rcFlicker 5s ease-in-out infinite 1s; }
 
     /* SVG tactical lines */
     .connections {
@@ -78,6 +119,7 @@
       stroke: var(--border-dim);
       stroke-width: 1;
       stroke-dasharray: 8 5;
+      animation: rcDash 2s linear infinite;
     }
     .conn-node {
       fill: var(--red);
@@ -93,6 +135,7 @@
 <body>
   <div class="game-wrap">
     <div class="game-frame">
+      <div class="game-border-light"></div>
       <span class="gc gc--tl"></span>
       <span class="gc gc--tr"></span>
       <span class="gc gc--bl"></span>

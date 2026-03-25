@@ -31,6 +31,24 @@
       width: 60px; height: 2px;
       background: var(--red);
       z-index: 2;
+      overflow: hidden;
+    }
+
+    /* Sweep light */
+    .panel-sweep {
+      position: absolute;
+      top: 0; left: 0; width: 60px; height: 2px;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 3;
+    }
+    .panel-sweep::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -60px;
+      width: 60px; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+      animation: rcSweep 5s ease-in-out infinite;
     }
 
     .panel::after {
@@ -91,23 +109,42 @@
       display: inline-block;
       width: 3px; height: 12px;
     }
-    .data-prefix--red   { background: var(--red); }
-    .data-prefix--steel { background: var(--steel); }
-    .data-prefix--amber { background: var(--amber); }
+    .data-prefix--red   { background: var(--red); animation: rcDataPulse 2.5s ease-in-out infinite; }
+    .data-prefix--steel { background: var(--steel); animation: rcDataPulse 2.5s ease-in-out infinite 0.8s; --dp-color: var(--steel); }
+    .data-prefix--amber { background: var(--amber); animation: rcDataPulse 2.5s ease-in-out infinite 1.6s; --dp-color: var(--amber); }
 
     .data-value {
       font-family: var(--font-display);
       font-size: 22px;
       letter-spacing: 2px;
     }
-    .data-value--red   { color: var(--red); }
-    .data-value--steel { color: var(--steel); }
-    .data-value--amber { color: var(--amber); }
+    .data-value--red   { color: var(--red); text-shadow: 0 0 10px rgba(230,57,70,0.3); animation: dvGlowRed 3s ease-in-out infinite; }
+    .data-value--steel { color: var(--steel); text-shadow: 0 0 10px rgba(92,138,173,0.3); animation: dvGlowSteel 3s ease-in-out infinite 1s; }
+    .data-value--amber { color: var(--amber); text-shadow: 0 0 10px rgba(240,160,48,0.3); animation: dvGlowAmber 3s ease-in-out infinite 2s; }
+
+    @keyframes dvGlowRed {
+      0%, 100% { text-shadow: 0 0 10px rgba(230,57,70,0.2); }
+      50%      { text-shadow: 0 0 18px rgba(230,57,70,0.5), 0 0 4px rgba(230,57,70,0.8); }
+    }
+    @keyframes dvGlowSteel {
+      0%, 100% { text-shadow: 0 0 10px rgba(92,138,173,0.2); }
+      50%      { text-shadow: 0 0 18px rgba(92,138,173,0.5), 0 0 4px rgba(92,138,173,0.8); }
+    }
+    @keyframes dvGlowAmber {
+      0%, 100% { text-shadow: 0 0 10px rgba(240,160,48,0.2); }
+      50%      { text-shadow: 0 0 18px rgba(240,160,48,0.5), 0 0 4px rgba(240,160,48,0.8); }
+    }
+
+    /* Panel border glow breathing */
+    .panel {
+      animation: rcGlow 4s ease-in-out infinite;
+    }
   </style>
 </head>
 <body>
   <div class="panel-wrap">
     <div class="panel">
+      <div class="panel-sweep"></div>
       <div class="panel-header">
         <span class="panel-title" data-config="sideTitle">INTEL</span>
         <div class="panel-tag">

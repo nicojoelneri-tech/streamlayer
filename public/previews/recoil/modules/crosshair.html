@@ -54,6 +54,20 @@
       border: 1px solid rgba(230,57,70,0.2);
       border-radius: 50%;
       transform: translate(-50%, -50%);
+      animation: chRingPulse 2.5s ease-in-out infinite;
+    }
+    /* Center dot pulse */
+    .ch-dot {
+      animation: chDotPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes chRingPulse {
+      0%, 100% { width: 28px; height: 28px; border-color: rgba(230,57,70,0.2); }
+      50%      { width: 32px; height: 32px; border-color: rgba(230,57,70,0.35); }
+    }
+    @keyframes chDotPulse {
+      0%, 100% { box-shadow: 0 0 6px rgba(230,57,70,0.6); }
+      50%      { box-shadow: 0 0 12px rgba(230,57,70,0.9), 0 0 3px rgba(230,57,70,1); }
     }
   </style>
 </head>

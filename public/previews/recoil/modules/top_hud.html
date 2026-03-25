@@ -52,7 +52,7 @@
       letter-spacing: 8px;
       color: var(--red);
       text-shadow: 0 0 20px rgba(230,57,70,0.35);
-      animation: rcFlicker 8s ease-in-out infinite;
+      animation: rcGlitch 5s ease-in-out infinite, rcFlicker 8s ease-in-out infinite;
       position: relative;
     }
     .hud-title::before {
@@ -62,6 +62,26 @@
       transform: translateX(-50%);
       width: 60px; height: 2px;
       background: linear-gradient(90deg, transparent, var(--red), transparent);
+    }
+    /* Chromatic aberration ghost */
+    .hud-title::after {
+      content: attr(data-config);
+      position: absolute;
+      top: 0; left: 2px;
+      color: var(--steel);
+      opacity: 0;
+      z-index: -1;
+      font-family: var(--font-display);
+      font-size: 34px;
+      letter-spacing: 8px;
+      animation: hudAberration 5s ease-in-out infinite;
+    }
+    @keyframes hudAberration {
+      0%, 88%, 100% { opacity: 0; left: 0; }
+      90% { opacity: 0.4; left: 3px; }
+      92% { opacity: 0; left: -2px; }
+      94% { opacity: 0.3; left: 2px; }
+      96% { opacity: 0; }
     }
 
     /* Right: channel + game */
@@ -101,6 +121,8 @@
         var(--red), var(--border-dim) 30%,
         var(--border-dim) 70%, var(--steel)
       );
+      background-size: 200% 100%;
+      animation: rcGradientShift 6s ease-in-out infinite;
     }
 
     /* Chevron decorations */
@@ -108,9 +130,15 @@
       position: absolute; bottom: -1px;
       font-size: 10px; font-weight: 700;
       line-height: 1;
+      animation: rcPulse 2.5s ease-in-out infinite;
     }
     .hud-chev-l { left: 268px; color: var(--red); }
-    .hud-chev-r { right: 298px; color: var(--steel); }
+    .hud-chev-r { right: 298px; color: var(--steel); animation-delay: 1.2s; }
+
+    /* Mode box glow */
+    .hud-mode {
+      animation: rcGlow 4s ease-in-out infinite;
+    }
   </style>
 </head>
 <body>

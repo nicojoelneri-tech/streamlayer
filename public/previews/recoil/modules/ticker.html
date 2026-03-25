@@ -22,6 +22,8 @@
         var(--red), var(--border-dim) 40%,
         var(--border-dim) 60%, var(--steel)
       );
+      background-size: 200% 100%;
+      animation: rcGradientShift 6s ease-in-out infinite;
     }
 
     .ticker-tag {
@@ -67,8 +69,8 @@
 
     .hl { color: var(--red); font-weight: 700; }
 
-    .ticker-chev-l { position: absolute; top: -1px; left: 268px; color: var(--red); font-size: 10px; font-weight: 700; }
-    .ticker-chev-r { position: absolute; top: -1px; right: 298px; color: var(--steel); font-size: 10px; font-weight: 700; }
+    .ticker-chev-l { position: absolute; top: -1px; left: 268px; color: var(--red); font-size: 10px; font-weight: 700; animation: rcPulse 2.5s ease-in-out infinite; }
+    .ticker-chev-r { position: absolute; top: -1px; right: 298px; color: var(--steel); font-size: 10px; font-weight: 700; animation: rcPulse 2.5s ease-in-out infinite 1.2s; }
   </style>
 </head>
 <body>

@@ -52,13 +52,30 @@
       content: '';
       position: absolute; inset: 0;
       background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(230,57,70,0.008) 3px, rgba(230,57,70,0.008) 4px);
+      background-size: 100% 40px;
+      animation: rcScanDrift 6s linear infinite;
       pointer-events: none;
     }
+
+    .cam-scanline {
+      position: absolute;
+      left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent 5%, rgba(230,57,70,0.25) 20%, rgba(230,57,70,0.4) 50%, rgba(230,57,70,0.25) 80%, transparent 95%);
+      box-shadow: 0 0 8px rgba(230,57,70,0.3);
+      animation: rcScanLine 3.5s linear infinite;
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    .cc { animation: rcCornerGlow 3s ease-in-out infinite; }
+    .cc--br { animation-delay: 1.5s; }
   </style>
 </head>
 <body>
   <div class="cam-wrap">
     <div class="cam-frame cam-scan">
+      <div class="cam-scanline"></div>
       <div class="rec"><span class="rec-dot"></span><span class="rec-text">REC</span></div>
       <span class="cc cc--tl"></span>
       <span class="cc cc--br"></span>

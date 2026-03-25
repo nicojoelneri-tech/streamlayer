@@ -75,9 +75,32 @@
     .jc-frame::after {
       content: '';
       position: absolute; inset: 0;
-      background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(230,57,70,0.008) 3px, rgba(230,57,70,0.008) 4px);
+      background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(230,57,70,0.006) 3px, rgba(230,57,70,0.006) 4px);
+      background-size: 100% 40px;
+      animation: rcScanDrift 8s linear infinite;
       pointer-events: none;
     }
+
+    /* Scan line */
+    .jc-scanline {
+      position: absolute;
+      left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent 5%, rgba(230,57,70,0.2) 20%, rgba(230,57,70,0.35) 50%, rgba(230,57,70,0.2) 80%, transparent 95%);
+      box-shadow: 0 0 8px rgba(230,57,70,0.25), 0 -4px 12px rgba(230,57,70,0.06), 0 4px 12px rgba(230,57,70,0.06);
+      animation: rcScanLine 5s linear infinite;
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    /* Corner glow */
+    .jcc { animation: rcCornerGlow 3s ease-in-out infinite; }
+    .jcc--tr { animation-delay: 0.7s; }
+    .jcc--bl { animation-delay: 1.4s; }
+    .jcc--br { animation-delay: 2.1s; }
+
+    /* Label flicker */
+    .jc-label { animation: rcFlicker 6s ease-in-out infinite; }
   </style>
 </head>
 <body>
@@ -85,6 +108,7 @@
     <div class="jc-label" data-config="justChattingLabel">CAM://TACTICAL_FEED</div>
     <div class="jc-rec"><span class="jc-rec-dot"></span><span class="jc-rec-text">REC</span></div>
     <div class="jc-frame">
+      <div class="jc-scanline"></div>
       <span class="jcc jcc--tl"></span>
       <span class="jcc jcc--tr"></span>
       <span class="jcc jcc--bl"></span>
