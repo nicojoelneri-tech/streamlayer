@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920,height=1080">
+<title>HANAMI - Chat Frame</title>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body{ background:transparent; }
+
+  .hm-chat{
+    position:fixed;
+    right:16px; top:100px;
+    width:280px; height:740px;
+    border-radius:8px;
+    z-index:10;
+  }
+
+  .hm-chat-inner{
+    position:relative;
+    width:100%; height:100%;
+    display:flex; flex-direction:column;
+    padding:18px 16px 14px;
+  }
+
+  /* header */
+  .hm-chat-header{
+    display:flex; flex-direction:column; gap:3px;
+    margin-bottom:10px;
+  }
+  .hm-chat-title{
+    font-family:'Zen Old Mincho',serif;
+    font-size:16px; font-weight:600;
+    color:var(--ink);
+    letter-spacing:2px;
+  }
+  .hm-chat-subtitle{
+    font-family:'Noto Sans JP',sans-serif;
+    font-size:11px;
+    color:var(--text-mid);
+    letter-spacing:1px;
+  }
+
+  /* divider */
+  .hm-chat-divider{
+    margin-bottom:12px;
+  }
+
+  /* chat area (empty, filled by OBS browser source) */
+  .hm-chat-area{
+    flex:1;
+  }
+
+  /* vertical decorative text */
+  .hm-vert-deco{
+    position:absolute;
+    right:6px; top:50%;
+    transform:translateY(-50%);
+    writing-mode:vertical-rl;
+    font-family:'Zen Old Mincho',serif;
+    font-size:11px;
+    letter-spacing:8px;
+    color:rgba(42,36,32,0.05);
+    user-select:none;
+    pointer-events:none;
+  }
+</style>
+</head>
+<body>
+
+<div class="hm-chat hm-panel">
+  <div class="hm-chat-inner">
+
+    <div class="hm-chat-header">
+      <span class="hm-chat-title" data-config="chatTitle">JARDIN DE VOCES</span>
+      <span class="hm-chat-subtitle" data-config="chatSubtitle">puertas abiertas</span>
+    </div>
+
+    <div class="hm-divider hm-chat-divider"></div>
+
+    <div class="hm-chat-area"></div>
+
+  </div>
+
+  <!-- vertical kanji deco -->
+  <span class="hm-vert-deco">花 · 風 · 声</span>
+
+  <!-- washi texture -->
+  <div class="hm-washi-texture"></div>
+</div>
+
+<script src="../config/config.js"></script>
+<script src="../shared.js"></script>
+</body>
+</html>

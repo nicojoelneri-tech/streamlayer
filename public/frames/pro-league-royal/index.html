@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=420,height=320">
+<title>Pro League Royal — Camera Frame</title>
+<style>
+  /* ═══════════════════════════════════════════
+     PRO LEAGUE ROYAL — Football Broadcast Camera Frame
+     Browser Source: 420 × 320, transparent bg
+     Webcam goes ABOVE this source in OBS
+  ═══════════════════════════════════════════ */
+
+  @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap');
+
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:420px;height:320px;background:transparent;overflow:hidden}
+
+  .frame-wrap{
+    position:absolute;left:50%;top:50%;
+    transform:translate(-50%,-50%);
+    width:384px;height:260px;
+  }
+
+  /* ── Main border: angular broadcast style ── */
+  .border-main{
+    position:absolute;inset:0;
+    clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px);
+  }
+  .border-svg{position:absolute;inset:0;pointer-events:none}
+  .border-svg svg{width:100%;height:100%}
+  .border-line{
+    fill:none;stroke-width:2.5;
+    stroke:url(#mainGrad);
+    filter:drop-shadow(0 0 3px rgba(255,230,0,.3)) drop-shadow(0 0 6px rgba(155,48,255,.2));
+  }
+
+  /* ── Inner trim ── */
+  .border-inner{position:absolute;inset:5px;pointer-events:none}
+  .border-inner svg{width:100%;height:100%}
+  .inner-line{
+    fill:none;stroke-width:0.8;
+    stroke:rgba(255,255,255,.12);
+  }
+
+  /* ── Gradient stripe accents (broadcast bars) ── */
+  .stripe{
+    position:absolute;
+    background:linear-gradient(90deg,#ffe600,#fff044,#9b30ff);
+    pointer-events:none;
+  }
+  .stripe-top{
+    top:-1px;left:10px;right:0;height:3px;
+    clip-path:polygon(0 0,100% 0,100% 100%,4px 100%);
+  }
+  .stripe-bottom{
+    bottom:-1px;left:0;right:10px;height:3px;
+    clip-path:polygon(0 0,calc(100% - 4px) 0,100% 100%,0 100%);
+  }
+  .stripe-left{
+    left:-1px;top:10px;width:3px;bottom:0;
+    background:linear-gradient(180deg,#ffe600,#9b30ff);
+  }
+  .stripe-right{
+    right:-1px;top:0;width:3px;bottom:10px;
+    background:linear-gradient(180deg,#ffe600,#9b30ff);
+  }
+
+  /* ── Corner cuts (diagonal accents) ── */
+  .corner-cut{
+    position:absolute;width:16px;height:16px;pointer-events:none;
+  }
+  .cc-tl{top:-1px;left:-1px}
+  .cc-br{bottom:-1px;right:-1px}
+  .corner-cut svg{width:100%;height:100%}
+  .cc-line{fill:none;stroke-width:2;stroke:url(#cornerGrad);filter:drop-shadow(0 0 3px rgba(255,230,0,.4))}
+
+  /* ── Shimmer sweep (holographic card effect) ── */
+  .shimmer{
+    position:absolute;inset:0;
+    overflow:hidden;
+    pointer-events:none;
+    clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px);
+  }
+  .shimmer::before{
+    content:'';
+    position:absolute;
+    top:-100%;left:-100%;
+    width:60px;height:400%;
+    background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.06) 45%,rgba(255,255,255,.12) 50%,rgba(255,255,255,.06) 55%,transparent 70%);
+    transform:rotate(25deg);
+    animation:shimmerSweep 5s ease-in-out infinite;
+  }
+  @keyframes shimmerSweep{
+    0%{left:-100px}
+    100%{left:calc(100% + 100px)}
+  }
+
+  /* ── Top HUD bar (broadcast info strip) ── */
+  .hud-bar{
+    position:absolute;
+    top:-12px;left:20px;
+    display:flex;align-items:center;gap:0;
+    height:14px;
+    font-family:'Rajdhani',sans-serif;
+    font-size:9px;font-weight:700;
+    letter-spacing:1px;
+    text-transform:uppercase;
+  }
+  .hud-tag{
+    background:linear-gradient(90deg,#ffe600,#ccb800);
+    color:#fff;
+    padding:0 8px;
+    line-height:14px;
+    clip-path:polygon(0 0,calc(100% - 4px) 0,100% 100%,0 100%);
+  }
+  .hud-info{
+    background:rgba(0,0,0,.7);
+    color:rgba(255,255,255,.7);
+    padding:0 10px 0 8px;
+    line-height:14px;
+    border:1px solid rgba(255,255,255,.1);
+    border-left:none;
+    clip-path:polygon(0 0,calc(100% - 4px) 0,100% 100%,0 100%);
+  }
+
+  /* ── Stat badges (small indicators on sides) ── */
+  .stat-badge{
+    position:absolute;
+    width:18px;height:18px;
+    border:1px solid rgba(255,255,255,.1);
+    background:rgba(0,0,0,.5);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Rajdhani',sans-serif;
+    font-size:7px;font-weight:700;
+    color:rgba(155,48,255,.7);
+    pointer-events:none;
+  }
+  .sb-1{bottom:8px;left:-10px;clip-path:polygon(3px 0,100% 0,100% 100%,0 100%,0 3px)}
+  .sb-2{bottom:30px;left:-10px;clip-path:polygon(3px 0,100% 0,100% 100%,0 100%,0 3px)}
+  .sb-3{bottom:8px;right:-10px;clip-path:polygon(0 0,calc(100% - 3px) 0,100% 3px,100% 100%,0 100%)}
+  .sb-4{bottom:30px;right:-10px;clip-path:polygon(0 0,calc(100% - 3px) 0,100% 3px,100% 100%,0 100%)}
+
+  /* ── Bottom gradient line (animated) ── */
+  .bottom-line{
+    position:absolute;
+    bottom:0;left:0;right:10px;height:1px;
+    background:linear-gradient(90deg,#ffe600,#9b30ff);
+    opacity:.5;
+    animation:lineGlow 3s ease-in-out infinite;
+  }
+  @keyframes lineGlow{0%,100%{opacity:.3}50%{opacity:.8}}
+
+  /* ── Top gradient line ── */
+  .top-line{
+    position:absolute;
+    top:0;left:10px;right:0;height:1px;
+    background:linear-gradient(90deg,#ffe600,#9b30ff);
+    opacity:.3;
+  }
+
+  /* ── Diagonal accent lines (field lines feel) ── */
+  .diag-line{
+    position:absolute;
+    width:1px;height:30px;
+    background:linear-gradient(180deg,rgba(155,48,255,.2),transparent);
+    pointer-events:none;
+    transform:rotate(25deg);
+  }
+  .dl-1{top:6px;right:30px;animation:diagFade 4s ease-in-out infinite}
+  .dl-2{top:6px;right:55px;height:22px;animation:diagFade 4s ease-in-out infinite .5s}
+  .dl-3{top:6px;right:80px;height:16px;animation:diagFade 4s ease-in-out infinite 1s}
+  @keyframes diagFade{0%,100%{opacity:.2}50%{opacity:.6}}
+
+  /* ── Bottom label ── */
+  .match-label{
+    position:absolute;
+    bottom:-22px;left:50%;transform:translateX(-50%);
+    font-family:'Rajdhani',sans-serif;
+    font-size:11px;font-weight:700;
+    letter-spacing:4px;
+    text-transform:uppercase;
+    color:rgba(255,255,255,.5);
+    text-shadow:0 0 6px rgba(155,48,255,.3);
+    white-space:nowrap;
+  }
+
+  /* ── Ambient canvas (subtle particles) ── */
+  #ambientCanvas{
+    position:absolute;inset:-20px;
+    width:calc(100% + 40px);height:calc(100% + 40px);
+    pointer-events:none;
+  }
+
+</style>
+</head>
+<body>
+
+<div class="frame-wrap">
+
+  <!-- Ambient particles -->
+  <canvas id="ambientCanvas"></canvas>
+
+  <!-- Main angular border -->
+  <div class="border-svg">
+    <svg viewBox="0 0 384 260" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="mainGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#ffe600"/>
+          <stop offset="50%" stop-color="#fff044"/>
+          <stop offset="100%" stop-color="#9b30ff"/>
+        </linearGradient>
+        <linearGradient id="cornerGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#ffe600"/>
+          <stop offset="100%" stop-color="#fff044"/>
+        </linearGradient>
+      </defs>
+      <polygon class="border-line" points="10,0 384,0 384,250 374,260 0,260 0,10"/>
+    </svg>
+  </div>
+
+  <!-- Inner trim -->
+  <div class="border-inner">
+    <svg viewBox="0 0 374 250" preserveAspectRatio="none">
+      <polygon class="inner-line" points="8,0 374,0 374,242 366,250 0,250 0,8"/>
+    </svg>
+  </div>
+
+  <!-- Gradient stripes -->
+  <div class="stripe stripe-top"></div>
+  <div class="stripe stripe-bottom"></div>
+  <div class="stripe stripe-left"></div>
+  <div class="stripe stripe-right"></div>
+
+  <!-- Corner diagonal cuts -->
+  <div class="corner-cut cc-tl">
+    <svg viewBox="0 0 16 16"><line class="cc-line" x1="0" y1="16" x2="16" y2="0"/></svg>
+  </div>
+  <div class="corner-cut cc-br">
+    <svg viewBox="0 0 16 16"><line class="cc-line" x1="0" y1="16" x2="16" y2="0"/></svg>
+  </div>
+
+  <!-- Shimmer sweep -->
+  <div class="shimmer"></div>
+
+  <!-- Top HUD bar -->
+  <div class="hud-bar">
+    <div class="hud-tag">LIVE</div>
+    <div class="hud-info">ON AIR</div>
+  </div>
+
+  <!-- Stat badges -->
+  <div class="stat-badge sb-1">88</div>
+  <div class="stat-badge sb-2">91</div>
+  <div class="stat-badge sb-3">97</div>
+  <div class="stat-badge sb-4">85</div>
+
+  <!-- Diagonal accent lines -->
+  <div class="diag-line dl-1"></div>
+  <div class="diag-line dl-2"></div>
+  <div class="diag-line dl-3"></div>
+
+  <!-- Bottom + top glow lines -->
+  <div class="bottom-line"></div>
+  <div class="top-line"></div>
+
+  <!-- Label -->
+  <div class="match-label" id="label"></div>
+
+</div>
+
+<script>
+// ═══════════════ CONFIGURACION ═══════════════
+// Edita este texto para personalizar el label del marco:
+const LABEL_TEXT = 'PRO LEAGUE';
+// ═════════════════════════════════════════════
+document.getElementById('label').textContent = LABEL_TEXT;
+
+// ═════════════════════════════════════════
+//  AMBIENT PARTICLES — Subtle floating specs
+// ═════════════════════════════════════════
+
+const canvas = document.getElementById('ambientCanvas');
+const ctx = canvas.getContext('2d');
+const frameW = 384, frameH = 260;
+canvas.width = frameW + 40; canvas.height = frameH + 40;
+const ox = 20, oy = 20;
+
+class Confetti {
+  constructor() { this.reset(true); }
+  reset(init) {
+    const leftSide = Math.random() < 0.5;
+    if (leftSide) { this.x = ox + Math.random() * 50 - 20; }
+    else { this.x = ox + frameW - 30 + Math.random() * 50; }
+    this.y = init ? oy + Math.random() * frameH : oy - 10 - Math.random() * 30;
+    this.vy = 0.4 + Math.random() * 0.8;
+    this.vx = (Math.random() - 0.5) * 0.5;
+    this.w = 2 + Math.random() * 4; this.h = 1.5 + Math.random() * 3;
+    this.rot = Math.random() * Math.PI * 2;
+    this.rotSpeed = (Math.random() - 0.5) * 0.08;
+    this.wobble = Math.random() * Math.PI * 2;
+    this.wobbleSpeed = 0.03 + Math.random() * 0.04;
+    this.wobbleAmp = 0.3 + Math.random() * 0.6;
+    this.alpha = 0.25 + Math.random() * 0.45;
+  }
+  update() {
+    this.wobble += this.wobbleSpeed;
+    this.x += this.vx + Math.sin(this.wobble) * this.wobbleAmp;
+    this.y += this.vy; this.rot += this.rotSpeed;
+    if (this.y > oy + frameH + 20) this.reset(false);
+  }
+  draw(ctx) {
+    ctx.save(); ctx.translate(this.x, this.y); ctx.rotate(this.rot);
+    ctx.fillStyle = `rgba(255,255,255,${this.alpha})`;
+    ctx.fillRect(-this.w / 2, -this.h / 2, this.w, this.h);
+    ctx.restore();
+  }
+}
+
+const confetti = Array.from({ length: 22 }, () => new Confetti());
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  confetti.forEach(c => { c.update(); c.draw(ctx); });
+  requestAnimationFrame(animate);
+}
+animate();
+</script>
+</body>
+</html>

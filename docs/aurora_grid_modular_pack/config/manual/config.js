@@ -1,0 +1,35 @@
+window.OVERLAY_CONFIG = {
+  channelName: "Aurora Grid",
+  channelAccent: "Grid",
+  liveLabel: "LIVE",
+  gameFeedLabel: "Aurora Grid // Game Feed",
+  resolution: "1920x1080",
+  activeSessionLabel: "Active Session",
+  cameraLabel: "Operator Cam",
+  chatTitle: "Stream Chat",
+  chatMessages: [],
+  socialPanelTitle: "Redes",
+  socialPanelCode: "follow.me",
+  socialLinks: [
+    {"platform":"YOUTUBE","user":"elnovatoNN"},
+    {"platform":"INSTAGRAM","user":"elnovato.nn"},
+    {"platform":"TIKTOK","user":"elnovato.nn"}
+  ],
+  staticLabel: "Multis",
+  staticTitle: "100 Bits",
+  staticMessage: "Tirá una multi en vivo",
+  tickerTag: "sys.log",
+  tickerItems: [
+    "🎮 Gracias por estar en el stream — dejá tu <span class=\"hl\">follow</span> si te copa el contenido",
+    "💬 Escribí en el <span class=\"hl\">chat</span>, se lee todo",
+    "📡 Seguime en redes: <span class=\"hl\">YouTube</span> · <span class=\"hl\">Instagram</span> · <span class=\"hl\">TikTok</span>"
+  ],
+  currentTopic: "Charlando con el chat",
+  currentTopicSub: "Escriban algo en el chat y cambiamos el rumbo.",
+  startingTitle: "Starting <span>Soon</span>",
+  startingSub: "Preparando todo para arrancar la transmisión.",
+  brbTitle: "Be <span>Right Back</span>",
+  brbSub: "Haciendo una pausa breve. No te vayas.",
+  endingTitle: "Stream <span>Offline</span>",
+  endingSub: "Gracias por pasar. Nos vemos en la próxima sesión.",
+};

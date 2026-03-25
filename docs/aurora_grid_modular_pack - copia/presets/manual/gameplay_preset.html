@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1920,height=1080" />
+<title>gameplay_preset.html</title>
+<link rel="stylesheet" href="../../assets_shared.css" />
+
+</head>
+<body>
+<div class="module-root">
+
+<div class="top-hud">
+  <div class="top-left">
+    <div class="live"><div class="live-dot"></div><div class="live-text" id="live-label">LIVE</div></div>
+  </div>
+  <div class="top-center">
+    <div class="brand">
+      <div class="brand-badge"></div>
+      <div class="brand-text"><span id="brand-main">Aurora</span> <span id="brand-accent">Grid</span></div>
+    </div>
+  </div>
+  <div class="top-right"></div>
+</div>
+
+<div class="game-safe">
+  <div class="game-frame"></div>
+
+  <svg class="corner-svg corner-tl" viewBox="0 0 124 124">
+    <path d="M1 60V18C1 8 8 1 18 1H60" stroke="rgba(84,229,255,.85)" stroke-width="2" fill="none"/>
+    <path d="M1 84V72M84 1H72" stroke="rgba(84,229,255,.55)" stroke-width="2" fill="none"/>
+    <path class="accent" d="M10 44V20C10 14 14 10 20 10H44" stroke="rgba(255,77,196,.6)" stroke-width="1.5" fill="none"/>
+    <circle cx="1" cy="60" r="4" fill="rgba(84,229,255,.95)"/>
+    <circle cx="60" cy="1" r="4" fill="rgba(84,229,255,.95)"/>
+    <rect x="18" y="18" width="10" height="10" fill="none" stroke="rgba(84,229,255,.55)" stroke-width="1.5"/>
+    <circle class="accent" cx="38" cy="10" r="2.5" fill="rgba(255,77,196,.85)"/>
+  </svg>
+  <svg class="corner-svg corner-tr" viewBox="0 0 124 124">
+    <path d="M1 60V18C1 8 8 1 18 1H60" stroke="rgba(84,229,255,.85)" stroke-width="2" fill="none"/>
+    <path d="M1 84V72M84 1H72" stroke="rgba(84,229,255,.55)" stroke-width="2" fill="none"/>
+    <path class="accent" d="M10 44V20C10 14 14 10 20 10H44" stroke="rgba(255,77,196,.6)" stroke-width="1.5" fill="none"/>
+    <circle cx="1" cy="60" r="4" fill="rgba(84,229,255,.95)"/>
+    <circle cx="60" cy="1" r="4" fill="rgba(84,229,255,.95)"/>
+    <rect x="18" y="18" width="10" height="10" fill="none" stroke="rgba(84,229,255,.55)" stroke-width="1.5"/>
+    <circle class="accent" cx="38" cy="10" r="2.5" fill="rgba(255,77,196,.85)"/>
+  </svg>
+  <svg class="corner-svg corner-bl" viewBox="0 0 124 124">
+    <path d="M1 60V18C1 8 8 1 18 1H60" stroke="rgba(84,229,255,.85)" stroke-width="2" fill="none"/>
+    <path d="M1 84V72M84 1H72" stroke="rgba(84,229,255,.55)" stroke-width="2" fill="none"/>
+    <path class="accent" d="M10 44V20C10 14 14 10 20 10H44" stroke="rgba(255,77,196,.6)" stroke-width="1.5" fill="none"/>
+    <circle cx="1" cy="60" r="4" fill="rgba(84,229,255,.95)"/>
+    <circle cx="60" cy="1" r="4" fill="rgba(84,229,255,.95)"/>
+    <rect x="18" y="18" width="10" height="10" fill="none" stroke="rgba(84,229,255,.55)" stroke-width="1.5"/>
+    <circle class="accent" cx="38" cy="10" r="2.5" fill="rgba(255,77,196,.85)"/>
+  </svg>
+  <svg class="corner-svg corner-br" viewBox="0 0 124 124">
+    <path d="M1 60V18C1 8 8 1 18 1H60" stroke="rgba(84,229,255,.85)" stroke-width="2" fill="none"/>
+    <path d="M1 84V72M84 1H72" stroke="rgba(84,229,255,.55)" stroke-width="2" fill="none"/>
+    <path class="accent" d="M10 44V20C10 14 14 10 20 10H44" stroke="rgba(255,77,196,.6)" stroke-width="1.5" fill="none"/>
+    <circle cx="1" cy="60" r="4" fill="rgba(84,229,255,.95)"/>
+    <circle cx="60" cy="1" r="4" fill="rgba(84,229,255,.95)"/>
+    <rect x="18" y="18" width="10" height="10" fill="none" stroke="rgba(84,229,255,.55)" stroke-width="1.5"/>
+    <circle class="accent" cx="38" cy="10" r="2.5" fill="rgba(255,77,196,.85)"/>
+  </svg>
+
+  <div class="game-side-ping left"></div>
+  <div class="game-side-ping right"></div>
+  <div class="edge-mark edge-top-left" id="game-feed-label">Aurora Grid // Game Feed</div>
+  <div class="edge-mark edge-top-right" id="resolution-label">1920x1080</div>
+  <div class="edge-mark edge-bottom"><div class="bar"></div><span id="session-label">Active Session</span><div class="bar"></div></div>
+</div>
+
+<div class="left-stack">
+  <div class="panel panel-cut">
+    <div class="panel-grid"></div>
+    <div class="panel-head">
+      <div class="tag" id="social-panel-title">Redes</div>
+      <div class="small" id="social-panel-code">follow.me</div>
+    </div>
+    <div class="event-list" id="social-list"></div>
+  </div>
+</div>
+
+<div class="camera-wrap">
+  <div class="camera-orbit"></div>
+  <div class="camera-label"><div class="pill"></div><span id="camera-label">Operator Cam</span></div>
+  <div class="camera-frame"><div class="camera-guides"></div><div class="camera-reticle"></div></div>
+</div>
+
+<div class="chat-wrap">
+  <div class="chat-panel">
+    <div class="chat-header">
+      <div class="chat-title" id="chat-title">Stream Chat</div>
+    </div>
+    <div class="chat-list" id="chat-list"></div>
+  </div>
+</div>
+
+<div class="ticker">
+  <div class="ticker-bar">
+    <div class="ticker-tag" id="ticker-tag">sys.log</div>
+    <div class="ticker-window"><div class="ticker-flow" id="ticker-flow"></div></div>
+  </div>
+</div>
+
+</div>
+<script src="../../config/manual/config.js"></script>
+<script src="../../config/manual/manual.js"></script>
+</body>
+</html>

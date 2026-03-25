@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920,height=1080">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .hud{
+      position:absolute; inset:0 0 auto 0; height:80px;
+      /* NO continuous background — fragmented blocks only */
+    }
+
+    /* dashed data bus connecting the 3 blocks */
+    .hud-bus{
+      position:absolute; left:0; right:0; bottom:12px; height:1px;
+      border-top:1px dashed rgba(0,212,255,0.25);
+      pointer-events:none;
+    }
+
+    .inner{
+      position:absolute; left:20px; right:20px; top:0; bottom:0;
+      display:grid; grid-template-columns: 360px 1fr 360px;
+      align-items:center;
+    }
+
+    /* LEFT — status block */
+    .hud-left{ display:flex; align-items:center; }
+    .status-block{
+      display:flex; align-items:center; gap:10px;
+      padding:10px 16px;
+      background:var(--bg-panel);
+      border:1px solid var(--border-dim);
+      clip-path: polygon(0 6px, 6px 0, calc(100% - 6px) 0, 100% 6px,
+        100% calc(100% - 6px), calc(100% - 6px) 100%, 6px 100%, 0 calc(100% - 6px));
+      box-shadow: var(--glow-green);
+    }
+    .status-block::after{
+      content:""; position:absolute; inset:0;
+      background: repeating-linear-gradient(0deg, transparent 0 2px, rgba(0,212,255,0.02) 2px 4px);
+      pointer-events:none;
+    }
+    .status-copy{ display:flex; flex-direction:column; gap:2px; }
+    .status-copy .mode{
+      font-size:12px; letter-spacing:2px; color:var(--green);
+      text-transform:uppercase;
+    }
+    .status-copy .line{
+      font-size:10px; letter-spacing:1.5px; color:var(--text-mid);
+      text-transform:uppercase;
+    }
+
+    /* CENTER — glitched title */
+    .hud-center{
+      display:flex; align-items:center; justify-content:center;
+    }
+    .glitch-title{
+      font-size:36px; letter-spacing:12px;
+      color:var(--green);
+      text-transform:uppercase;
+      text-shadow:
+        0 0 20px rgba(0,212,255,0.4),
+        0 0 40px rgba(0,212,255,0.15);
+      position:relative;
+      animation: dlGlitch 6s linear infinite;
+    }
+    /* chromatic aberration layers */
+    .glitch-title::before, .glitch-title::after{
+      content:attr(data-text);
+      position:absolute; left:0; top:0;
+      width:100%; height:100%;
+      pointer-events:none;
+    }
+    .glitch-title::before{
+      color:var(--red); opacity:.08;
+      transform:translate(-2px, 1px);
+    }
+    .glitch-title::after{
+      color:var(--cyan); opacity:.08;
+      transform:translate(2px, -1px);
+    }
+
+    /* RIGHT — channel block */
+    .hud-right{ display:flex; align-items:center; justify-content:flex-end; }
+    .channel-block{
+      display:flex; align-items:center; gap:10px;
+      padding:10px 16px;
+      background:var(--bg-panel);
+      border:1px solid var(--border-dim);
+      clip-path: polygon(0 6px, 6px 0, calc(100% - 6px) 0, 100% 6px,
+        100% calc(100% - 6px), calc(100% - 6px) 100%, 6px 100%, 0 calc(100% - 6px));
+      box-shadow: var(--glow-green);
+    }
+    .channel-block::after{
+      content:""; position:absolute; inset:0;
+      background: repeating-linear-gradient(0deg, transparent 0 2px, rgba(0,212,255,0.02) 2px 4px);
+      pointer-events:none;
+    }
+    .channel-copy{ display:flex; flex-direction:column; gap:2px; text-align:right; }
+    .channel-copy .name{
+      font-size:12px; letter-spacing:2px; color:var(--cyan);
+      text-transform:uppercase;
+    }
+    .channel-copy .game{
+      font-size:10px; letter-spacing:1.5px; color:var(--text-mid);
+      text-transform:uppercase;
+    }
+  </style>
+</head>
+<body>
+  <div class="hud">
+    <div class="hud-bus"></div>
+    <div class="inner">
+      <div class="hud-left">
+        <div class="status-block">
+          <span class="dl-bracket">[</span>
+          <div class="status-copy">
+            <span class="mode" data-config="streamMode">LINK ACTIVO</span>
+            <span class="line" data-config="statusLine">CONEXION ESTABLE</span>
+          </div>
+          <span class="dl-bracket">]</span>
+        </div>
+      </div>
+      <div class="hud-center">
+        <span class="glitch-title" data-config="hudCenter" data-text="DEADLINK">DEADLINK</span>
+      </div>
+      <div class="hud-right">
+        <div class="channel-block">
+          <span class="dl-bracket cyan">[</span>
+          <div class="channel-copy">
+            <span class="name" data-config="channelName">EL_NOVATO</span>
+            <span class="game" data-config="gameLabel">EXEC: DARK_SOULS_III</span>
+          </div>
+          <span class="dl-bracket cyan">]</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="../config/config.js"></script>
+  <script src="../shared.js"></script>
+  <script>
+    // Sync data-text attribute for glitch pseudo-elements
+    const t = document.querySelector('.glitch-title');
+    if(t) t.setAttribute('data-text', t.textContent);
+  </script>
+</body>
+</html>

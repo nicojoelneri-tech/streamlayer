@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920,height=1080">
+<title>HANAMI - Game Frame</title>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body{ background:transparent; }
+
+  .wrap{ position:absolute; left:290px; top:94px; width:1340px; height:740px; z-index:5; }
+
+  /* ── Main frame border ── */
+  .frame{
+    position:absolute; inset:0;
+    border:3px solid rgba(42,36,32,0.30);
+    border-radius:8px;
+    box-shadow:
+      0 0 0 1px rgba(212,98,138,0.15),
+      inset 0 0 40px rgba(212,98,138,0.06),
+      0 6px 30px rgba(42,36,32,0.12);
+  }
+  .frame-inner{
+    position:absolute; inset:7px;
+    border:1px solid rgba(42,36,32,0.14);
+    border-radius:4px;
+  }
+
+  /* ── Brush stroke accents — BOLD ── */
+  .brush-top{
+    position:absolute; top:-2px; left:20px; right:20px; height:4px;
+    background:linear-gradient(90deg,
+      transparent 2%,
+      rgba(212,98,138,0.7) 15%,
+      rgba(123,94,167,0.6) 40%,
+      rgba(212,98,138,0.65) 60%,
+      rgba(196,162,101,0.5) 85%,
+      transparent 98%);
+    border-radius:2px;
+  }
+  .brush-bottom{
+    position:absolute; bottom:-2px; left:60px; right:60px; height:3px;
+    background:linear-gradient(90deg,
+      transparent 5%,
+      rgba(123,94,167,0.5) 25%,
+      rgba(212,98,138,0.55) 50%,
+      rgba(123,94,167,0.5) 75%,
+      transparent 95%);
+    border-radius:2px;
+  }
+  .brush-left{
+    position:absolute; left:-2px; top:30px; bottom:30px; width:3px;
+    background:linear-gradient(180deg,
+      transparent 5%,
+      rgba(212,98,138,0.45) 20%,
+      rgba(123,94,167,0.35) 50%,
+      rgba(196,78,63,0.3) 80%,
+      transparent 95%);
+    border-radius:2px;
+  }
+  .brush-right{
+    position:absolute; right:-2px; top:30px; bottom:30px; width:3px;
+    background:linear-gradient(180deg,
+      transparent 5%,
+      rgba(123,94,167,0.45) 20%,
+      rgba(212,98,138,0.35) 50%,
+      rgba(196,162,101,0.3) 80%,
+      transparent 95%);
+    border-radius:2px;
+  }
+
+  /* ── Corner branches — BIG (140px), fully visible ── */
+  .corner-branch{ position:absolute; width:140px; height:140px; pointer-events:none; }
+  .corner-branch svg{ width:100%; height:100%; overflow:visible; }
+  .corner-branch.tl{ top:-20px; left:-20px; }
+  .corner-branch.tr{ top:-20px; right:-20px; transform:scaleX(-1); }
+  .corner-branch.bl{ bottom:-20px; left:-20px; transform:scaleY(-1); }
+  .corner-branch.br{ bottom:-20px; right:-20px; transform:scale(-1,-1); }
+
+  /* ── Side wisps ── */
+  .wisp{
+    position:absolute; top:50%; width:4px; height:120px;
+    transform:translateY(-50%);
+    border-radius:3px;
+    opacity:.5;
+    animation: hmBreathe 6s ease-in-out infinite;
+  }
+  .wisp.left{
+    left:-14px;
+    background:linear-gradient(180deg, transparent, rgba(212,98,138,0.7), rgba(123,94,167,0.5), transparent);
+  }
+  .wisp.right{
+    right:-14px;
+    background:linear-gradient(180deg, transparent, rgba(123,94,167,0.7), rgba(212,98,138,0.5), transparent);
+    animation-delay:3s;
+  }
+
+  /* ── Edge labels ── */
+  .edge-label{
+    position:absolute; height:26px; display:flex; align-items:center;
+    padding:0 14px; gap:8px;
+    background:rgba(252,248,242,0.92);
+    border:1px solid rgba(42,36,32,0.18);
+    border-radius:4px;
+    font-family:'Noto Sans JP',sans-serif;
+    font-size:9px; font-weight:500;
+    letter-spacing:1.5px;
+    box-shadow: 0 2px 10px rgba(42,36,32,0.08);
+  }
+  .edge-tl{ top:-13px; left:100px; color:var(--sakura); }
+  .edge-tr{ top:-13px; right:100px; color:var(--ink); }
+  .edge-bot{
+    bottom:-13px; left:50%; transform:translateX(-50%);
+    color:var(--text-mid); gap:10px;
+  }
+  .edge-bot .bar{
+    width:30px; height:2px;
+    background:linear-gradient(90deg, transparent, var(--sakura), transparent);
+    opacity:.6;
+    animation: hmBreathe 4s ease-in-out infinite;
+  }
+
+  /* ── White backdrop — lienzo behind the frame ── */
+  .backdrop{
+    position:absolute; inset:-14px;
+    background:rgba(255,255,255,0.35);
+    border-radius:18px;
+    pointer-events:none;
+  }
+
+  /* ── Ink mist corners ── */
+  .mist{
+    position:absolute; inset:-10px;
+    background:
+      radial-gradient(ellipse at 3% 3%, rgba(212,98,138,0.10), transparent 22%),
+      radial-gradient(ellipse at 97% 97%, rgba(123,94,167,0.10), transparent 22%),
+      radial-gradient(ellipse at 3% 97%, rgba(196,78,63,0.07), transparent 18%),
+      radial-gradient(ellipse at 97% 3%, rgba(196,162,101,0.07), transparent 18%);
+    filter:blur(14px); pointer-events:none;
+  }
+
+  /* ── Connection lines ── */
+  .ink-lines{
+    position:absolute; inset:0; z-index:1;
+    pointer-events:none; overflow:visible;
+  }
+  .ink-lines svg{ width:1920px; height:1080px; }
+
+  @keyframes inkPulse{
+    0%,100%{ opacity:.25; }
+    50%{ opacity:.55; }
+  }
+  @keyframes inkPulseAlt{
+    0%,100%{ opacity:.18; }
+    50%{ opacity:.4; }
+  }
+  @keyframes inkNodePulse{
+    0%,100%{ opacity:.3; }
+    50%{ opacity:.75; }
+  }
+
+  .ink-lines .iline{
+    fill:none; stroke-linecap:round;
+    animation: inkPulse 5s ease-in-out infinite;
+  }
+  .ink-lines .iline-alt{
+    fill:none; stroke-linecap:round;
+    animation: inkPulseAlt 4s ease-in-out infinite;
+  }
+  .ink-lines .inode{
+    animation: inkNodePulse 5s ease-in-out infinite;
+  }
+</style>
+</head>
+<body>
+
+  <!-- Organic ink connection lines (full 1920x1080) -->
+  <div class="ink-lines">
+    <svg viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="gLeft" x1="1" y1="0" x2="0" y2="0">
+          <stop offset="0%" stop-color="rgb(212,98,138)" stop-opacity="0.7"/>
+          <stop offset="40%" stop-color="rgb(123,94,167)" stop-opacity="0.4"/>
+          <stop offset="100%" stop-color="rgb(42,36,32)" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="gRight" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="rgb(123,94,167)" stop-opacity="0.7"/>
+          <stop offset="40%" stop-color="rgb(212,98,138)" stop-opacity="0.4"/>
+          <stop offset="100%" stop-color="rgb(42,36,32)" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="gUp" x1="0" y1="1" x2="0" y2="0">
+          <stop offset="0%" stop-color="rgb(212,98,138)" stop-opacity="0.6"/>
+          <stop offset="100%" stop-color="rgb(42,36,32)" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="gDown" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="rgb(123,94,167)" stop-opacity="0.6"/>
+          <stop offset="100%" stop-color="rgb(42,36,32)" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+
+      <!-- LEFT: frame → focus panel -->
+      <path class="iline" d="M290,340 Q230,330 180,300 Q120,260 40,240"
+            stroke="url(#gLeft)" stroke-width="2"/>
+      <path class="iline" d="M290,460 Q210,450 150,470 Q80,500 20,510"
+            stroke="url(#gLeft)" stroke-width="1.8" style="animation-delay:.5s"/>
+      <path class="iline-alt" d="M290,260 Q240,240 180,215 Q110,185 30,170"
+            stroke="url(#gLeft)" stroke-width="1.2" style="animation-delay:1.2s"/>
+      <path class="iline-alt" d="M290,580 Q200,575 130,600 Q70,620 20,640"
+            stroke="url(#gLeft)" stroke-width="1" style="animation-delay:2s"/>
+      <circle class="inode" cx="180" cy="300" r="5" fill="rgba(212,98,138,0.6)"/>
+      <circle class="inode" cx="150" cy="470" r="4" fill="rgba(123,94,167,0.5)" style="animation-delay:1s"/>
+      <circle class="inode" cx="180" cy="215" r="3.5" fill="rgba(196,162,101,0.5)" style="animation-delay:1.8s"/>
+      <circle class="inode" cx="130" cy="600" r="3" fill="rgba(196,78,63,0.4)" style="animation-delay:2.5s"/>
+
+      <!-- RIGHT: frame → chat panel -->
+      <path class="iline" d="M1630,340 Q1690,330 1740,300 Q1800,260 1880,240"
+            stroke="url(#gRight)" stroke-width="2"/>
+      <path class="iline" d="M1630,480 Q1710,470 1770,490 Q1840,520 1900,530"
+            stroke="url(#gRight)" stroke-width="1.8" style="animation-delay:.7s"/>
+      <path class="iline-alt" d="M1630,250 Q1690,235 1750,215 Q1820,190 1890,175"
+            stroke="url(#gRight)" stroke-width="1.2" style="animation-delay:1.5s"/>
+      <circle class="inode" cx="1740" cy="300" r="5" fill="rgba(123,94,167,0.6)" style="animation-delay:.3s"/>
+      <circle class="inode" cx="1770" cy="490" r="4" fill="rgba(212,98,138,0.5)" style="animation-delay:1.2s"/>
+      <circle class="inode" cx="1750" cy="215" r="3.5" fill="rgba(196,162,101,0.4)" style="animation-delay:2s"/>
+
+      <!-- TOP: frame → HUD -->
+      <path class="iline" d="M960,94 Q957,55 953,20"
+            stroke="url(#gUp)" stroke-width="1.8"/>
+      <path class="iline-alt" d="M820,94 Q815,58 808,15"
+            stroke="url(#gUp)" stroke-width="1.2" style="animation-delay:.6s"/>
+      <path class="iline-alt" d="M1100,94 Q1107,55 1112,12"
+            stroke="url(#gUp)" stroke-width="1.2" style="animation-delay:1.2s"/>
+      <circle class="inode" cx="955" cy="45" r="4" fill="rgba(212,98,138,0.5)" style="animation-delay:.3s"/>
+
+      <!-- BOTTOM: frame → ticker -->
+      <path class="iline" d="M960,834 Q957,885 953,950 Q950,1000 953,1028"
+            stroke="url(#gDown)" stroke-width="1.8"/>
+      <path class="iline-alt" d="M760,834 Q755,895 748,970 L745,1028"
+            stroke="url(#gDown)" stroke-width="1.2" style="animation-delay:.8s"/>
+      <path class="iline-alt" d="M1160,834 Q1165,895 1172,970 L1175,1028"
+            stroke="url(#gDown)" stroke-width="1.2" style="animation-delay:1.4s"/>
+      <circle class="inode" cx="953" cy="950" r="4" fill="rgba(123,94,167,0.5)" style="animation-delay:.5s"/>
+    </svg>
+  </div>
+
+  <div class="wrap">
+    <div class="backdrop"></div>
+    <div class="mist"></div>
+    <div class="frame"></div>
+    <div class="frame-inner"></div>
+    <div class="brush-top"></div>
+    <div class="brush-bottom"></div>
+    <div class="brush-left"></div>
+    <div class="brush-right"></div>
+
+    <!-- Cherry blossom branch corners — BIG, decorative -->
+    <div class="corner-branch tl"><svg viewBox="0 0 140 140">
+      <!-- main branch -->
+      <path d="M5,100 Q20,60 50,35 Q75,18 110,6" stroke="rgba(42,36,32,0.55)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <!-- secondary twigs -->
+      <path d="M30,65 Q45,42 70,28" stroke="rgba(42,36,32,0.35)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <path d="M15,82 Q30,75 45,55" stroke="rgba(42,36,32,0.25)" stroke-width="1" fill="none" stroke-linecap="round"/>
+      <!-- flowers (large) -->
+      <circle cx="110" cy="6" r="8" fill="rgba(212,98,138,0.7)"/>
+      <circle cx="110" cy="6" r="4.5" fill="rgba(242,212,222,0.8)"/>
+      <circle cx="110" cy="6" r="2" fill="rgba(255,255,255,0.5)"/>
+      <circle cx="70" cy="28" r="6" fill="rgba(212,98,138,0.6)"/>
+      <circle cx="70" cy="28" r="3" fill="rgba(242,212,222,0.7)"/>
+      <circle cx="50" cy="35" r="5" fill="rgba(123,94,167,0.55)"/>
+      <circle cx="50" cy="35" r="2.5" fill="rgba(168,140,200,0.6)"/>
+      <!-- buds -->
+      <circle cx="90" cy="14" r="3.5" fill="rgba(212,98,138,0.5)"/>
+      <circle cx="45" cy="55" r="3" fill="rgba(196,162,101,0.45)"/>
+      <circle cx="60" cy="20" r="2.5" fill="rgba(212,98,138,0.4)"/>
+      <!-- petal scatter -->
+      <circle cx="82" cy="10" r="2" fill="rgba(242,212,222,0.5)"/>
+      <circle cx="38" cy="48" r="2" fill="rgba(212,98,138,0.35)"/>
+      <circle cx="20" cy="72" r="1.5" fill="rgba(123,94,167,0.3)"/>
+      <circle cx="100" cy="18" r="1.5" fill="rgba(196,162,101,0.3)"/>
+    </svg></div>
+
+    <div class="corner-branch tr"><svg viewBox="0 0 140 140">
+      <path d="M5,100 Q20,60 50,35 Q75,18 110,6" stroke="rgba(42,36,32,0.55)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <path d="M30,65 Q45,42 70,28" stroke="rgba(42,36,32,0.35)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <path d="M15,82 Q30,75 45,55" stroke="rgba(42,36,32,0.25)" stroke-width="1" fill="none" stroke-linecap="round"/>
+      <circle cx="110" cy="6" r="8" fill="rgba(123,94,167,0.65)"/>
+      <circle cx="110" cy="6" r="4.5" fill="rgba(168,140,200,0.75)"/>
+      <circle cx="110" cy="6" r="2" fill="rgba(255,255,255,0.4)"/>
+      <circle cx="70" cy="28" r="6" fill="rgba(123,94,167,0.55)"/>
+      <circle cx="70" cy="28" r="3" fill="rgba(168,140,200,0.6)"/>
+      <circle cx="50" cy="35" r="5" fill="rgba(212,98,138,0.5)"/>
+      <circle cx="50" cy="35" r="2.5" fill="rgba(242,212,222,0.6)"/>
+      <circle cx="90" cy="14" r="3.5" fill="rgba(123,94,167,0.45)"/>
+      <circle cx="45" cy="55" r="3" fill="rgba(212,98,138,0.4)"/>
+      <circle cx="82" cy="10" r="2" fill="rgba(168,140,200,0.45)"/>
+      <circle cx="38" cy="48" r="2" fill="rgba(123,94,167,0.3)"/>
+    </svg></div>
+
+    <div class="corner-branch bl"><svg viewBox="0 0 140 140">
+      <path d="M5,100 Q20,60 50,35 Q75,18 110,6" stroke="rgba(42,36,32,0.55)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <path d="M30,65 Q45,42 70,28" stroke="rgba(42,36,32,0.35)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <circle cx="110" cy="6" r="8" fill="rgba(196,78,63,0.6)"/>
+      <circle cx="110" cy="6" r="4.5" fill="rgba(220,140,120,0.65)"/>
+      <circle cx="110" cy="6" r="2" fill="rgba(255,255,255,0.35)"/>
+      <circle cx="70" cy="28" r="6" fill="rgba(196,162,101,0.55)"/>
+      <circle cx="70" cy="28" r="3" fill="rgba(216,192,140,0.6)"/>
+      <circle cx="50" cy="35" r="5" fill="rgba(212,98,138,0.45)"/>
+      <circle cx="90" cy="14" r="3.5" fill="rgba(196,78,63,0.4)"/>
+      <circle cx="45" cy="55" r="3" fill="rgba(196,162,101,0.35)"/>
+      <circle cx="82" cy="10" r="2" fill="rgba(196,78,63,0.35)"/>
+    </svg></div>
+
+    <div class="corner-branch br"><svg viewBox="0 0 140 140">
+      <path d="M5,100 Q20,60 50,35 Q75,18 110,6" stroke="rgba(42,36,32,0.55)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <path d="M30,65 Q45,42 70,28" stroke="rgba(42,36,32,0.35)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <path d="M15,82 Q30,75 45,55" stroke="rgba(42,36,32,0.25)" stroke-width="1" fill="none" stroke-linecap="round"/>
+      <circle cx="110" cy="6" r="8" fill="rgba(212,98,138,0.65)"/>
+      <circle cx="110" cy="6" r="4.5" fill="rgba(242,212,222,0.7)"/>
+      <circle cx="110" cy="6" r="2" fill="rgba(255,255,255,0.4)"/>
+      <circle cx="70" cy="28" r="6" fill="rgba(123,94,167,0.5)"/>
+      <circle cx="70" cy="28" r="3" fill="rgba(168,140,200,0.55)"/>
+      <circle cx="50" cy="35" r="5" fill="rgba(196,162,101,0.45)"/>
+      <circle cx="50" cy="35" r="2.5" fill="rgba(216,192,140,0.5)"/>
+      <circle cx="90" cy="14" r="3.5" fill="rgba(212,98,138,0.4)"/>
+      <circle cx="45" cy="55" r="3" fill="rgba(123,94,167,0.35)"/>
+      <circle cx="82" cy="10" r="2" fill="rgba(212,98,138,0.35)"/>
+    </svg></div>
+
+    <div class="wisp left"></div>
+    <div class="wisp right"></div>
+
+    <div class="edge-label edge-tl"><div class="hm-petal sm"></div><span data-config="gameEdgeLeft">風の道</span></div>
+    <div class="edge-label edge-tr"><span data-config="gameEdgeRight">camino del viento</span></div>
+    <div class="edge-label edge-bot"><div class="bar"></div><span data-config="gameEdgeBottom">cada petalo cuenta una historia</span><div class="bar"></div></div>
+  </div>
+  <script src="../config/config.js"></script>
+  <script src="../shared.js"></script>
+</body>
+</html>

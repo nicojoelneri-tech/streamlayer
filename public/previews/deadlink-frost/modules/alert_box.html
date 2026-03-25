@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920,height=1080">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .alert-wrap{
+      position:absolute; left:50%; top:110px; transform:translateX(-50%);
+      width:580px; pointer-events:none;
+    }
+
+    .alert{
+      position:relative; padding:18px 24px;
+      background:var(--bg-panel);
+      border:1px solid rgba(255,32,64,0.3);
+      clip-path: polygon(
+        0 6px, 6px 0, calc(100% - 6px) 0, 100% 6px,
+        100% calc(100% - 6px), calc(100% - 6px) 100%,
+        6px 100%, 0 calc(100% - 6px)
+      );
+      box-shadow: var(--glow-red), 0 8px 40px rgba(0,0,0,0.4);
+      overflow:hidden;
+      animation: dlAlertFlash 2s ease-in-out infinite;
+    }
+
+    /* scanlines */
+    .alert::after{
+      content:""; position:absolute; inset:0;
+      background: repeating-linear-gradient(0deg, transparent 0 2px, rgba(255,32,64,0.02) 2px 4px);
+      pointer-events:none; z-index:2;
+    }
+
+    /* red top line */
+    .alert::before{
+      content:""; position:absolute; left:16px; right:16px; top:0; height:1px;
+      background:linear-gradient(90deg, transparent, var(--red), transparent);
+      opacity:.6;
+    }
+
+    .alert-header{ display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+    /* warning triangle */
+    .alert-icon{
+      width:0; height:0; flex-shrink:0;
+      border-left:10px solid transparent;
+      border-right:10px solid transparent;
+      border-bottom:18px solid var(--red);
+      position:relative;
+      filter: drop-shadow(0 0 8px rgba(255,32,64,0.5));
+      animation: dlPulse 2s ease-in-out infinite;
+    }
+    .alert-icon::after{
+      content:"!"; position:absolute;
+      left:50%; top:4px; transform:translateX(-50%);
+      font-size:10px; font-weight:bold; color:black;
+    }
+    .alert-label{
+      font-size:12px; letter-spacing:2px; color:var(--red);
+      text-transform:uppercase;
+    }
+    .alert-user{
+      font-size:22px; letter-spacing:1px; color:var(--text);
+      line-height:1.2; margin-bottom:4px;
+    }
+    .alert-message{
+      font-size:13px; color:var(--text-mid);
+    }
+  </style>
+</head>
+<body>
+  <div class="alert-wrap">
+    <div class="alert">
+      <div class="alert-header">
+        <div class="alert-icon"></div>
+        <span class="alert-label" data-config="alertTitle">[!] ALERTA DE SISTEMA</span>
+      </div>
+      <div class="alert-user" data-config="alertText">NUEVO NODO DETECTADO EN LA RED</div>
+      <div class="alert-message" data-config="alertSub">// conexion establecida</div>
+    </div>
+  </div>
+  <script src="../config/config.js"></script>
+  <script src="../shared.js"></script>
+</body>
+</html>

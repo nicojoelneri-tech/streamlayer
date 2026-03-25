@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920,height=1080">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .wrap{ position:absolute; left:260px; top:86px; width:1360px; height:860px; }
+
+    .jc-label{
+      position:absolute; left:0; top:-28px;
+      display:flex; align-items:center; gap:8px;
+      padding:5px 14px;
+      background:var(--bg-void);
+      border:1px solid var(--border-dim);
+      box-shadow: var(--glow-green);
+    }
+    .jc-label span{
+      font-size:11px; letter-spacing:2px; color:var(--green);
+      text-transform:uppercase;
+    }
+
+    .jc-frame{
+      position:absolute; inset:0;
+      background:rgba(0,0,0,0.3);
+      border:1px solid rgba(0,212,255,0.40);
+      clip-path: polygon(
+        0 10px, 10px 0, calc(100% - 10px) 0, 100% 10px,
+        100% calc(100% - 10px), calc(100% - 10px) 100%,
+        10px 100%, 0 calc(100% - 10px)
+      );
+      box-shadow: var(--glow-green);
+      overflow:hidden;
+    }
+
+    /* L-bracket corners */
+    .jc-bracket{ position:absolute; pointer-events:none; }
+    .jc-bracket::before, .jc-bracket::after{
+      content:""; position:absolute; background:rgba(0,212,255,0.35);
+    }
+    .jc-bracket::before{ width:20px; height:1px; }
+    .jc-bracket::after{ width:1px; height:20px; }
+    .jb-tl{ top:4px; left:4px; }
+    .jb-tl::before{ top:0; left:0; }
+    .jb-tl::after{ top:0; left:0; }
+    .jb-tr{ top:4px; right:4px; }
+    .jb-tr::before{ top:0; right:0; }
+    .jb-tr::after{ top:0; right:0; }
+    .jb-bl{ bottom:4px; left:4px; }
+    .jb-bl::before{ bottom:0; left:0; }
+    .jb-bl::after{ bottom:0; left:0; }
+    .jb-br{ bottom:4px; right:4px; }
+    .jb-br::before{ bottom:0; right:0; }
+    .jb-br::after{ bottom:0; right:0; }
+
+    /* REC */
+    .rec{
+      position:absolute; top:12px; right:14px; z-index:3;
+      display:flex; align-items:center; gap:4px;
+      font-size:10px; letter-spacing:1px; color:var(--red);
+    }
+    .rec-dot{
+      width:6px; height:6px; border-radius:50%;
+      background:var(--red);
+      box-shadow: 0 0 6px rgba(255,32,64,0.6);
+      animation: dlRecBlink 1.5s ease-in-out infinite;
+    }
+
+    .jc-scan{
+      position:absolute; inset:0;
+      background: repeating-linear-gradient(0deg, transparent 0 2px, rgba(0,212,255,0.015) 2px 4px);
+      pointer-events:none; z-index:2;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="jc-label">
+      <span data-config="justChattingLabel">CAM://FEED_PRINCIPAL</span>
+    </div>
+    <div class="jc-frame">
+      <div class="jc-scan"></div>
+      <div class="jc-bracket jb-tl"></div>
+      <div class="jc-bracket jb-tr"></div>
+      <div class="jc-bracket jb-bl"></div>
+      <div class="jc-bracket jb-br"></div>
+      <div class="rec"><span class="rec-dot"></span>REC</div>
+    </div>
+  </div>
+  <script src="../config/config.js"></script>
+  <script src="../shared.js"></script>
+</body>
+</html>

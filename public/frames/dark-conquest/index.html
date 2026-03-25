@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=420,height=320">
+<title>Dark Conquest — Camera Frame</title>
+<style>
+  /* ═══════════════════════════════════════════
+     DARK CONQUEST — Medieval Camera Frame
+     Browser Source: 420 × 320, transparent bg
+     Webcam goes ABOVE this source in OBS
+  ═══════════════════════════════════════════ */
+
+  @import url('https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap');
+
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:420px;height:320px;background:transparent;overflow:hidden}
+
+  .frame-wrap{
+    position:absolute;left:50%;top:50%;
+    transform:translate(-50%,-50%);
+    width:384px;height:260px;
+  }
+
+  /* ── Stone border (layered gradients) ── */
+  .stone-border{
+    position:absolute;inset:0;
+    border:4px solid;
+    border-image:linear-gradient(
+      180deg,
+      #6b5c3e 0%,#4a3f2a 20%,#3a3028 50%,#4a3f2a 80%,#6b5c3e 100%
+    ) 1;
+    box-shadow:
+      inset 0 0 0 1px rgba(200,168,78,.25),
+      0 0 0 1px rgba(0,0,0,.6),
+      0 0 12px rgba(0,0,0,.5),
+      0 0 3px rgba(200,168,78,.15);
+  }
+
+  /* ── Gold trim (inner line) ── */
+  .gold-trim{
+    position:absolute;inset:6px;
+    border:1px solid rgba(200,168,78,.35);
+    box-shadow:inset 0 0 4px rgba(200,168,78,.1);
+  }
+  .gold-trim::before{
+    content:'';position:absolute;inset:2px;
+    border:1px solid rgba(200,168,78,.12);
+  }
+
+  /* ── Corner rivets ── */
+  .rivet{
+    position:absolute;width:12px;height:12px;
+    border-radius:50%;
+    background:radial-gradient(circle at 35% 35%,#c8a84e,#6b5c3e 60%,#3a3028);
+    box-shadow:
+      inset 0 -1px 2px rgba(0,0,0,.6),
+      inset 0 1px 1px rgba(255,220,130,.3),
+      0 0 4px rgba(200,168,78,.3);
+  }
+  .rv-tl{top:-2px;left:-2px}
+  .rv-tr{top:-2px;right:-2px}
+  .rv-bl{bottom:-2px;left:-2px}
+  .rv-br{bottom:-2px;right:-2px}
+
+  /* ── Mid-border rivets (smaller) ── */
+  .rivet-sm{
+    position:absolute;width:7px;height:7px;
+    border-radius:50%;
+    background:radial-gradient(circle at 35% 35%,#a08040,#5a4a30 70%,#2a2018);
+    box-shadow:inset 0 -1px 1px rgba(0,0,0,.5),inset 0 1px 1px rgba(255,220,130,.2);
+  }
+  .rs-tc{top:-3px;left:50%;transform:translateX(-50%)}
+  .rs-bc{bottom:-3px;left:50%;transform:translateX(-50%)}
+  .rs-lc{left:-3px;top:50%;transform:translateY(-50%)}
+  .rs-rc{right:-3px;top:50%;transform:translateY(-50%)}
+
+  /* ── Chain links along top & bottom ── */
+  .chain-row{
+    position:absolute;left:20px;right:20px;height:6px;
+    background:repeating-linear-gradient(
+      90deg,
+      transparent 0px,transparent 4px,
+      rgba(200,168,78,.15) 4px,rgba(200,168,78,.15) 5px,
+      transparent 5px,transparent 10px,
+      rgba(140,110,50,.12) 10px,rgba(140,110,50,.12) 11px,
+      transparent 11px,transparent 14px
+    );
+    pointer-events:none;
+  }
+  .ch-top{top:1px}.ch-bot{bottom:1px}
+
+  /* ── Torch holders (sides) ── */
+  .torch-holder{
+    position:absolute;width:10px;
+    top:50%;transform:translateY(-50%);
+    height:40px;
+  }
+  .th-left{left:-14px}
+  .th-right{right:-14px}
+
+  /* Bracket shape */
+  .torch-holder::before{
+    content:'';position:absolute;
+    width:8px;height:30px;
+    top:5px;left:1px;
+    background:linear-gradient(180deg,#6b5c3e,#4a3f2a,#3a3028);
+    border-radius:2px;
+    box-shadow:inset 0 1px 1px rgba(255,220,130,.2),0 0 3px rgba(0,0,0,.5);
+  }
+
+  /* ── Torch flame canvas ── */
+  #flameCanvas{
+    position:absolute;
+    inset:-30px;
+    width:calc(100% + 60px);
+    height:calc(100% + 60px);
+    pointer-events:none;
+  }
+
+  /* ── Ember / ash particle canvas ── */
+  #emberCanvas{
+    position:absolute;
+    inset:-30px;
+    width:calc(100% + 60px);
+    height:calc(100% + 60px);
+    pointer-events:none;
+  }
+
+  /* ── Gothic corner ornaments ── */
+  .gothic-corner{
+    position:absolute;width:24px;height:24px;
+    pointer-events:none;
+  }
+  .gc-tl{top:4px;left:4px}
+  .gc-tr{top:4px;right:4px;transform:scaleX(-1)}
+  .gc-bl{bottom:4px;left:4px;transform:scaleY(-1)}
+  .gc-br{bottom:4px;right:4px;transform:scale(-1,-1)}
+
+  .gothic-corner svg{width:100%;height:100%}
+  .gothic-corner path{
+    fill:none;stroke:rgba(200,168,78,.4);stroke-width:1.2;
+    filter:drop-shadow(0 0 2px rgba(200,168,78,.3));
+  }
+
+  /* ── Stone texture overlay ── */
+  .stone-texture{
+    position:absolute;inset:0;
+    background:
+      repeating-conic-gradient(rgba(60,50,40,.04) 0% 25%,transparent 0% 50%) 0 0/8px 8px,
+      repeating-conic-gradient(rgba(80,70,50,.03) 0% 25%,transparent 0% 50%) 4px 4px/8px 8px;
+    pointer-events:none;
+    mix-blend-mode:multiply;
+  }
+
+  /* ── Ambient dark vignette on edges ── */
+  .vignette{
+    position:absolute;inset:0;
+    box-shadow:inset 0 0 30px rgba(0,0,0,.3);
+    pointer-events:none;
+  }
+
+  /* ── Gold glow pulse (subtle) ── */
+  .gold-glow{
+    position:absolute;inset:0;
+    box-shadow:inset 0 0 15px rgba(200,168,78,.05);
+    animation:goldPulse 5s ease-in-out infinite;
+    pointer-events:none;
+  }
+  @keyframes goldPulse{
+    0%,100%{box-shadow:inset 0 0 15px rgba(200,168,78,.05)}
+    50%{box-shadow:inset 0 0 20px rgba(200,168,78,.12)}
+  }
+
+  /* ── HP & Mana bars (bottom, horizontal) ── */
+  .stat-bar{
+    position:absolute;
+    bottom:-9px;
+    height:5px;
+    width:120px;
+    background:rgba(20,16,12,.7);
+    border:1px solid rgba(200,168,78,.3);
+    overflow:hidden;
+  }
+  .stat-bar-hp{left:0}
+  .stat-bar-mp{right:0}
+
+  .stat-bar::after{
+    content:'';position:absolute;
+    top:0;bottom:0;
+  }
+  .stat-bar-hp::after{
+    left:0;width:75%;
+    background:linear-gradient(90deg,#8b0000,#cc2020,#ff4040);
+    box-shadow:0 0 4px rgba(200,30,30,.4);
+  }
+  .stat-bar-mp::after{
+    right:0;width:75%;
+    background:linear-gradient(270deg,#001880,#2040cc,#4070ff);
+    box-shadow:0 0 4px rgba(40,80,220,.4);
+  }
+
+  .stat-bar::before{
+    content:'';position:absolute;inset:0;
+    background:linear-gradient(180deg,rgba(255,255,255,.1),transparent);
+    pointer-events:none;z-index:1;
+  }
+
+  /* ── Label ── */
+  .realm-label{
+    position:absolute;
+    bottom:-28px;left:50%;transform:translateX(-50%);
+    font-family:'MedievalSharp',serif;
+    font-size:10px;
+    letter-spacing:5px;
+    text-transform:uppercase;
+    color:rgba(200,168,78,.6);
+    text-shadow:0 0 4px rgba(200,168,78,.3),0 1px 2px rgba(0,0,0,.8);
+    white-space:nowrap;
+    animation:labelBreath 4s ease-in-out infinite;
+  }
+  @keyframes labelBreath{0%,100%{opacity:.6}50%{opacity:.9}}
+
+  /* ── Decorative edge runes ── */
+  .rune{
+    position:absolute;
+    font-family:'MedievalSharp',serif;
+    font-size:8px;
+    color:rgba(200,168,78,.2);
+    text-shadow:0 0 3px rgba(200,168,78,.15);
+    pointer-events:none;
+    animation:runeFade 6s ease-in-out infinite;
+  }
+  .rune-l1{left:6px;top:25%;transform:rotate(-90deg)}.rune-l2{left:6px;top:65%;transform:rotate(-90deg)}
+  .rune-r1{right:6px;top:30%;transform:rotate(90deg)}.rune-r2{right:6px;top:70%;transform:rotate(90deg)}
+  @keyframes runeFade{0%,100%{opacity:.2}50%{opacity:.5}}
+
+  /* ── Red blood drip (occasional on sides) ── */
+  .blood-drip{
+    position:absolute;width:2px;
+    background:linear-gradient(180deg,rgba(139,0,0,.6),rgba(139,0,0,0));
+    border-radius:0 0 1px 1px;
+    pointer-events:none;
+    opacity:0;
+  }
+  .bd-1{left:60px;top:0;height:20px;animation:drip 8s ease-in infinite 1s}
+  .bd-2{right:90px;top:0;height:28px;animation:drip 10s ease-in infinite 4s}
+  .bd-3{left:140px;top:0;height:16px;animation:drip 12s ease-in infinite 7s}
+  @keyframes drip{
+    0%,70%,100%{opacity:0;height:0;top:0}
+    75%{opacity:.6;top:0;height:4px}
+    90%{opacity:.4;top:0}
+    95%{opacity:.2}
+  }
+
+</style>
+</head>
+<body>
+
+<div class="frame-wrap">
+
+  <!-- Flame canvas (torches) -->
+  <canvas id="flameCanvas"></canvas>
+
+  <!-- Ember / ash canvas -->
+  <canvas id="emberCanvas"></canvas>
+
+  <!-- Stone border -->
+  <div class="stone-border"></div>
+  <div class="gold-trim"></div>
+
+  <!-- Stone texture overlay -->
+  <div class="stone-texture"></div>
+
+  <!-- Corner rivets -->
+  <div class="rivet rv-tl"></div><div class="rivet rv-tr"></div>
+  <div class="rivet rv-bl"></div><div class="rivet rv-br"></div>
+
+  <!-- Mid-border rivets -->
+  <div class="rivet-sm rs-tc"></div><div class="rivet-sm rs-bc"></div>
+  <div class="rivet-sm rs-lc"></div><div class="rivet-sm rs-rc"></div>
+
+  <!-- Chain rows -->
+  <div class="chain-row ch-top"></div>
+  <div class="chain-row ch-bot"></div>
+
+  <!-- Gothic corner ornaments -->
+  <div class="gothic-corner gc-tl">
+    <svg viewBox="0 0 24 24"><path d="M2,2 Q2,12 8,16 Q4,10 4,2 M2,2 Q12,2 16,8 Q10,4 2,4"/></svg>
+  </div>
+  <div class="gothic-corner gc-tr">
+    <svg viewBox="0 0 24 24"><path d="M2,2 Q2,12 8,16 Q4,10 4,2 M2,2 Q12,2 16,8 Q10,4 2,4"/></svg>
+  </div>
+  <div class="gothic-corner gc-bl">
+    <svg viewBox="0 0 24 24"><path d="M2,2 Q2,12 8,16 Q4,10 4,2 M2,2 Q12,2 16,8 Q10,4 2,4"/></svg>
+  </div>
+  <div class="gothic-corner gc-br">
+    <svg viewBox="0 0 24 24"><path d="M2,2 Q2,12 8,16 Q4,10 4,2 M2,2 Q12,2 16,8 Q10,4 2,4"/></svg>
+  </div>
+
+  <!-- Torch holders -->
+  <div class="torch-holder th-left"></div>
+  <div class="torch-holder th-right"></div>
+
+  <!-- Rune inscriptions on sides -->
+  <div class="rune rune-l1">&#x16A0;&#x16A2;&#x16B1;</div>
+  <div class="rune rune-l2">&#x16A6;&#x16B7;</div>
+  <div class="rune rune-r1">&#x16C1;&#x16A8;</div>
+  <div class="rune rune-r2">&#x16B3;&#x16A0;&#x16C7;</div>
+
+  <!-- Blood drips -->
+  <div class="blood-drip bd-1"></div>
+  <div class="blood-drip bd-2"></div>
+  <div class="blood-drip bd-3"></div>
+
+  <!-- Vignette + gold glow -->
+  <div class="vignette"></div>
+  <div class="gold-glow"></div>
+
+  <!-- HP bar (left) -->
+  <div class="stat-bar stat-bar-hp"></div>
+
+  <!-- Mana bar (right) -->
+  <div class="stat-bar stat-bar-mp"></div>
+
+  <!-- Label -->
+  <div class="realm-label" id="label"></div>
+
+</div>
+
+<script>
+// ═══════════════ CONFIGURACION ═══════════════
+// Edita este texto para personalizar el label del marco:
+const LABEL_TEXT = '✦ Conquest ✦';
+// ═════════════════════════════════════════════
+document.getElementById('label').textContent = LABEL_TEXT;
+
+// ═════════════════════════════════════════
+//  TORCH FLAME SYSTEM
+// ═════════════════════════════════════════
+
+const flameC = document.getElementById('flameCanvas');
+const flameCtx = flameC.getContext('2d');
+const frameW = 384, frameH = 260;
+flameC.width = frameW + 60; flameC.height = frameH + 60;
+const ox = 30, oy = 30; // canvas offset
+
+// Torch positions (relative to frame)
+const torches = [
+  { x: -10, y: frameH / 2 - 8 },  // left
+  { x: frameW + 10, y: frameH / 2 - 8 },  // right
+];
+
+class FlameParticle {
+  constructor(tx, ty) {
+    this.tx = tx; this.ty = ty;
+    this.reset();
+  }
+  reset() {
+    this.x = this.tx + (Math.random() - 0.5) * 6;
+    this.y = this.ty;
+    this.vy = -0.8 - Math.random() * 1.5;
+    this.vx = (Math.random() - 0.5) * 0.6;
+    this.size = 2 + Math.random() * 4;
+    this.life = 20 + Math.random() * 25;
+    this.maxLife = this.life;
+  }
+  update() {
+    this.x += this.vx + (Math.random() - 0.5) * 0.4;
+    this.y += this.vy;
+    this.vy -= 0.03;
+    this.size *= 0.97;
+    this.life--;
+    if (this.life <= 0) this.reset();
+  }
+  draw(ctx) {
+    const t = this.life / this.maxLife;
+    let r, g, b, a;
+    if (t > 0.6) {
+      // White-yellow core
+      r = 255; g = 240; b = 180; a = t * 0.9;
+    } else if (t > 0.3) {
+      // Orange mid
+      r = 255; g = 140 + (t * 100); b = 0; a = t * 0.8;
+    } else {
+      // Dark red tip
+      r = 200; g = 40; b = 0; a = t * 0.6;
+    }
+    ctx.beginPath();
+    ctx.arc(this.x + ox, this.y + oy, this.size * t, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(${r},${g},${b},${a})`;
+    ctx.shadowColor = `rgba(255,120,0,${a * 0.5})`;
+    ctx.shadowBlur = 8;
+    ctx.fill();
+    ctx.shadowBlur = 0;
+  }
+}
+
+// Torch base glow
+function drawTorchGlow(ctx, tx, ty) {
+  const g = ctx.createRadialGradient(tx + ox, ty + oy, 0, tx + ox, ty + oy, 30);
+  g.addColorStop(0, 'rgba(255,120,0,0.08)');
+  g.addColorStop(0.5, 'rgba(255,80,0,0.03)');
+  g.addColorStop(1, 'rgba(255,60,0,0)');
+  ctx.fillStyle = g;
+  ctx.fillRect(tx + ox - 30, ty + oy - 30, 60, 60);
+}
+
+const flameParticles = [];
+torches.forEach(t => {
+  for (let i = 0; i < 18; i++) {
+    flameParticles.push(new FlameParticle(t.x, t.y));
+  }
+});
+
+// ═════════════════════════════════════════
+//  EMBER / ASH SYSTEM
+// ═════════════════════════════════════════
+
+const emberC = document.getElementById('emberCanvas');
+const emberCtx = emberC.getContext('2d');
+emberC.width = frameW + 60; emberC.height = frameH + 60;
+
+class Ember {
+  constructor() { this.reset(); }
+  reset() {
+    // Spawn from bottom or sides
+    const r = Math.random();
+    if (r < 0.5) {
+      this.x = ox + Math.random() * frameW;
+      this.y = oy + frameH + 5;
+    } else if (r < 0.75) {
+      this.x = ox - 5;
+      this.y = oy + frameH * 0.5 + (Math.random() - 0.5) * frameH;
+    } else {
+      this.x = ox + frameW + 5;
+      this.y = oy + frameH * 0.5 + (Math.random() - 0.5) * frameH;
+    }
+    this.vy = -0.3 - Math.random() * 0.8;
+    this.vx = (Math.random() - 0.5) * 0.4;
+    this.size = 0.5 + Math.random() * 1.5;
+    this.life = 80 + Math.random() * 120;
+    this.maxLife = this.life;
+    this.wobble = Math.random() * Math.PI * 2;
+    this.wobbleSpeed = 0.02 + Math.random() * 0.04;
+    // Color: orange to dark red
+    const ci = Math.random();
+    if (ci < 0.4) { this.r = 255; this.g = 120 + Math.random() * 60; this.b = 0; }
+    else if (ci < 0.7) { this.r = 255; this.g = 60; this.b = 0; }
+    else { this.r = 200; this.g = 168; this.b = 78; } // gold ember
+  }
+  update() {
+    this.wobble += this.wobbleSpeed;
+    this.x += this.vx + Math.sin(this.wobble) * 0.3;
+    this.y += this.vy;
+    this.life--;
+    if (this.life <= 0) this.reset();
+  }
+  draw(ctx) {
+    const a = (this.life / this.maxLife) * 0.7;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(${this.r},${this.g},${this.b},${a})`;
+    ctx.shadowColor = `rgba(${this.r},${this.g},${this.b},${a * 0.6})`;
+    ctx.shadowBlur = 4;
+    ctx.fill();
+    ctx.shadowBlur = 0;
+  }
+}
+
+const embers = Array.from({ length: 25 }, () => new Ember());
+
+// ═════════════════════════════════════════
+//  ANIMATION LOOP
+// ═════════════════════════════════════════
+
+function animate() {
+  // Flames
+  flameCtx.clearRect(0, 0, flameC.width, flameC.height);
+  torches.forEach(t => drawTorchGlow(flameCtx, t.x, t.y));
+  flameParticles.forEach(p => { p.update(); p.draw(flameCtx); });
+
+  // Embers
+  emberCtx.clearRect(0, 0, emberC.width, emberC.height);
+  embers.forEach(e => { e.update(); e.draw(emberCtx); });
+
+  requestAnimationFrame(animate);
+}
+animate();
+</script>
+</body>
+</html>

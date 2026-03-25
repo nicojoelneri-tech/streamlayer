@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920,height=1080">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .hud {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 68px;
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      gap: 8px;
+    }
+
+    /* Left: mode + status */
+    .hud-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 260px;
+    }
+    .hud-mode {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 14px;
+      background: rgba(230,57,70,0.12);
+      border: 1px solid var(--border-mid);
+      clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+    }
+    .hud-mode-text {
+      font-family: var(--font-display);
+      font-size: 16px;
+      letter-spacing: 3px;
+      color: var(--red);
+    }
+    .hud-status {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-mid);
+      letter-spacing: 1.5px;
+    }
+
+    /* Center: title */
+    .hud-center { flex: 1; text-align: center; position: relative; }
+    .hud-title {
+      font-family: var(--font-display);
+      font-size: 34px;
+      letter-spacing: 8px;
+      color: var(--red);
+      text-shadow: 0 0 20px rgba(230,57,70,0.35);
+      animation: rcFlicker 8s ease-in-out infinite;
+      position: relative;
+    }
+    .hud-title::before {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 50%;
+      transform: translateX(-50%);
+      width: 60px; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--red), transparent);
+    }
+
+    /* Right: channel + game */
+    .hud-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 290px;
+      justify-content: flex-end;
+    }
+    .hud-channel {
+      font-family: var(--font-display);
+      font-size: 18px;
+      letter-spacing: 3px;
+      color: var(--steel);
+    }
+    .hud-game-box {
+      padding: 5px 14px;
+      background: var(--bg-panel);
+      border: 1px solid rgba(92,138,173,0.30);
+      box-shadow: var(--glow-steel);
+      clip-path: polygon(8px 0, 100% 0, 100% 100%, 0 100%, 0 8px);
+    }
+    .hud-game {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      color: var(--steel);
+    }
+
+    /* Bottom line */
+    .hud-line {
+      position: absolute;
+      bottom: 0; left: 14px; right: 14px;
+      height: 1px;
+      background: linear-gradient(90deg,
+        var(--red), var(--border-dim) 30%,
+        var(--border-dim) 70%, var(--steel)
+      );
+    }
+
+    /* Chevron decorations */
+    .hud-chev-l, .hud-chev-r {
+      position: absolute; bottom: -1px;
+      font-size: 10px; font-weight: 700;
+      line-height: 1;
+    }
+    .hud-chev-l { left: 268px; color: var(--red); }
+    .hud-chev-r { right: 298px; color: var(--steel); }
+  </style>
+</head>
+<body>
+  <div class="hud">
+    <div class="hud-left">
+      <div class="hud-mode">
+        <span class="rc-diamond" style="width:5px;height:5px;"></span>
+        <span class="hud-mode-text" data-config="streamMode">EN VIVO</span>
+      </div>
+      <span class="hud-status" data-config="statusLine">SIGNAL LOCKED</span>
+    </div>
+
+    <div class="hud-center">
+      <div class="hud-title" data-config="hudCenter">RECOIL</div>
+    </div>
+
+    <div class="hud-right">
+      <span class="hud-channel" data-config="channelName">STREAMER</span>
+      <div class="hud-game-box">
+        <span class="hud-game" data-config="gameLabel">VALORANT</span>
+      </div>
+    </div>
+
+    <div class="hud-line"></div>
+    <span class="hud-chev-l">›</span>
+    <span class="hud-chev-r">‹</span>
+  </div>
+
+  <script src="../config/config.js"></script>
+  <script src="../shared.js"></script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920,height=1080">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .panel-wrap {
+      position: absolute;
+      left: 14px; top: 108px;
+      width: 260px;
+    }
+
+    .panel {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-mid);
+      box-shadow: var(--glow-red);
+      padding: 14px 12px;
+      position: relative;
+      clip-path: polygon(
+        0 0, calc(100% - 12px) 0,
+        100% 12px, 100% 100%,
+        12px 100%, 0 calc(100% - 12px)
+      );
+    }
+
+    .panel::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 60px; height: 2px;
+      background: var(--red);
+      z-index: 2;
+    }
+
+    .panel::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(
+        0deg, transparent, transparent 3px,
+        rgba(230,57,70,0.008) 3px, rgba(230,57,70,0.008) 4px
+      );
+      pointer-events: none;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .panel-title {
+      font-family: var(--font-display);
+      font-size: 20px;
+      letter-spacing: 4px;
+      color: var(--red);
+    }
+    .panel-tag {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .panel-tag-text {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      color: var(--text-mid);
+    }
+
+    .panel-divider {
+      height: 1px;
+      background: linear-gradient(90deg, var(--red), var(--border-dim), transparent);
+      margin-bottom: 12px;
+    }
+
+    .data-item { margin-bottom: 14px; }
+    .data-item:last-child { margin-bottom: 0; }
+
+    .data-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 3px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .data-prefix {
+      display: inline-block;
+      width: 3px; height: 12px;
+    }
+    .data-prefix--red   { background: var(--red); }
+    .data-prefix--steel { background: var(--steel); }
+    .data-prefix--amber { background: var(--amber); }
+
+    .data-value {
+      font-family: var(--font-display);
+      font-size: 22px;
+      letter-spacing: 2px;
+    }
+    .data-value--red   { color: var(--red); }
+    .data-value--steel { color: var(--steel); }
+    .data-value--amber { color: var(--amber); }
+  </style>
+</head>
+<body>
+  <div class="panel-wrap">
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-title" data-config="sideTitle">INTEL</span>
+        <div class="panel-tag">
+          <span class="rc-diamond" style="width:5px;height:5px;"></span>
+          <span class="panel-tag-text" data-config="sideTag">ACTIVE</span>
+        </div>
+      </div>
+      <div class="panel-divider"></div>
+
+      <div class="data-item">
+        <div class="data-label"><span class="data-prefix data-prefix--red"></span><span data-config="sideLabel1">AGENT</span></div>
+        <div class="data-value data-value--red" data-config="sidePrimary">STREAMER</div>
+      </div>
+
+      <div class="data-item">
+        <div class="data-label"><span class="data-prefix data-prefix--steel"></span><span data-config="sideLabel2">RANK</span></div>
+        <div class="data-value data-value--steel" data-config="sideSecondary">DIAMOND II</div>
+      </div>
+
+      <div class="data-item">
+        <div class="data-label"><span class="data-prefix data-prefix--amber"></span><span data-config="sideLabel3">K/D/A</span></div>
+        <div class="data-value data-value--amber" data-config="sideTertiary">15 / 3 / 7</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../config/config.js"></script>
+  <script src="../shared.js"></script>
+</body>
+</html>

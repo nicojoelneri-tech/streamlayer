@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920,height=1080">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    body {
+      display: flex; align-items: center; justify-content: center;
+      background: transparent;
+    }
+    .card {
+      width: 540px; padding: 40px 36px;
+      background: var(--bg-dark);
+      border: 1px solid rgba(92,138,173,0.36);
+      box-shadow: var(--glow-steel);
+      text-align: center; position: relative;
+      clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
+    }
+    .card::before {
+      content: ''; position: absolute; top: 0; left: 0;
+      width: 100%; height: 2px; background: var(--steel); z-index: 2;
+    }
+    .card::after {
+      content: ''; position: absolute; inset: 0;
+      background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(92,138,173,0.01) 3px, rgba(92,138,173,0.01) 4px);
+      pointer-events: none;
+    }
+    .tag { font-size: 11px; font-weight: 600; letter-spacing: 2px; color: var(--text-dim); margin-bottom: 16px; }
+    .heading { font-family: var(--font-display); font-size: 42px; letter-spacing: 4px; color: var(--text); margin-bottom: 2px; }
+    .accent { font-family: var(--font-display); font-size: 42px; letter-spacing: 4px; color: var(--steel); text-shadow: 0 0 20px rgba(92,138,173,0.4); margin-bottom: 18px; }
+    .accent::after { content: '_'; animation: rcPulse 1s step-end infinite; }
+    .sub { font-size: 14px; font-weight: 500; color: var(--text-mid); margin-bottom: 18px; }
+    .chips { display: flex; justify-content: center; gap: 8px; margin-bottom: 18px; }
+    .chip {
+      padding: 3px 14px; background: rgba(92,138,173,0.08); border: 1px solid rgba(92,138,173,0.2);
+      font-size: 11px; font-weight: 600; letter-spacing: 1px; color: var(--steel);
+      clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));
+    }
+    .note { font-size: 10px; color: var(--text-dim); letter-spacing: 1px; }
+
+    canvas { position: fixed; top: 0; left: 0; z-index: -1; }
+  </style>
+</head>
+<body>
+  <canvas id="bg" width="1920" height="1080"></canvas>
+  <div class="card">
+    <div class="tag" data-config="brbTag">// standby</div>
+    <div class="heading" data-config="brbTitle">Operación</div>
+    <div class="accent" data-config="brbAccent">En Pausa</div>
+    <div class="sub" data-config="brbSub">El operador vuelve pronto. Canal táctico activo.</div>
+    <div class="chips">
+      <span class="chip" data-config="brbChip1">STANDBY</span>
+      <span class="chip" data-config="brbChip2">LINK OK</span>
+      <span class="chip" data-config="brbChip3">HOLD</span>
+    </div>
+    <div class="note" data-config="brbNote">RECOIL v1.0 // hold</div>
+  </div>
+
+  <script src="../config/config.js"></script>
+  <script src="../shared.js"></script>
+  <script>
+    (function () {
+      var c = document.getElementById('bg');
+      var ctx = c.getContext('2d');
+      var W = 1920, H = 1080;
+
+      var p = [];
+      for (var i = 0; i < 40; i++) {
+        p.push({ x: Math.random()*W, y: Math.random()*H, r: Math.random()*1+0.3,
+          a: Math.random()*0.25+0.08, vy: -(Math.random()*0.15+0.05), vx: (Math.random()-0.5)*0.1 });
+      }
+
+      /* Reticle */
+      var sectors = [
+        {x:350,y:300},{x:1550,y:250},{x:1450,y:780},{x:450,y:700},
+        {x:960,y:280},{x:200,y:540},{x:1700,y:540},{x:960,y:820}
+      ];
+      var ret = { x: sectors[0].x, y: sectors[0].y,
+                  tx: sectors[1].x, ty: sectors[1].y,
+                  idx: 1, wait: 0, size: 28 };
+
+      function nextSector() {
+        ret.idx = (ret.idx + 1) % sectors.length;
+        ret.tx = sectors[ret.idx].x + (Math.random()-0.5)*150;
+        ret.ty = sectors[ret.idx].y + (Math.random()-0.5)*100;
+      }
+
+      function drawReticle(x, y, sz, alpha) {
+        ctx.save();
+        ctx.globalAlpha = alpha;
+        ctx.strokeStyle = '#5c8aad';
+        ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.arc(x, y, sz, 0, Math.PI*2); ctx.stroke();
+        ctx.beginPath(); ctx.arc(x, y, sz*0.55, 0, Math.PI*2); ctx.stroke();
+        var gap = 8, len = sz + 14;
+        ctx.beginPath();
+        ctx.moveTo(x-len,y); ctx.lineTo(x-gap,y);
+        ctx.moveTo(x+gap,y); ctx.lineTo(x+len,y);
+        ctx.moveTo(x,y-len); ctx.lineTo(x,y-gap);
+        ctx.moveTo(x,y+gap); ctx.lineTo(x,y+len);
+        ctx.stroke();
+        var tk = sz + 6;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(x,y-tk); ctx.lineTo(x,y-tk-6);
+        ctx.moveTo(x,y+tk); ctx.lineTo(x,y+tk+6);
+        ctx.moveTo(x-tk,y); ctx.lineTo(x-tk-6,y);
+        ctx.moveTo(x+tk,y); ctx.lineTo(x+tk+6,y);
+        ctx.stroke();
+        ctx.fillStyle = '#5c8aad';
+        ctx.beginPath(); ctx.arc(x, y, 2, 0, Math.PI*2); ctx.fill();
+        ctx.restore();
+      }
+
+      function draw() {
+        ctx.clearRect(0,0,W,H);
+        for (var i=0;i<p.length;i++) {
+          var d=p[i]; d.x+=d.vx; d.y+=d.vy;
+          if(d.y<-10){d.y=H+10;d.x=Math.random()*W;}
+          ctx.beginPath(); ctx.arc(d.x,d.y,d.r,0,Math.PI*2);
+          ctx.fillStyle='rgba(92,138,173,'+d.a+')'; ctx.fill();
+        }
+
+        if (ret.wait > 0) { ret.wait--; if (ret.wait <= 0) nextSector(); }
+        else {
+          var dx=ret.tx-ret.x, dy=ret.ty-ret.y, dist=Math.sqrt(dx*dx+dy*dy);
+          if (dist<5) { ret.x=ret.tx; ret.y=ret.ty; ret.wait=40+Math.random()*30; }
+          else { var sp=Math.min(dist*0.035,5); ret.x+=(dx/dist)*sp; ret.y+=(dy/dist)*sp; }
+        }
+        drawReticle(ret.x, ret.y, ret.size, 0.45);
+
+        requestAnimationFrame(draw);
+      }
+      draw();
+    })();
+  </script>
+</body>
+</html>

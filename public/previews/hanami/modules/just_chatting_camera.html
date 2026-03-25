@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920,height=1080">
+<title>HANAMI - Just Chatting Camera</title>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body{ background:transparent; }
+
+  .hm-jc-wrapper{
+    position:fixed;
+    left:290px; top:100px;
+    width:1340px;
+    z-index:5;
+  }
+
+  .hm-jc-label{
+    font-family:'Zen Old Mincho',serif;
+    font-size:10px; font-weight:500;
+    color:var(--text-dim);
+    letter-spacing:2px;
+    background:rgba(252,248,242,0.85);
+    border:1px solid var(--border-dim);
+    border-radius:4px;
+    padding:3px 12px;
+    display:inline-block;
+    margin-bottom:6px;
+  }
+
+  .hm-jc-frame{
+    width:1340px; height:820px;
+    border:1px solid rgba(42,36,32,0.08);
+    border-radius:8px;
+    box-shadow: inset 0 1px 6px rgba(42,36,32,0.04);
+    position:relative;
+    overflow:hidden;
+  }
+
+  /* corner composition guides */
+  .hm-comp-guide{
+    position:absolute;
+    width:20px; height:20px;
+    pointer-events:none;
+  }
+  .hm-comp-guide::before,
+  .hm-comp-guide::after{
+    content:""; position:absolute;
+    background:rgba(42,36,32,0.06);
+  }
+  .hm-comp-guide.tl{ top:14px; left:14px; }
+  .hm-comp-guide.tl::before{ width:20px; height:1px; top:0; left:0; }
+  .hm-comp-guide.tl::after{ width:1px; height:20px; top:0; left:0; }
+
+  .hm-comp-guide.tr{ top:14px; right:14px; }
+  .hm-comp-guide.tr::before{ width:20px; height:1px; top:0; right:0; }
+  .hm-comp-guide.tr::after{ width:1px; height:20px; top:0; right:0; }
+
+  .hm-comp-guide.bl{ bottom:14px; left:14px; }
+  .hm-comp-guide.bl::before{ width:20px; height:1px; bottom:0; left:0; }
+  .hm-comp-guide.bl::after{ width:1px; height:20px; bottom:0; left:0; }
+
+  .hm-comp-guide.br{ bottom:14px; right:14px; }
+  .hm-comp-guide.br::before{ width:20px; height:1px; bottom:0; right:0; }
+  .hm-comp-guide.br::after{ width:1px; height:20px; bottom:0; right:0; }
+</style>
+</head>
+<body>
+
+<div class="hm-jc-wrapper">
+  <span class="hm-jc-label" data-config="justChattingLabel">CEREMONIA DEL TE</span>
+
+  <div class="hm-jc-frame">
+    <div class="hm-comp-guide tl"></div>
+    <div class="hm-comp-guide tr"></div>
+    <div class="hm-comp-guide bl"></div>
+    <div class="hm-comp-guide br"></div>
+  </div>
+</div>
+
+<script src="../config/config.js"></script>
+<script src="../shared.js"></script>
+</body>
+</html>

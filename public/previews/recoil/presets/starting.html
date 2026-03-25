@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920,height=1080">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    body {
+      display: flex; align-items: center; justify-content: center;
+      background: transparent;
+    }
+    .card {
+      width: 540px; padding: 40px 36px;
+      background: var(--bg-dark);
+      border: 1px solid var(--border-mid);
+      box-shadow: var(--glow-red);
+      text-align: center; position: relative;
+      clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
+    }
+    .card::before {
+      content: ''; position: absolute; top: 0; left: 0;
+      width: 100%; height: 2px; background: var(--red); z-index: 2;
+    }
+    .card::after {
+      content: ''; position: absolute; inset: 0;
+      background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(230,57,70,0.01) 3px, rgba(230,57,70,0.01) 4px);
+      pointer-events: none;
+    }
+    .tag { font-size: 11px; font-weight: 600; letter-spacing: 2px; color: var(--text-dim); margin-bottom: 16px; }
+    .heading { font-family: var(--font-display); font-size: 42px; letter-spacing: 4px; color: var(--text); margin-bottom: 2px; }
+    .accent { font-family: var(--font-display); font-size: 42px; letter-spacing: 4px; color: var(--red); text-shadow: 0 0 20px rgba(230,57,70,0.4); margin-bottom: 18px; }
+    .progress-wrap { width: 100%; height: 4px; background: rgba(230,57,70,0.1); border-radius: 0; margin-bottom: 18px; overflow: hidden; }
+    .progress-bar { height: 100%; background: var(--red); box-shadow: 0 0 8px var(--red); width: 0; animation: rcProgressBar 4s ease-out forwards; }
+    .sub { font-size: 14px; font-weight: 500; color: var(--text-mid); margin-bottom: 18px; }
+    .chips { display: flex; justify-content: center; gap: 8px; margin-bottom: 18px; }
+    .chip {
+      padding: 3px 14px; background: rgba(230,57,70,0.08); border: 1px solid var(--border-dim);
+      font-size: 11px; font-weight: 600; letter-spacing: 1px; color: var(--red);
+      clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));
+    }
+    .chip--blink { animation: rcPulse 1s ease-in-out infinite; }
+    .note { font-size: 10px; color: var(--text-dim); letter-spacing: 1px; }
+
+    canvas { position: fixed; top: 0; left: 0; z-index: -1; }
+  </style>
+</head>
+<body>
+  <canvas id="bg" width="1920" height="1080"></canvas>
+  <div class="card">
+    <div class="tag" data-config="startingTag">// deploying</div>
+    <div class="heading" data-config="startingTitle">Preparando</div>
+    <div class="accent" data-config="startingAccent">Despliegue</div>
+    <div class="progress-wrap"><div class="progress-bar"></div></div>
+    <div class="sub" data-config="startingSub">Cargando armamento y módulos tácticos...</div>
+    <div class="chips">
+      <span class="chip" data-config="startingChip1">LOADOUT ✓</span>
+      <span class="chip" data-config="startingChip2">COMMS ✓</span>
+      <span class="chip chip--blink" data-config="startingChip3">DEPLOY ..</span>
+    </div>
+    <div class="note" data-config="startingNote">RECOIL v1.0 // deploy</div>
+  </div>
+
+  <script src="../config/config.js"></script>
+  <script src="../shared.js"></script>
+  <script>
+    (function () {
+      var c = document.getElementById('bg');
+      var ctx = c.getContext('2d');
+      var W = 1920, H = 1080;
+
+      /* Particles */
+      var p = [];
+      for (var i = 0; i < 45; i++) {
+        p.push({ x: Math.random()*W, y: Math.random()*H, r: Math.random()*1+0.3,
+          a: Math.random()*0.3+0.1, vy: -(Math.random()*0.2+0.08), vx: (Math.random()-0.5)*0.15,
+          type: Math.random() > 0.6 ? 1 : 0 });
+      }
+
+      /* Reticle — moves between sectors */
+      var sectors = [
+        {x:300,y:250},{x:1600,y:200},{x:1500,y:800},{x:400,y:750},
+        {x:960,y:300},{x:250,y:540},{x:1650,y:540},{x:960,y:800}
+      ];
+      var ret = { x: sectors[0].x, y: sectors[0].y,
+                  tx: sectors[1].x, ty: sectors[1].y,
+                  idx: 1, wait: 0, size: 28 };
+
+      function nextSector() {
+        ret.idx = (ret.idx + 1) % sectors.length;
+        ret.tx = sectors[ret.idx].x + (Math.random()-0.5)*150;
+        ret.ty = sectors[ret.idx].y + (Math.random()-0.5)*100;
+      }
+
+      function drawReticle(x, y, sz, alpha) {
+        ctx.save();
+        ctx.globalAlpha = alpha;
+        ctx.strokeStyle = '#e63946';
+        ctx.lineWidth = 1;
+
+        /* Outer ring */
+        ctx.beginPath();
+        ctx.arc(x, y, sz, 0, Math.PI*2);
+        ctx.stroke();
+
+        /* Inner ring */
+        ctx.beginPath();
+        ctx.arc(x, y, sz*0.55, 0, Math.PI*2);
+        ctx.stroke();
+
+        /* Crosshair lines (with gap in center) */
+        var gap = 8, len = sz + 14;
+        ctx.beginPath();
+        ctx.moveTo(x-len, y); ctx.lineTo(x-gap, y);
+        ctx.moveTo(x+gap, y); ctx.lineTo(x+len, y);
+        ctx.moveTo(x, y-len); ctx.lineTo(x, y-gap);
+        ctx.moveTo(x, y+gap); ctx.lineTo(x, y+len);
+        ctx.stroke();
+
+        /* Corner ticks on outer ring */
+        var tk = sz + 6;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(x, y-tk); ctx.lineTo(x, y-tk-6);
+        ctx.moveTo(x, y+tk); ctx.lineTo(x, y+tk+6);
+        ctx.moveTo(x-tk, y); ctx.lineTo(x-tk-6, y);
+        ctx.moveTo(x+tk, y); ctx.lineTo(x+tk+6, y);
+        ctx.stroke();
+
+        /* Center dot */
+        ctx.fillStyle = '#e63946';
+        ctx.beginPath();
+        ctx.arc(x, y, 2, 0, Math.PI*2);
+        ctx.fill();
+
+        ctx.restore();
+      }
+
+      function draw() {
+        ctx.clearRect(0,0,W,H);
+
+        /* Particles */
+        for (var i=0;i<p.length;i++) {
+          var d=p[i]; d.x+=d.vx; d.y+=d.vy;
+          if(d.y<-10){d.y=H+10;d.x=Math.random()*W;}
+          if(d.type===1) {
+            ctx.save(); ctx.translate(d.x,d.y); ctx.rotate(Math.PI/4);
+            ctx.fillStyle='rgba(230,57,70,'+d.a+')';
+            ctx.fillRect(-d.r,-d.r,d.r*2,d.r*2); ctx.restore();
+          } else {
+            ctx.beginPath(); ctx.arc(d.x,d.y,d.r,0,Math.PI*2);
+            ctx.fillStyle='rgba(92,138,173,'+d.a+')';
+            ctx.fill();
+          }
+        }
+
+        /* Move reticle */
+        if (ret.wait > 0) {
+          ret.wait--;
+          if (ret.wait <= 0) nextSector();
+        } else {
+          var dx = ret.tx - ret.x, dy = ret.ty - ret.y;
+          var dist = Math.sqrt(dx*dx + dy*dy);
+          if (dist < 5) {
+            ret.x = ret.tx; ret.y = ret.ty;
+            ret.wait = 40 + Math.random()*30;
+          } else {
+            var speed = Math.min(dist * 0.035, 5);
+            ret.x += (dx / dist) * speed;
+            ret.y += (dy / dist) * speed;
+          }
+        }
+
+        drawReticle(ret.x, ret.y, ret.size, 0.5);
+
+        requestAnimationFrame(draw);
+      }
+      draw();
+    })();
+  </script>
+</body>
+</html>

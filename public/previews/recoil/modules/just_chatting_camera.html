@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920,height=1080">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .jc-wrap {
+      position: absolute;
+      left: 14px; top: 108px;
+      width: 1594px; height: 920px;
+    }
+
+    .jc-label {
+      position: absolute;
+      top: -18px; left: 0;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      color: var(--steel);
+      text-transform: uppercase;
+    }
+
+    .jc-frame {
+      position: absolute; inset: 0;
+      border: 2px solid var(--border-mid);
+      box-shadow: var(--glow-red);
+      background: transparent;
+      clip-path: polygon(
+        0 0, calc(100% - 18px) 0,
+        100% 18px, 100% 100%,
+        18px 100%, 0 calc(100% - 18px)
+      );
+    }
+
+    .jc-frame::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100px; height: 2px;
+      background: var(--red);
+    }
+
+    .jc-rec {
+      position: absolute;
+      top: 10px; right: 24px;
+      display: flex; align-items: center; gap: 5px;
+      animation: rcRecBlink 1.2s step-end infinite;
+      z-index: 2;
+    }
+    .jc-rec-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--red); box-shadow: 0 0 6px var(--red); }
+    .jc-rec-text { font-size: 10px; font-weight: 700; letter-spacing: 2px; color: var(--red); }
+
+    .jcc { position: absolute; pointer-events: none; }
+    .jcc::before, .jcc::after {
+      content: ''; position: absolute;
+      background: var(--red);
+    }
+    .jcc--tl { top: 2px; left: 2px; }
+    .jcc--tl::before { width: 22px; height: 2px; }
+    .jcc--tl::after  { width: 2px; height: 22px; }
+
+    .jcc--tr { top: 16px; right: 2px; }
+    .jcc--tr::before { width: 22px; height: 2px; right: 0; }
+    .jcc--tr::after  { width: 2px; height: 22px; right: 0; }
+
+    .jcc--bl { bottom: 16px; left: 2px; }
+    .jcc--bl::before { width: 22px; height: 2px; bottom: 0; }
+    .jcc--bl::after  { width: 2px; height: 22px; bottom: 0; }
+
+    .jcc--br { bottom: 2px; right: 2px; }
+    .jcc--br::before { width: 22px; height: 2px; bottom: 0; right: 0; }
+    .jcc--br::after  { width: 2px; height: 22px; bottom: 0; right: 0; }
+
+    .jc-frame::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(230,57,70,0.008) 3px, rgba(230,57,70,0.008) 4px);
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="jc-wrap">
+    <div class="jc-label" data-config="justChattingLabel">CAM://TACTICAL_FEED</div>
+    <div class="jc-rec"><span class="jc-rec-dot"></span><span class="jc-rec-text">REC</span></div>
+    <div class="jc-frame">
+      <span class="jcc jcc--tl"></span>
+      <span class="jcc jcc--tr"></span>
+      <span class="jcc jcc--bl"></span>
+      <span class="jcc jcc--br"></span>
+    </div>
+  </div>
+
+  <script src="../config/config.js"></script>
+  <script src="../shared.js"></script>
+</body>
+</html>

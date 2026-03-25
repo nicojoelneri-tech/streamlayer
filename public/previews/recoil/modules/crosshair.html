@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920,height=1080">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      width: 1920px; height: 1080px; overflow: hidden;
+      background: transparent;
+    }
+    .crosshair {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 40px; height: 40px;
+      pointer-events: none;
+    }
+    /* Horizontal lines */
+    .ch-h {
+      position: absolute;
+      top: 50%; height: 2px;
+      background: rgba(230,57,70,0.7);
+      box-shadow: 0 0 4px rgba(230,57,70,0.4);
+      transform: translateY(-50%);
+    }
+    .ch-h--l { left: 0; width: 14px; }
+    .ch-h--r { right: 0; width: 14px; }
+    /* Vertical lines */
+    .ch-v {
+      position: absolute;
+      left: 50%; width: 2px;
+      background: rgba(230,57,70,0.7);
+      box-shadow: 0 0 4px rgba(230,57,70,0.4);
+      transform: translateX(-50%);
+    }
+    .ch-v--t { top: 0; height: 14px; }
+    .ch-v--b { bottom: 0; height: 14px; }
+    /* Center dot */
+    .ch-dot {
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 4px; height: 4px;
+      background: #e63946;
+      box-shadow: 0 0 6px rgba(230,57,70,0.6);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+    }
+    /* Outer ring */
+    .ch-ring {
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 28px; height: 28px;
+      border: 1px solid rgba(230,57,70,0.2);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+    }
+  </style>
+</head>
+<body>
+  <div class="crosshair">
+    <div class="ch-ring"></div>
+    <div class="ch-h ch-h--l"></div>
+    <div class="ch-h ch-h--r"></div>
+    <div class="ch-v ch-v--t"></div>
+    <div class="ch-v ch-v--b"></div>
+    <div class="ch-dot"></div>
+  </div>
+</body>
+</html>

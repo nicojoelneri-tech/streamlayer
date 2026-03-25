@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920,height=1080">
+<title>HANAMI - Falling Petals</title>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html,body{ width:1920px; height:1080px; overflow:hidden; background:transparent; }
+  canvas{ position:absolute; inset:0; width:1920px; height:1080px; background:transparent; }
+</style>
+</head>
+<body>
+<canvas id="ambient" width="1920" height="1080"></canvas>
+<script>
+(() => {
+  const canvas = document.getElementById('ambient');
+  const ctx = canvas.getContext('2d');
+  const W = 1920, H = 1080;
+
+  /* Game safe zone — petals sparse here */
+  const SAFE = { x1: 290, y1: 94, x2: 1630, y2: 834 };
+
+  /* Petal color palette with weights */
+  const COLORS = [
+    { r:212, g:98,  b:138, weight:0.40 }, /* sakura pink */
+    { r:242, g:212, b:222, weight:0.20 }, /* sakura pale */
+    { r:123, g:94,  b:167, weight:0.20 }, /* wisteria */
+    { r:196, g:78,  b:63,  weight:0.15 }, /* vermillion */
+    { r:196, g:162, b:101, weight:0.05 }, /* gold */
+  ];
+
+  function pickColor() {
+    let r = Math.random(), acc = 0;
+    for (const c of COLORS) { acc += c.weight; if (r < acc) return c; }
+    return COLORS[0];
+  }
+
+  function isInSafe(x, y) {
+    return x > SAFE.x1 && x < SAFE.x2 && y > SAFE.y1 && y < SAFE.y2;
+  }
+
+  /* ── Create a petal ── */
+  function makePetal(isLeaf) {
+    const x = Math.random() * W;
+    const y = Math.random() * H;
+    const inSafe = isInSafe(x, y);
+
+    /* Density weighting: skip 60% of safe-zone spawns */
+    if (inSafe && Math.random() > 0.40) return null;
+
+    const col = pickColor();
+    const baseSize = isLeaf ? (10 + Math.random() * 6) : (4 + Math.random() * 4);
+    const aspectRatio = 1.3 + Math.random() * 0.5;
+
+    return {
+      x: x,
+      y: y,
+      radiusX: baseSize / 2,
+      radiusY: (baseSize * aspectRatio) / 2,
+      rotation: Math.random() * Math.PI * 2,
+      rotSpeed: (Math.random() - 0.3) * 0.003,
+      vx: 0.3 + Math.random() * 0.6,
+      vy: 0.05 + Math.random() * 0.15,
+      wobbleAmp: 0.8 + Math.random() * 0.7,
+      wobbleFreq: 0.8 + Math.random() * 1.2,
+      wobblePhase: Math.random() * Math.PI * 2,
+      color: col,
+      alpha: isLeaf ? (0.25 + Math.random() * 0.3) : (0.35 + Math.random() * 0.5),
+      glowRadius: isLeaf ? (8 + Math.random() * 4) : (3 + Math.random() * 2),
+      lifetime: (6 + Math.random() * 8) * 1000,
+      age: Math.random() * 6000, /* stagger initial ages */
+      isLeaf: isLeaf,
+      inSafe: inSafe,
+    };
+  }
+
+  /* ── Populate arrays ── */
+  const petals = [];
+  const TARGET_PETALS = 120;
+  const TARGET_LEAVES = 18;
+
+  function spawnPetals(count, isLeaf) {
+    let created = 0, attempts = 0;
+    while (created < count && attempts < count * 6) {
+      attempts++;
+      const p = makePetal(isLeaf);
+      if (p) { petals.push(p); created++; }
+    }
+  }
+
+  spawnPetals(TARGET_PETALS, false);
+  spawnPetals(TARGET_LEAVES, true);
+
+  /* ── Respawn a petal on the left side ── */
+  function respawn(p) {
+    p.x = -10 - Math.random() * 40;
+    p.y = Math.random() * H;
+    p.age = 0;
+    p.rotation = Math.random() * Math.PI * 2;
+    p.vx = 0.3 + Math.random() * 0.6;
+    p.vy = 0.05 + Math.random() * 0.15;
+    p.wobblePhase = Math.random() * Math.PI * 2;
+    const col = pickColor();
+    p.color = col;
+    p.alpha = p.isLeaf ? (0.25 + Math.random() * 0.3) : (0.35 + Math.random() * 0.5);
+    p.lifetime = (6 + Math.random() * 8) * 1000;
+  }
+
+  /* ── Draw petal shape ── */
+  function drawPetal(p, alpha) {
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    ctx.rotate(p.rotation);
+    ctx.globalAlpha = alpha;
+
+    /* glow */
+    ctx.shadowColor = `rgba(${p.color.r},${p.color.g},${p.color.b},${alpha * 0.5})`;
+    ctx.shadowBlur = p.glowRadius;
+
+    ctx.beginPath();
+    ctx.ellipse(0, 0, p.radiusX, p.radiusY, 0, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(${p.color.r},${p.color.g},${p.color.b},1)`;
+    ctx.fill();
+
+    ctx.shadowBlur = 0;
+    ctx.globalAlpha = 1;
+    ctx.restore();
+  }
+
+  /* ── Animation loop ── */
+  let lastTime = performance.now();
+
+  function frame(now) {
+    const dt = now - lastTime;
+    lastTime = now;
+
+    ctx.clearRect(0, 0, W, H);
+
+    for (const p of petals) {
+      p.age += dt;
+
+      /* Respawn if expired or off screen */
+      if (p.age > p.lifetime || p.x > W + 40 || p.y > H + 40) {
+        respawn(p);
+        continue;
+      }
+
+      /* Fade in/out */
+      const fadeIn = Math.min(1, p.age / 800);
+      const fadeOut = Math.min(1, (p.lifetime - p.age) / 1000);
+      const lifeFade = fadeIn * fadeOut;
+
+      /* Movement — wind-blown drift */
+      const wobble = Math.sin(now * 0.001 * p.wobbleFreq + p.wobblePhase) * p.wobbleAmp;
+      p.x += (p.vx + wobble * 0.3) * (dt / 16.67);
+      p.y += (p.vy + Math.abs(wobble) * 0.1) * (dt / 16.67);
+      p.rotation += p.rotSpeed * (dt / 16.67);
+
+      /* Zone-based dimming */
+      const zoneInSafe = isInSafe(p.x, p.y);
+      const zoneMult = zoneInSafe ? 0.35 : 1.0;
+
+      const alpha = p.alpha * lifeFade * zoneMult;
+      if (alpha < 0.005) continue;
+
+      drawPetal(p, alpha);
+    }
+
+    requestAnimationFrame(frame);
+  }
+
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

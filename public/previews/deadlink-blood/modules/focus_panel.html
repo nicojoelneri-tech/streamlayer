@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920,height=1080">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    /* FOCUS PANEL IS ON THE RIGHT (inverted from Lumenfall/Ironhold) */
+    .wrap{ position:absolute; right:16px; top:86px; width:268px; }
+
+    .panel{
+      background:var(--bg-panel);
+      border:1px solid var(--border-dim);
+      clip-path: polygon(
+        0 6px, 6px 0, calc(100% - 6px) 0, 100% 6px,
+        100% calc(100% - 6px), calc(100% - 6px) 100%,
+        6px 100%, 0 calc(100% - 6px)
+      );
+      box-shadow: var(--glow-green);
+      overflow:hidden; position:relative;
+    }
+
+    .panel-head{
+      position:relative; display:flex; align-items:center; justify-content:space-between;
+      padding:12px 14px 8px;
+    }
+    .panel-head::after{
+      content:""; position:absolute; left:14px; right:14px; bottom:0; height:1px;
+      border-top:1px dashed rgba(255,26,46,0.35);
+    }
+    .panel-title{
+      font-size:13px; letter-spacing:2px; color:var(--green);
+      text-transform:uppercase;
+    }
+    .panel-tag{
+      display:flex; align-items:center; gap:5px;
+      font-size:10px; letter-spacing:1.5px; color:var(--text-mid);
+      text-transform:uppercase;
+    }
+    /* active status dot */
+    .status-dot{
+      width:7px; height:7px; border-radius:50%;
+      background:var(--green);
+      box-shadow: 0 0 6px rgba(255,26,46,0.6);
+      animation: dlBlink 1.5s step-end infinite;
+    }
+
+    .panel-list{ padding:10px 12px 12px; display:flex; flex-direction:column; gap:6px; }
+
+    .item{
+      display:flex; align-items:flex-start; gap:8px;
+      padding:8px 10px;
+      background:rgba(255,26,46,0.015);
+      border:1px solid rgba(255,26,46,0.20);
+    }
+    .item-prefix{
+      font-size:10px; color:var(--text-dim); flex-shrink:0; margin-top:2px;
+    }
+    .item-content{ display:flex; flex-direction:column; gap:2px; }
+    .item-label{
+      font-size:11px; letter-spacing:1.5px; color:var(--text-mid);
+      text-transform:uppercase;
+    }
+    .item-value{
+      font-size:18px; color:var(--text);
+    }
+
+    /* scanlines */
+    .panel-scan{
+      position:absolute; inset:0;
+      background: repeating-linear-gradient(0deg, transparent 0 2px, rgba(255,26,46,0.02) 2px 4px);
+      pointer-events:none; z-index:2;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="panel">
+      <div class="panel-scan"></div>
+      <div class="panel-head">
+        <span class="panel-title" data-config="sideTitle">DIAGNOSTICO</span>
+        <span class="panel-tag"><span class="status-dot"></span>[<span data-config="sideTag">activo</span>]</span>
+      </div>
+      <div class="panel-list">
+        <div class="item">
+          <span class="item-prefix">></span>
+          <div class="item-content">
+            <span class="item-label" data-config="sideLabel1">ultimo_ping</span>
+            <span class="item-value" data-config="sidePrimary">&nbsp;</span>
+          </div>
+        </div>
+        <div class="item">
+          <span class="item-prefix" style="color:var(--cyan)">></span>
+          <div class="item-content">
+            <span class="item-label" data-config="sideLabel2">nodos</span>
+            <span class="item-value" data-config="sideSecondary">&nbsp;</span>
+          </div>
+        </div>
+        <div class="item">
+          <span class="item-prefix" style="color:var(--red-soft)">></span>
+          <div class="item-content">
+            <span class="item-label" data-config="sideLabel3">ultimo_sub</span>
+            <span class="item-value" data-config="sideTertiary">&nbsp;</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="../config/config.js"></script>
+  <script src="../shared.js"></script>
+</body>
+</html>

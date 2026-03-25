@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920,height=1080">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    /* VERTICAL CAMERA — taller than wide, bottom-right */
+    .wrap{ position:absolute; right:16px; bottom:68px; width:190px; height:320px; }
+
+    .cam-frame{
+      position:absolute; inset:0;
+      background:rgba(0,0,0,0.3);
+      border:1px solid rgba(0,212,255,0.40);
+      clip-path: polygon(
+        0 6px, 6px 0, calc(100% - 6px) 0, 100% 6px,
+        100% calc(100% - 6px), calc(100% - 6px) 100%,
+        6px 100%, 0 calc(100% - 6px)
+      );
+      box-shadow: var(--glow-green);
+      overflow:hidden;
+    }
+
+    /* L-bracket corners */
+    .cam-bracket{ position:absolute; pointer-events:none; }
+    .cam-bracket::before, .cam-bracket::after{
+      content:""; position:absolute; background:rgba(0,212,255,0.35);
+    }
+    .cam-bracket::before{ width:16px; height:1px; }
+    .cam-bracket::after{ width:1px; height:16px; }
+    .cb-tl{ top:4px; left:4px; }
+    .cb-tl::before{ top:0; left:0; }
+    .cb-tl::after{ top:0; left:0; }
+    .cb-tr{ top:4px; right:4px; }
+    .cb-tr::before{ top:0; right:0; }
+    .cb-tr::after{ top:0; right:0; }
+    .cb-bl{ bottom:4px; left:4px; }
+    .cb-bl::before{ bottom:0; left:0; }
+    .cb-bl::after{ bottom:0; left:0; }
+    .cb-br{ bottom:4px; right:4px; }
+    .cb-br::before{ bottom:0; right:0; }
+    .cb-br::after{ bottom:0; right:0; }
+
+    /* REC indicator — on the frame border so webcam doesn't cover it */
+    .rec{
+      position:absolute; top:-20px; right:0; z-index:3;
+      display:flex; align-items:center; gap:4px;
+      font-size:9px; letter-spacing:1px; color:var(--red);
+      text-transform:uppercase;
+    }
+    .rec-dot{
+      width:6px; height:6px; border-radius:50%;
+      background:var(--red);
+      box-shadow: 0 0 6px rgba(255,32,64,0.6);
+      animation: dlRecBlink 1.5s ease-in-out infinite;
+    }
+
+    /* scanlines */
+    .cam-scan{
+      position:absolute; inset:0;
+      background: repeating-linear-gradient(0deg, transparent 0 2px, rgba(0,212,255,0.02) 2px 4px);
+      pointer-events:none; z-index:2;
+    }
+
+    /* crosshair — minimal */
+    .crosshair{
+      position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+      width:50px; height:50px; opacity:.15;
+    }
+    .crosshair::before, .crosshair::after{
+      content:""; position:absolute; left:50%; top:50%;
+      transform:translate(-50%,-50%); background:rgba(0,212,255,0.4);
+    }
+    .crosshair::before{ width:30px; height:1px; }
+    .crosshair::after{ width:1px; height:30px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="rec"><span class="rec-dot"></span>REC</div>
+    <div class="cam-frame">
+      <div class="cam-scan"></div>
+      <div class="crosshair"></div>
+      <div class="cam-bracket cb-tl"></div>
+      <div class="cam-bracket cb-tr"></div>
+      <div class="cam-bracket cb-bl"></div>
+      <div class="cam-bracket cb-br"></div>
+    </div>
+  </div>
+  <script src="../config/config.js"></script>
+  <script src="../shared.js"></script>
+</body>
+</html>

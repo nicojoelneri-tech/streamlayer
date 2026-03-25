@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920,height=1080">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .chat-wrap {
+      position: absolute;
+      right: 14px; top: 322px;
+      width: 290px; height: 706px;
+    }
+
+    .chat-panel {
+      position: absolute; inset: 0;
+      background: var(--bg-panel);
+      border: 1px solid var(--border-mid);
+      box-shadow: var(--glow-red);
+      display: flex;
+      flex-direction: column;
+      clip-path: polygon(
+        0 0, calc(100% - 12px) 0,
+        100% 12px, 100% 100%,
+        12px 100%, 0 calc(100% - 12px)
+      );
+    }
+
+    /* Red top accent */
+    .chat-panel::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 60px; height: 2px;
+      background: var(--red);
+      z-index: 2;
+    }
+
+    .chat-header {
+      padding: 12px 14px 8px;
+      flex-shrink: 0;
+    }
+    .chat-title-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .chat-title {
+      font-family: var(--font-display);
+      font-size: 20px;
+      letter-spacing: 4px;
+      color: var(--red);
+    }
+    .chat-sub {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--text-dim);
+      letter-spacing: 1px;
+      margin-top: 3px;
+    }
+
+    .chat-divider {
+      height: 1px;
+      background: linear-gradient(90deg, var(--red), var(--border-dim), transparent);
+      margin: 0 14px;
+      flex-shrink: 0;
+    }
+
+    .chat-body { flex: 1; }
+
+    /* Scanlines */
+    .chat-panel::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(
+        0deg, transparent, transparent 3px,
+        rgba(230,57,70,0.008) 3px, rgba(230,57,70,0.008) 4px
+      );
+      pointer-events: none;
+    }
+
+    /* Tactical edge line */
+    .chat-edge {
+      position: absolute;
+      left: -6px; top: 30px; bottom: 30px;
+      width: 1px;
+      border-left: 1px dashed var(--border-dim);
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-wrap">
+    <div class="chat-edge"></div>
+    <div class="chat-panel">
+      <div class="chat-header">
+        <div class="chat-title-row">
+          <span class="rc-diamond" style="width:5px;height:5px;"></span>
+          <span class="chat-title" data-config="chatTitle">COMMS</span>
+        </div>
+        <div class="chat-sub" data-config="chatSubtitle">tac-channel://open</div>
+      </div>
+      <div class="chat-divider"></div>
+      <div class="chat-body"></div>
+    </div>
+  </div>
+
+  <script src="../config/config.js"></script>
+  <script src="../shared.js"></script>
+</body>
+</html>

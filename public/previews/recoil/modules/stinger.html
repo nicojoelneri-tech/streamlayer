@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920,height=1080">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 1920px; height: 1080px; overflow: hidden; background: transparent; }
+    canvas { position: absolute; top: 0; left: 0; }
+  </style>
+</head>
+<body>
+  <canvas id="stg" width="1920" height="1080"></canvas>
+  <script>
+    (function () {
+      var c = document.getElementById('stg');
+      var ctx = c.getContext('2d');
+      var W = 1920, H = 1080;
+
+      var TOTAL = 950;
+      var FILL  = 400;
+      var HOLD  = 150;
+      var CLEAR = 400;
+
+      var startTime = null;
+
+      function easeInOut(t) {
+        return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+      }
+
+      // Diagonal wipe with red tint
+      function drawWipe(progress, alpha) {
+        // Diagonal band sweeping
+        var bandW = 400;
+        var center = -bandW + progress * (W + bandW * 2);
+
+        for (var y = 0; y < H; y += 2) {
+          var offset = (y / H) * 200; // diagonal skew
+          var x = center + offset;
+          var w = bandW + Math.random() * 40;
+
+          ctx.fillStyle = 'rgba(230, 57, 70, ' + (alpha * (0.6 + Math.random() * 0.4)) + ')';
+          ctx.fillRect(x - w / 2, y, w, 2);
+        }
+      }
+
+      function drawGlitchBars(count) {
+        for (var i = 0; i < count; i++) {
+          var y = Math.random() * H;
+          var h = Math.random() * 3 + 1;
+          ctx.fillStyle = 'rgba(230, 57, 70, ' + (Math.random() * 0.3 + 0.1) + ')';
+          ctx.fillRect(0, y, W, h);
+        }
+      }
+
+      function frame(ts) {
+        if (!startTime) startTime = ts;
+        var elapsed = ts - startTime;
+
+        ctx.clearRect(0, 0, W, H);
+
+        if (elapsed < FILL) {
+          var p = easeInOut(elapsed / FILL);
+          drawWipe(p, 0.85);
+          drawGlitchBars(Math.floor(p * 6));
+
+        } else if (elapsed < FILL + HOLD) {
+          // Full coverage
+          ctx.fillStyle = 'rgba(12, 14, 18, 0.95)';
+          ctx.fillRect(0, 0, W, H);
+          drawGlitchBars(3);
+
+          // Red flash
+          var grad = ctx.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, 500);
+          grad.addColorStop(0, 'rgba(230, 57, 70, 0.1)');
+          grad.addColorStop(1, 'rgba(230, 57, 70, 0)');
+          ctx.fillStyle = grad;
+          ctx.fillRect(0, 0, W, H);
+
+        } else if (elapsed < TOTAL) {
+          var p = easeInOut((elapsed - FILL - HOLD) / CLEAR);
+          drawWipe(1 - p, 0.7 * (1 - p));
+          drawGlitchBars(Math.floor((1 - p) * 4));
+        }
+
+        if (elapsed < TOTAL) {
+          requestAnimationFrame(frame);
+        }
+      }
+
+      requestAnimationFrame(frame);
+    })();
+  </script>
+</body>
+</html>

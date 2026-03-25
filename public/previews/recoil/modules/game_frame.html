@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920,height=1080">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .game-wrap {
+      position: absolute;
+      left: 282px; top: 108px;
+      width: 1326px; height: 920px;
+    }
+
+    .game-frame {
+      position: absolute; inset: 0;
+      border: 2px solid var(--border-mid);
+      box-shadow: var(--glow-red);
+      background: transparent;
+      clip-path: polygon(
+        0 0, calc(100% - 18px) 0,
+        100% 18px, 100% 100%,
+        18px 100%, 0 calc(100% - 18px)
+      );
+    }
+
+    /* Top-left accent bar */
+    .game-frame::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 80px; height: 2px;
+      background: var(--red);
+      box-shadow: 0 0 8px rgba(230,57,70,0.4);
+    }
+
+    /* Corners */
+    .gc { position: absolute; pointer-events: none; }
+    .gc::before, .gc::after {
+      content: ''; position: absolute;
+      background: var(--red);
+    }
+    .gc--tl { top: 2px; left: 2px; }
+    .gc--tl::before { width: 22px; height: 2px; }
+    .gc--tl::after  { width: 2px; height: 22px; }
+
+    .gc--tr { top: 16px; right: 2px; }
+    .gc--tr::before { width: 22px; height: 2px; right: 0; }
+    .gc--tr::after  { width: 2px; height: 22px; right: 0; }
+
+    .gc--bl { bottom: 16px; left: 2px; }
+    .gc--bl::before { width: 22px; height: 2px; bottom: 0; }
+    .gc--bl::after  { width: 2px; height: 22px; bottom: 0; }
+
+    .gc--br { bottom: 2px; right: 2px; }
+    .gc--br::before { width: 22px; height: 2px; bottom: 0; right: 0; }
+    .gc--br::after  { width: 2px; height: 22px; bottom: 0; right: 0; }
+
+    /* Edge labels */
+    .edge-label {
+      position: absolute;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+    .edge-tl { top: 8px; left: 28px; color: var(--text-dim); }
+    .edge-tr { top: 22px; right: 28px; color: rgba(92,138,173,0.35); }
+    .edge-bot { bottom: 20px; left: 28px; color: var(--text-dim); font-style: italic; }
+
+    /* SVG tactical lines */
+    .connections {
+      position: absolute; inset: 0;
+      pointer-events: none; overflow: visible;
+    }
+    .conn-line {
+      fill: none;
+      stroke: var(--border-dim);
+      stroke-width: 1;
+      stroke-dasharray: 8 5;
+    }
+    .conn-node {
+      fill: var(--red);
+      opacity: 0.5;
+      animation: rcPulse 3s ease-in-out infinite;
+    }
+    .conn-node--steel {
+      fill: var(--steel);
+      animation-delay: 1.5s;
+    }
+  </style>
+</head>
+<body>
+  <div class="game-wrap">
+    <div class="game-frame">
+      <span class="gc gc--tl"></span>
+      <span class="gc gc--tr"></span>
+      <span class="gc gc--bl"></span>
+      <span class="gc gc--br"></span>
+
+      <span class="edge-label edge-tl" data-config="gameEdgeLeft">SECTOR A</span>
+      <span class="edge-label edge-tr" data-config="gameEdgeRight">FEED://CAM-01</span>
+      <span class="edge-label edge-bot" data-config="gameEdgeBottom">// tactical output</span>
+    </div>
+
+    <svg class="connections" viewBox="0 0 1326 920" xmlns="http://www.w3.org/2000/svg">
+      <!-- Left to panel -->
+      <path class="conn-line" d="M 0 200 L -40 200"/>
+      <circle class="conn-node" cx="0" cy="200" r="3"/>
+      <path class="conn-line" d="M 0 550 L -40 550"/>
+      <circle class="conn-node--steel conn-node" cx="0" cy="550" r="3"/>
+
+      <!-- Right to cam/chat -->
+      <path class="conn-line" d="M 1326 150 L 1366 150"/>
+      <circle class="conn-node--steel conn-node" cx="1326" cy="150" r="3"/>
+      <path class="conn-line" d="M 1326 500 L 1366 500"/>
+      <circle class="conn-node" cx="1326" cy="500" r="3"/>
+
+      <!-- Top to HUD -->
+      <path class="conn-line" d="M 300 0 L 300 -25"/>
+      <circle class="conn-node" cx="300" cy="0" r="2.5"/>
+      <path class="conn-line" d="M 900 0 L 900 -25"/>
+      <circle class="conn-node--steel conn-node" cx="900" cy="0" r="2.5"/>
+    </svg>
+  </div>
+
+  <script src="../config/config.js"></script>
+  <script src="../shared.js"></script>
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920,height=1080">
+  <title>Deadlink — Standby</title>
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .scene{
+      position:absolute; inset:0;
+      display:flex; align-items:center; justify-content:center;
+    }
+
+    .card{
+      position:relative; width:720px;
+      padding:38px 44px;
+      background:var(--bg-panel);
+      border:1px solid var(--border-mid);
+      clip-path: polygon(
+        0 10px, 10px 0, calc(100% - 10px) 0, 100% 10px,
+        100% calc(100% - 10px), calc(100% - 10px) 100%,
+        10px 100%, 0 calc(100% - 10px)
+      );
+      box-shadow: var(--glow-green), 0 12px 60px rgba(0,0,0,0.6);
+      text-align:left;
+    }
+
+    .card::after{
+      content:""; position:absolute; inset:0;
+      background: repeating-linear-gradient(0deg, transparent 0 2px, rgba(0,255,65,0.025) 2px 4px);
+      pointer-events:none;
+    }
+    .card::before{
+      content:""; position:absolute; left:20px; right:20px; top:0; height:1px;
+      background:linear-gradient(90deg, transparent, rgba(0,255,65,0.3), transparent);
+      opacity:.4;
+    }
+
+    .tag{
+      font-size:10px; letter-spacing:3px; color:var(--text-dim);
+      text-transform:uppercase; margin-bottom:14px;
+    }
+
+    .heading{
+      font-size:42px; letter-spacing:6px; color:var(--text);
+      text-transform:uppercase; line-height:1;
+      margin-bottom:8px;
+    }
+    .heading .accent{ color:var(--cyan); }
+
+    .divider{
+      width:160px; height:1px; margin:14px 0;
+      border-top:1px dashed rgba(0,255,65,0.2);
+    }
+
+    .sub{
+      font-size:14px; color:var(--text-mid);
+      margin-bottom:22px;
+    }
+
+    .chips{ display:flex; gap:10px; flex-wrap:wrap; }
+    .chip{
+      display:flex; align-items:center; gap:6px;
+      padding:6px 12px;
+      background:rgba(0,212,255,0.03);
+      border:1px solid rgba(0,212,255,0.12);
+      font-size:10px; letter-spacing:1.5px; color:var(--cyan);
+      text-transform:uppercase;
+    }
+
+    /* pulsing standby cursor */
+    .standby-cursor{
+      display:inline-block; width:10px; height:16px;
+      background:var(--green); margin-left:8px;
+      animation: dlBlink 1s step-end infinite;
+    }
+
+    .note{
+      position:absolute; left:50%; bottom:36px; transform:translateX(-50%);
+      font-size:9px; letter-spacing:3px; color:var(--text-dim);
+      text-transform:uppercase;
+    }
+
+    /* matrix background */
+    .rain{
+      position:absolute; inset:0; overflow:hidden; pointer-events:none;
+    }
+    .rain-col{
+      position:absolute; top:-200px; width:16px;
+      font-size:12px; color:var(--green); line-height:16px;
+      animation: rainFall linear infinite;
+      white-space:pre;
+      opacity:.25;
+      text-shadow: 0 0 6px rgba(0,255,65,0.4);
+    }
+    .rain-col.cyan{ color:var(--cyan); text-shadow: 0 0 6px rgba(0,212,255,0.4); opacity:.2; }
+    .rain-col.dim{ opacity:.12; }
+    .rain-col.bright{ opacity:.4; text-shadow: 0 0 10px rgba(0,255,65,0.6); }
+    @keyframes rainFall{
+      0%{ transform:translateY(-100%); }
+      100%{ transform:translateY(1200px); }
+    }
+  </style>
+</head>
+<body>
+  <div class="rain">
+    <div class="rain-col" style="left:4%;animation-duration:9s;animation-delay:0.5s">0A1F&#10;3B7E&#10;C4D2&#10;9F01&#10;E8A3</div>
+    <div class="rain-col cyan" style="left:14%;animation-duration:8s;animation-delay:1s">FF01&#10;D2A8&#10;4C7B&#10;90E3&#10;1BF6</div>
+    <div class="rain-col bright" style="left:25%;animation-duration:10s;animation-delay:0s">A3C9&#10;7E12&#10;D4B6&#10;08FF&#10;5A3D</div>
+    <div class="rain-col dim" style="left:36%;animation-duration:11s;animation-delay:2s">E2F0&#10;1B9A&#10;C87D&#10;3456&#10;AF0E</div>
+    <div class="rain-col cyan" style="left:48%;animation-duration:7.5s;animation-delay:0.8s">1C3A&#10;E7D4&#10;8B0F&#10;A265&#10;49C8</div>
+    <div class="rain-col" style="left:58%;animation-duration:9.5s;animation-delay:1.5s">D6F2&#10;0A4B&#10;7E1C&#10;3958&#10;BC0D</div>
+    <div class="rain-col bright" style="left:70%;animation-duration:8s;animation-delay:0.3s">82C1&#10;F9A0&#10;3D7E&#10;B654&#10;0E28</div>
+    <div class="rain-col dim" style="left:80%;animation-duration:10.5s;animation-delay:2.5s">43AE&#10;9D17&#10;B28C&#10;6F05&#10;E4DA</div>
+    <div class="rain-col cyan" style="left:90%;animation-duration:7s;animation-delay:1.2s">F1B3&#10;5A02&#10;C8E6&#10;2D7F&#10;9041</div>
+    <div class="rain-col bright" style="left:96%;animation-duration:8.5s;animation-delay:0.6s">6DA1&#10;F83B&#10;027E&#10;C5D9&#10;4A16</div>
+  </div>
+
+  <div class="scene">
+    <div class="card">
+      <div class="tag" data-config="brbTag">// standby mode</div>
+      <div class="heading"><span data-config="brbTitle">Sistema</span> <span class="accent" data-config="brbAccent">En Pausa</span><span class="standby-cursor"></span></div>
+      <div class="divider"></div>
+      <div class="sub" data-config="brbSub">El operador vuelve pronto. Conexion activa.</div>
+      <div class="chips">
+        <div class="chip">[<span data-config="brbChip1">standby</span>]</div>
+        <div class="chip">[<span data-config="brbChip2">link activo</span>]</div>
+        <div class="chip">[<span data-config="brbChip3">buffer ok</span>]</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="note" data-config="brbNote">deadlink v1.0 // standby</div>
+  <script src="../config/config.js"></script>
+  <script src="../shared.js"></script>
+</body>
+</html>

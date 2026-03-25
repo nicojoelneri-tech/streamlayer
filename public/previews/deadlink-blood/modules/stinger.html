@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920,height=1080">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    *{ margin:0; padding:0; box-sizing:border-box; }
+    html,body{ width:1920px; height:1080px; overflow:hidden; background:transparent; }
+    canvas{ position:absolute; top:0; left:0; width:1920px; height:1080px; }
+  </style>
+</head>
+<body>
+<canvas id="c" width="1920" height="1080"></canvas>
+<script>
+(function(){
+  const canvas = document.getElementById('c');
+  const ctx = canvas.getContext('2d');
+  const W = 1920, H = 1080;
+
+  const BG = 'rgb(0,0,0)';
+
+  /* timing */
+  const FILL_DURATION  = 0.45;
+  const HOLD_DURATION  = 0.15;
+  const CLEAR_DURATION = 0.40;
+  const TOTAL = FILL_DURATION + HOLD_DURATION + CLEAR_DURATION;
+
+  /* static noise pixel size */
+  const PX = 4;
+  const COLS = Math.ceil(W / PX);
+  const ROWS = Math.ceil(H / PX);
+
+  /* draw TV static noise in a region */
+  function drawNoise(x1, x2, intensity) {
+    const c1 = Math.floor(x1 / PX);
+    const c2 = Math.ceil(x2 / PX);
+    for (let r = 0; r < ROWS; r++) {
+      for (let c = c1; c < c2; c++) {
+        if (Math.random() > intensity) continue;
+        const v = Math.floor(Math.random() * 60);
+        const g = Math.random() < 0.3 ? Math.floor(Math.random() * 40) : 0;
+        ctx.fillStyle = `rgb(${v},${v + g},${v})`;
+        ctx.fillRect(c * PX, r * PX, PX, PX);
+      }
+    }
+  }
+
+  /* horizontal glitch lines */
+  function drawGlitchLines(count, alpha) {
+    for (let i = 0; i < count; i++) {
+      const y = Math.floor(Math.random() * H);
+      const h = 1 + Math.floor(Math.random() * 3);
+      const offset = (Math.random() - 0.5) * 40;
+      ctx.fillStyle = `rgba(255,26,46,${alpha})`;
+      ctx.fillRect(offset, y, W, h);
+    }
+  }
+
+  let startTime = null;
+
+  function frame(ts) {
+    if (!startTime) startTime = ts;
+    const elapsed = (ts - startTime) / 1000;
+
+    ctx.clearRect(0, 0, W, H);
+
+    if (elapsed > TOTAL + 0.05) return;
+
+    /* Phase 1: noise fills from left to right */
+    if (elapsed < FILL_DURATION + HOLD_DURATION) {
+      const t = Math.min(elapsed / FILL_DURATION, 1);
+      const ease = t < 0.5 ? 2*t*t : 1 - Math.pow(-2*t+2, 2)/2;
+      const frontX = W * ease;
+
+      // Solid black behind noise
+      ctx.fillStyle = BG;
+      ctx.fillRect(0, 0, Math.max(0, frontX - 100), H);
+
+      // Noise band
+      if (t < 1) {
+        drawNoise(Math.max(0, frontX - 200), frontX, 0.7);
+        drawGlitchLines(3, 0.15);
+      }
+
+      // Hold phase
+      if (elapsed >= FILL_DURATION) {
+        ctx.fillStyle = BG;
+        ctx.fillRect(0, 0, W, H);
+        drawNoise(0, W, 0.15);
+        drawGlitchLines(5, 0.08);
+      }
+    }
+
+    /* Phase 2: noise clears from left to right */
+    if (elapsed >= FILL_DURATION + HOLD_DURATION) {
+      const clearT = (elapsed - FILL_DURATION - HOLD_DURATION) / CLEAR_DURATION;
+      const ease = clearT < 0.5 ? 2*clearT*clearT : 1 - Math.pow(-2*clearT+2, 2)/2;
+      const clearX = W * ease;
+
+      // Right side still opaque
+      if (clearX < W) {
+        ctx.fillStyle = BG;
+        ctx.fillRect(Math.max(0, clearX + 100), 0, W, H);
+      }
+
+      // Noise band on clearing edge
+      if (clearT < 1) {
+        drawNoise(clearX, Math.min(W, clearX + 200), 0.6);
+        drawGlitchLines(2, 0.1);
+      }
+    }
+
+    requestAnimationFrame(frame);
+  }
+
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,188 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;600&display=swap');
+
+:root{
+  /* washi paper tones — LIGHT THEME */
+  --bg-washi:  rgba(248, 244, 236, 0.92);
+  --bg-panel:  rgba(252, 248, 242, 0.88);
+  --bg-glass:  rgba(255, 252, 248, 0.60);
+
+  /* ink borders */
+  --border-dim: rgba(60, 50, 40, 0.10);
+  --border-mid: rgba(60, 50, 40, 0.22);
+  --border-ink: rgba(42, 36, 32, 0.35);
+
+  /* accent colors */
+  --sakura:      #d4628a;
+  --sakura-soft: #e8a0b8;
+  --sakura-pale: #f2d4de;
+  --wisteria:    #7b5ea7;
+  --wisteria-soft:#a88cc8;
+  --vermillion:  #c44e3f;
+  --ink:         #2a2420;
+  --ink-soft:    #5c534a;
+  --gold:        #c4a265;
+  --gold-soft:   #d8c090;
+
+  /* text — ink tones */
+  --text:     rgba(42, 36, 32, 0.95);
+  --text-mid: rgba(42, 36, 32, 0.72);
+  --text-dim: rgba(42, 36, 32, 0.50);
+
+  /* glows — soft, warm */
+  --glow-sakura:   0 0 16px rgba(212,98,138,0.12), 0 0 40px rgba(212,98,138,0.05);
+  --glow-wisteria: 0 0 16px rgba(123,94,167,0.12), 0 0 40px rgba(123,94,167,0.05);
+  --glow-gold:     0 0 14px rgba(196,162,101,0.14), 0 0 36px rgba(196,162,101,0.06);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{
+  width:1920px; height:1080px; overflow:hidden;
+  background:transparent;
+  font-family:'Noto Sans JP', 'Hiragino Sans', sans-serif;
+  color:var(--text);
+}
+body{position:relative}
+
+/* ═══════════════════════════════════════
+   PANEL BASE — floating washi paper
+   ═══════════════════════════════════════ */
+.hm-panel{
+  position:relative;
+  background: var(--bg-panel);
+  border:1px solid var(--border-dim);
+  border-radius:6px;
+  box-shadow:
+    0 2px 20px rgba(42,36,32,0.06),
+    0 8px 40px rgba(42,36,32,0.03);
+  overflow:hidden;
+}
+/* top brush stroke accent */
+.hm-panel::before{
+  content:""; position:absolute;
+  left:16px; right:16px; top:0; height:2px;
+  background: linear-gradient(90deg,
+    transparent,
+    var(--sakura) 20%,
+    var(--wisteria) 50%,
+    var(--sakura) 80%,
+    transparent);
+  opacity:.35; pointer-events:none;
+}
+/* washi paper texture */
+.hm-panel::after{
+  content:""; position:absolute; inset:0;
+  background:
+    radial-gradient(ellipse at 25% 25%, rgba(212,98,138,0.02), transparent 40%),
+    radial-gradient(ellipse at 75% 75%, rgba(123,94,167,0.02), transparent 40%);
+  pointer-events:none;
+}
+
+/* ═══════════════════════════════════════
+   DECORATIVE ELEMENTS
+   ═══════════════════════════════════════ */
+
+/* petal ornament (replaces diamonds/fleurs/brackets) */
+.hm-petal{
+  width:10px; height:10px;
+  flex-shrink:0;
+  position:relative;
+}
+.hm-petal::before{
+  content:""; position:absolute;
+  width:8px; height:12px;
+  background:var(--sakura);
+  border-radius:50% 50% 50% 0;
+  transform:rotate(-45deg);
+  opacity:.7;
+  top:0; left:1px;
+}
+.hm-petal.sm{ width:7px; height:7px; }
+.hm-petal.sm::before{ width:6px; height:9px; }
+.hm-petal.wisteria::before{ background:var(--wisteria); }
+.hm-petal.vermillion::before{ background:var(--vermillion); }
+.hm-petal.gold::before{ background:var(--gold); }
+
+/* ink divider — brush stroke */
+.hm-divider{
+  height:1px;
+  background:linear-gradient(90deg,
+    transparent 5%,
+    rgba(42,36,32,0.12) 15%,
+    rgba(212,98,138,0.15) 50%,
+    rgba(42,36,32,0.12) 85%,
+    transparent 95%);
+  position:relative;
+}
+
+/* calligraphy rune */
+.hm-rune{
+  position:absolute; pointer-events:none;
+  color:rgba(42,36,32,0.04);
+  font-family:'Zen Old Mincho',serif; font-size:13px;
+  letter-spacing:4px;
+  user-select:none;
+}
+
+/* washi texture overlay */
+.hm-washi-texture{
+  position:absolute; inset:0;
+  background:
+    repeating-linear-gradient(0deg, transparent 0 5px, rgba(42,36,32,0.005) 5px 6px),
+    repeating-linear-gradient(90deg, transparent 0 8px, rgba(42,36,32,0.004) 8px 9px);
+  opacity:.5; pointer-events:none;
+}
+
+/* ═══════════════════════════════════════
+   ANIMATIONS
+   ═══════════════════════════════════════ */
+.hm-breathe{ animation: hmBreathe 6s ease-in-out infinite; }
+@keyframes hmBreathe{
+  0%,100%{ opacity:.65; }
+  50%{ opacity:1; }
+}
+
+.hm-sway{ animation: hmSway 8s ease-in-out infinite; }
+@keyframes hmSway{
+  0%,100%{ transform:translateX(0) rotate(0deg); }
+  25%{ transform:translateX(2px) rotate(0.3deg); }
+  75%{ transform:translateX(-2px) rotate(-0.3deg); }
+}
+
+.hm-float{ animation: hmFloat 5s ease-in-out infinite; }
+@keyframes hmFloat{
+  0%,100%{ transform:translateY(0); }
+  50%{ transform:translateY(-3px); }
+}
+
+@keyframes hmAurora{
+  0%{ background-position: 0% 50%; }
+  50%{ background-position: 100% 50%; }
+  100%{ background-position: 0% 50%; }
+}
+
+@keyframes hmTicker{
+  0%{ transform:translateX(0); }
+  100%{ transform:translateX(-50%); }
+}
+
+@keyframes hmReveal{
+  0%{ opacity:0; transform:translateY(10px); }
+  100%{ opacity:1; transform:translateY(0); }
+}
+
+@keyframes hmOrnamentPulse{
+  0%,100%{ opacity:.4; }
+  50%{ opacity:.75; }
+}
+
+@keyframes hmShimmerSweep{
+  0%{ background-position:100% 0; }
+  100%{ background-position:-100% 0; }
+}
+
+/* ink brush stroke animation */
+@keyframes hmBrushReveal{
+  0%{ clip-path:inset(0 100% 0 0); }
+  100%{ clip-path:inset(0 0 0 0); }
+}

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920">
+  <title>Deadlink - Matrix Rain</title>
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html, body { width:1920px; height:1080px; overflow:hidden; background:transparent; }
+    canvas { position:absolute; inset:0; width:1920px; height:1080px; background:transparent; }
+  </style>
+</head>
+<body>
+  <canvas id="ambient" width="1920" height="1080"></canvas>
+  <script>
+    (() => {
+      const canvas = document.getElementById('ambient');
+      const ctx = canvas.getContext('2d');
+      const W = 1920, H = 1080;
+
+      // Game safe zone — rain is sparse here
+      const SAFE = { x1: 260, y1: 86, x2: 1620, y2: 866 };
+
+      // Characters: katakana range + digits + some latin
+      const CHARS = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEF';
+
+      const COL_W = 22; // column width in px
+      const COLS = Math.ceil(W / COL_W);
+      const columns = [];
+
+      function isInSafe(x) {
+        return x > SAFE.x1 && x < SAFE.x2;
+      }
+
+      // Initialize columns
+      for (let i = 0; i < COLS; i++) {
+        const x = i * COL_W;
+        const inSafe = isInSafe(x);
+        // Sparse in safe zone, dense on edges
+        if (inSafe && Math.random() > 0.25) continue;
+
+        columns.push({
+          x: x,
+          y: Math.random() * H,
+          speed: 40 + Math.random() * 80, // px per second
+          length: 8 + Math.floor(Math.random() * 18),
+          chars: [],
+          nextChar: 0,
+          inSafe: inSafe,
+        });
+      }
+
+      // Pre-generate character arrays
+      columns.forEach(col => {
+        col.chars = [];
+        for (let j = 0; j < col.length; j++) {
+          col.chars.push(CHARS[Math.floor(Math.random() * CHARS.length)]);
+        }
+      });
+
+      ctx.font = '14px "Share Tech Mono", monospace';
+
+      let lastTime = performance.now();
+
+      function frame(now) {
+        const dt = (now - lastTime) / 1000;
+        lastTime = now;
+
+        ctx.clearRect(0, 0, W, H);
+
+        for (const col of columns) {
+          col.y += col.speed * dt;
+
+          // Reset when off screen
+          if (col.y - col.length * 18 > H) {
+            col.y = -col.length * 18;
+            col.speed = 40 + Math.random() * 80;
+            // Re-randomize chars
+            for (let j = 0; j < col.chars.length; j++) {
+              col.chars[j] = CHARS[Math.floor(Math.random() * CHARS.length)];
+            }
+          }
+
+          // Randomly mutate a character
+          if (Math.random() < 0.03) {
+            const idx = Math.floor(Math.random() * col.chars.length);
+            col.chars[idx] = CHARS[Math.floor(Math.random() * CHARS.length)];
+          }
+
+          const baseAlpha = col.inSafe ? 0.12 : 0.3;
+
+          for (let j = 0; j < col.length; j++) {
+            const charY = col.y - j * 18;
+            if (charY < -18 || charY > H + 18) continue;
+
+            // Safe zone vertical check
+            const inSafeV = charY > SAFE.y1 && charY < SAFE.y2;
+            const zoneAlpha = (col.inSafe && inSafeV) ? 0.06 : baseAlpha;
+
+            // Head is brightest, tail fades
+            const fade = j === 0 ? 1 : Math.max(0, 1 - j / col.length);
+            const alpha = zoneAlpha * fade;
+
+            if (alpha < 0.005) continue;
+
+            // Head character is white-green, rest are green
+            if (j === 0) {
+              ctx.fillStyle = `rgba(180,255,200,${alpha * 3})`;
+            } else {
+              ctx.fillStyle = `rgba(0,255,65,${alpha})`;
+            }
+
+            ctx.fillText(col.chars[j], col.x, charY);
+          }
+        }
+
+        requestAnimationFrame(frame);
+      }
+
+      requestAnimationFrame(frame);
+    })();
+  </script>
+</body>
+</html>

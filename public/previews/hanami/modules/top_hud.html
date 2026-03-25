@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920,height=1080">
+<title>HANAMI - Top HUD</title>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body{ background:transparent; }
+
+  .hm-hud{
+    position:fixed; top:0; left:0;
+    width:1920px; height:76px;
+    background: linear-gradient(180deg,
+      rgba(252,248,242,0.94) 0%,
+      rgba(248,244,236,0.90) 100%);
+    display:grid;
+    grid-template-columns: 360px 1fr 360px;
+    align-items:center;
+    z-index:10;
+  }
+
+  /* bottom brush stroke edge */
+  .hm-hud::after{
+    content:""; position:absolute;
+    left:40px; right:40px; bottom:0; height:2px;
+    background: linear-gradient(90deg,
+      transparent,
+      var(--sakura) 15%,
+      var(--wisteria) 50%,
+      var(--sakura) 85%,
+      transparent);
+    opacity:.25;
+    pointer-events:none;
+  }
+
+  /* ── LEFT: status ── */
+  .hm-hud-left{
+    display:flex; align-items:center; gap:10px;
+    padding-left:24px;
+  }
+  .hm-status-block{
+    display:flex; flex-direction:column; gap:2px;
+    background: var(--bg-glass);
+    border:1px solid var(--border-dim);
+    border-radius:5px;
+    padding:6px 14px;
+  }
+  .hm-mode-row{
+    display:flex; align-items:center; gap:7px;
+  }
+  .hm-mode-text{
+    font-family:'Zen Old Mincho',serif;
+    font-size:14px; font-weight:600;
+    color:var(--ink);
+    letter-spacing:2px;
+  }
+  .hm-status-line{
+    font-family:'Noto Sans JP',sans-serif;
+    font-size:11px; color:var(--text-mid);
+    letter-spacing:1px;
+    text-transform:lowercase;
+  }
+
+  /* ── CENTER ── */
+  .hm-hud-center{
+    display:flex; align-items:center; justify-content:center; gap:16px;
+  }
+  .hm-center-line{
+    width:60px; height:1px;
+    background: linear-gradient(90deg, transparent, var(--border-mid), transparent);
+    flex-shrink:0;
+  }
+  .hm-center-text{
+    font-family:'Zen Old Mincho',serif;
+    font-size:30px; font-weight:600;
+    letter-spacing:6px;
+    color:var(--ink);
+    text-shadow: 0 0 20px rgba(212,98,138,0.10);
+    animation: hmBreathe 6s ease-in-out infinite;
+    white-space:nowrap;
+  }
+
+  /* ── RIGHT: channel ── */
+  .hm-hud-right{
+    display:flex; flex-direction:column; align-items:flex-end;
+    padding-right:24px; gap:2px;
+  }
+  .hm-channel-name{
+    font-family:'Zen Old Mincho',serif;
+    font-size:15px; font-weight:600;
+    color:var(--wisteria);
+    letter-spacing:3px;
+  }
+  .hm-game-label{
+    font-family:'Noto Sans JP',sans-serif;
+    font-size:11px; color:var(--text-mid);
+    letter-spacing:1px;
+  }
+</style>
+</head>
+<body>
+
+<div class="hm-hud">
+
+  <!-- LEFT -->
+  <div class="hm-hud-left">
+    <div class="hm-status-block">
+      <div class="hm-mode-row">
+        <span class="hm-petal sm"></span>
+        <span class="hm-mode-text" data-config="streamMode">EN DIRECTO</span>
+      </div>
+      <span class="hm-status-line" data-config="statusLine">transmision activa</span>
+    </div>
+  </div>
+
+  <!-- CENTER -->
+  <div class="hm-hud-center">
+    <div class="hm-center-line"></div>
+    <span class="hm-center-text" data-config="hudCenter">花見 HANAMI</span>
+    <div class="hm-center-line"></div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="hm-hud-right">
+    <span class="hm-channel-name" data-config="channelName">EL NOVATO</span>
+    <span class="hm-game-label" data-config="gameLabel">JUGANDO: GENSHIN IMPACT</span>
+  </div>
+
+</div>
+
+<script src="../config/config.js"></script>
+<script src="../shared.js"></script>
+</body>
+</html>

@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=420,height=320">
+<title>Arcade Fighter — Camera Frame</title>
+<style>
+  /* ═══════════════════════════════════════════
+     ARCADE FIGHTER — Animated Camera Frame
+     Browser Source: 420 × 320, transparent bg
+     Webcam goes ABOVE this source in OBS
+  ═══════════════════════════════════════════ */
+
+  @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{
+    width:420px;height:320px;
+    background:transparent;
+    overflow:hidden;
+  }
+
+  .frame-wrap{
+    position:absolute;
+    left:50%;top:50%;
+    transform:translate(-50%,-50%);
+    width:384px;height:264px;
+  }
+
+  /* ── Main border — aggressive angular cuts ── */
+  .border-main{
+    position:absolute;inset:0;
+    clip-path:polygon(
+      14px 0,calc(100% - 14px) 0,100% 14px,100% calc(100% - 14px),
+      calc(100% - 14px) 100%,14px 100%,0 calc(100% - 14px),0 14px
+    );
+    border:3px solid #ff2020;
+    background:transparent;
+  }
+  /* Simulate clipped border with an SVG overlay */
+  .border-svg{
+    position:absolute;inset:0;pointer-events:none;
+  }
+  .border-svg svg{width:100%;height:100%}
+  .border-svg polygon{
+    fill:none;stroke:#ff2020;stroke-width:3;
+    filter:drop-shadow(0 0 4px rgba(255,32,32,.6)) drop-shadow(0 0 10px rgba(255,32,32,.3));
+    animation:borderFlash 4s ease-in-out infinite;
+  }
+  @keyframes borderFlash{
+    0%,100%{stroke:#ff2020;filter:drop-shadow(0 0 4px rgba(255,32,32,.6)) drop-shadow(0 0 10px rgba(255,32,32,.3))}
+    50%{stroke:#ffe600;filter:drop-shadow(0 0 6px rgba(255,230,0,.6)) drop-shadow(0 0 14px rgba(255,230,0,.3))}
+  }
+
+  .border-inner-svg{
+    position:absolute;inset:5px;pointer-events:none;
+  }
+  .border-inner-svg svg{width:100%;height:100%}
+  .border-inner-svg polygon{
+    fill:none;stroke:rgba(255,230,0,.3);stroke-width:1;
+    animation:innerFlash 4s ease-in-out infinite .5s;
+  }
+  @keyframes innerFlash{
+    0%,100%{stroke:rgba(255,230,0,.3)}
+    50%{stroke:rgba(255,32,32,.3)}
+  }
+
+  /* ── Corner slashes — diagonal accent marks ── */
+  .corner-slash{
+    position:absolute;
+    width:20px;height:20px;
+  }
+  .corner-slash::before{
+    content:'';position:absolute;
+    width:28px;height:3px;
+    background:#ffe600;
+    box-shadow:0 0 6px #ffe600,0 0 12px rgba(255,230,0,.4);
+  }
+  .cs-tl{top:2px;left:2px}.cs-tl::before{transform:rotate(45deg);transform-origin:left center}
+  .cs-tr{top:2px;right:2px}.cs-tr::before{transform:rotate(-45deg);transform-origin:right center}
+  .cs-bl{bottom:2px;left:2px}.cs-bl::before{transform:rotate(-45deg);transform-origin:left center}
+  .cs-br{bottom:2px;right:2px}.cs-br::before{transform:rotate(45deg);transform-origin:right center}
+
+  .corner-slash::after{
+    content:'';position:absolute;
+    width:8px;height:8px;
+    background:#ff2020;
+    clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%);
+    box-shadow:0 0 4px #ff2020;
+    animation:diamondPulse 1s ease-in-out infinite;
+  }
+  .cs-tl::after{top:-2px;left:-2px}
+  .cs-tr::after{top:-2px;right:-2px}
+  .cs-bl::after{bottom:-2px;left:-2px}
+  .cs-br::after{bottom:-2px;right:-2px}
+  @keyframes diamondPulse{0%,100%{opacity:.6;transform:scale(1)}50%{opacity:1;transform:scale(1.3)}}
+
+  /* ── HP Bar — top accent ── */
+  .hp-bar{
+    position:absolute;
+    top:-10px;left:30px;right:80px;
+    height:8px;
+    background:rgba(0,0,0,.6);
+    border:1px solid rgba(255,32,32,.4);
+    clip-path:polygon(4px 0,calc(100% - 4px) 0,100% 50%,calc(100% - 4px) 100%,4px 100%,0 50%);
+    overflow:hidden;
+  }
+  .hp-fill{
+    position:absolute;
+    top:0;left:0;bottom:0;
+    width:100%;
+    background:linear-gradient(90deg,#ff2020,#ffe600 60%,#00ff44 100%);
+    animation:hpPulse 3s ease-in-out infinite;
+    box-shadow:inset 0 -2px 4px rgba(0,0,0,.3);
+  }
+  .hp-fill::after{
+    content:'';position:absolute;inset:0;
+    background:linear-gradient(180deg,rgba(255,255,255,.3) 0%,transparent 50%);
+  }
+  @keyframes hpPulse{
+    0%,100%{width:100%;background:linear-gradient(90deg,#ff2020,#ffe600 60%,#00ff44)}
+    40%{width:85%;background:linear-gradient(90deg,#ff2020,#ffe600 70%,#ffe600)}
+    70%{width:95%}
+  }
+
+  /* ── HP Bar segments ── */
+  .hp-segments{
+    position:absolute;inset:0;
+    background:repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 9px,
+      rgba(0,0,0,.4) 9px,
+      rgba(0,0,0,.4) 10px
+    );
+    pointer-events:none;
+  }
+
+  /* ── Combo counter ── */
+  .combo{
+    position:absolute;
+    top:-12px;right:8px;
+    font-family:'Press Start 2P',monospace;
+    font-size:7px;
+    color:#ffe600;
+    text-shadow:0 0 4px rgba(255,230,0,.6),1px 1px 0 #000;
+    animation:comboFlash 2s step-end infinite;
+  }
+  @keyframes comboFlash{
+    0%,100%{opacity:1}
+    85%{opacity:1}86%{opacity:0}92%{opacity:1}93%{opacity:0}96%{opacity:1}
+  }
+
+  /* ── Side energy bars ── */
+  .side-bar{
+    position:absolute;
+    width:5px;
+    background:rgba(0,0,0,.5);
+    border:1px solid rgba(255,32,32,.3);
+  }
+  .sb-left{left:-8px;top:20px;bottom:20px}
+  .sb-right{right:-8px;top:20px;bottom:20px}
+  .side-bar::after{
+    content:'';position:absolute;
+    left:0;right:0;bottom:0;
+    background:linear-gradient(0deg,#ff2020,#ffe600);
+    animation:sideBarFill 2.5s ease-in-out infinite;
+    box-shadow:0 0 6px rgba(255,32,32,.5);
+  }
+  .sb-left::after{animation-delay:0s}
+  .sb-right::after{animation-delay:1.25s}
+  @keyframes sideBarFill{
+    0%{height:20%}50%{height:100%}100%{height:20%}
+  }
+
+  /* ── Impact / hit spark canvas ── */
+  #sparkCanvas{
+    position:absolute;
+    inset:-30px;
+    width:calc(100% + 60px);
+    height:calc(100% + 60px);
+    pointer-events:none;
+  }
+
+  /* ── Scanlines (heavy CRT arcade) ── */
+  .scanlines{
+    position:absolute;inset:0;
+    background:repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 1px,
+      rgba(0,0,0,.12) 1px,
+      rgba(0,0,0,.12) 3px
+    );
+    pointer-events:none;
+    animation:scanDrift 8s linear infinite;
+  }
+  @keyframes scanDrift{0%{background-position:0 0}100%{background-position:0 60px}}
+
+  /* ── Screen shake on "hit" ── */
+  .frame-wrap{
+    animation:idle 4s ease-in-out infinite;
+  }
+  @keyframes idle{
+    0%,88%,100%{transform:translate(-50%,-50%)}
+    89%{transform:translate(calc(-50% + 3px),calc(-50% - 2px))}
+    90%{transform:translate(calc(-50% - 4px),calc(-50% + 1px))}
+    91%{transform:translate(calc(-50% + 2px),calc(-50% + 3px))}
+    92%{transform:translate(calc(-50% - 1px),calc(-50% - 3px))}
+    93%{transform:translate(calc(-50% + 3px),calc(-50% + 1px))}
+    94%{transform:translate(-50%,-50%)}
+  }
+
+  /* ── Edge tick marks (ruler style, like arcade UI) ── */
+  .tick-marks{
+    position:absolute;
+    pointer-events:none;
+  }
+  .tm-top,.tm-bottom{
+    left:40px;right:40px;height:4px;
+    background:repeating-linear-gradient(
+      90deg,
+      transparent,transparent 18px,
+      rgba(255,32,32,.3) 18px,rgba(255,32,32,.3) 20px
+    );
+  }
+  .tm-top{top:0}.tm-bottom{bottom:0}
+  .tm-left,.tm-right{
+    top:30px;bottom:30px;width:4px;
+    background:repeating-linear-gradient(
+      180deg,
+      transparent,transparent 14px,
+      rgba(255,230,0,.25) 14px,rgba(255,230,0,.25) 16px
+    );
+  }
+  .tm-left{left:0}.tm-right{right:0}
+
+  /* ── VS flash (on top-right corner) ── */
+  .vs-flash{
+    position:absolute;
+    bottom:-18px;right:-10px;
+    transform:scale(0) rotate(-8deg);
+    font-family:'Press Start 2P',monospace;
+    font-size:14px;
+    color:#fff;
+    text-shadow:
+      0 0 8px #ffe600,0 0 16px #ff2020,
+      2px 2px 0 #ff2020,-1px -1px 0 #0044ff;
+    opacity:0;
+    pointer-events:none;
+    animation:vsAppear 10s ease-out infinite;
+    letter-spacing:4px;
+  }
+  @keyframes vsAppear{
+    0%,82%,100%{transform:scale(0) rotate(-8deg);opacity:0}
+    84%{transform:scale(1.4) rotate(-8deg);opacity:1}
+    86%{transform:scale(1) rotate(-8deg);opacity:1}
+    92%{transform:scale(1) rotate(-8deg);opacity:.9}
+    94%{opacity:0;transform:scale(1.3) rotate(-8deg)}
+  }
+
+  /* ── KO flash (on bottom-left corner) ── */
+  .ko-flash{
+    position:absolute;
+    bottom:-18px;left:-8px;
+    transform:scale(0) rotate(6deg);
+    font-family:'Press Start 2P',monospace;
+    font-size:16px;
+    color:#ff2020;
+    text-shadow:
+      0 0 8px #ff2020,0 0 16px rgba(255,32,32,.6),
+      2px 2px 0 #000,-1px -1px 0 #ffe600;
+    opacity:0;
+    pointer-events:none;
+    animation:koAppear 14s ease-out infinite 5s;
+    letter-spacing:5px;
+  }
+  @keyframes koAppear{
+    0%,78%,100%{transform:scale(0) rotate(6deg);opacity:0}
+    79%{transform:scale(2) rotate(6deg);opacity:1}
+    81%{transform:scale(1) rotate(6deg);opacity:1}
+    82%{transform:scale(1.15) rotate(6deg);opacity:1}
+    83%{transform:scale(1) rotate(6deg);opacity:1}
+    90%{transform:scale(1) rotate(6deg);opacity:.9}
+    92%{opacity:0;transform:scale(.8) rotate(6deg)}
+  }
+
+  /* ── Player label ── */
+  .player-label{
+    position:absolute;
+    bottom:-20px;left:50%;
+    transform:translateX(-50%);
+    font-family:'Press Start 2P',monospace;
+    font-size:8px;
+    letter-spacing:3px;
+    color:#ffe600;
+    text-shadow:0 0 4px rgba(255,230,0,.5),2px 2px 0 #000;
+    white-space:nowrap;
+    animation:labelBlink 3s step-end infinite;
+  }
+  @keyframes labelBlink{
+    0%,100%{opacity:1}90%{opacity:1}91%{opacity:0}95%{opacity:1}96%{opacity:0}98%{opacity:1}
+  }
+
+  /* ── Round dots (bottom accent) ── */
+  .round-dots{
+    position:absolute;
+    bottom:-6px;left:50%;
+    transform:translateX(-50%);
+    display:flex;gap:6px;
+  }
+  .round-dot{
+    width:5px;height:5px;
+    border-radius:50%;
+    border:1px solid #ff2020;
+    background:transparent;
+  }
+  .round-dot.filled{
+    background:#ff2020;
+    box-shadow:0 0 4px #ff2020;
+    animation:dotWin .8s ease-in-out infinite;
+  }
+  @keyframes dotWin{0%,100%{box-shadow:0 0 4px #ff2020}50%{box-shadow:0 0 8px #ff2020,0 0 12px rgba(255,32,32,.4)}}
+
+  /* ── P1 badge ── */
+  .p1-badge{
+    position:absolute;
+    top:-14px;left:8px;
+    font-family:'Press Start 2P',monospace;
+    font-size:7px;
+    color:#00aaff;
+    text-shadow:0 0 4px rgba(0,170,255,.5),1px 1px 0 #000;
+    animation:p1Glow 2s ease-in-out infinite;
+  }
+  @keyframes p1Glow{0%,100%{color:#00aaff;text-shadow:0 0 4px rgba(0,170,255,.5),1px 1px 0 #000}50%{color:#44ccff;text-shadow:0 0 8px rgba(0,170,255,.8),1px 1px 0 #000}}
+
+  /* ── Horizontal separator lines ── */
+  .h-line{
+    position:absolute;
+    left:0;right:0;height:1px;
+    background:linear-gradient(90deg,transparent,rgba(255,32,32,.4),transparent);
+  }
+  .hl-top{top:4px}
+  .hl-bot{bottom:4px}
+
+</style>
+</head>
+<body>
+
+<div class="frame-wrap">
+
+  <!-- Spark / hit effect canvas -->
+  <canvas id="sparkCanvas"></canvas>
+
+  <!-- Main angular border (SVG for proper clip rendering) -->
+  <div class="border-svg">
+    <svg viewBox="0 0 384 264" preserveAspectRatio="none">
+      <polygon points="14,0 370,0 384,14 384,250 370,264 14,264 0,250 0,14"/>
+    </svg>
+  </div>
+  <div class="border-inner-svg">
+    <svg viewBox="0 0 374 254" preserveAspectRatio="none">
+      <polygon points="12,0 362,0 374,12 374,242 362,254 12,254 0,242 0,12"/>
+    </svg>
+  </div>
+
+  <!-- Corner diagonal slashes -->
+  <div class="corner-slash cs-tl"></div>
+  <div class="corner-slash cs-tr"></div>
+  <div class="corner-slash cs-bl"></div>
+  <div class="corner-slash cs-br"></div>
+
+  <!-- HP bar -->
+  <div class="hp-bar">
+    <div class="hp-fill"></div>
+    <div class="hp-segments"></div>
+  </div>
+
+  <!-- P1 badge + combo counter -->
+  <div class="p1-badge">P1</div>
+  <div class="combo">HIT</div>
+
+  <!-- Side energy bars -->
+  <div class="side-bar sb-left"></div>
+  <div class="side-bar sb-right"></div>
+
+  <!-- Edge tick marks -->
+  <div class="tick-marks tm-top"></div>
+  <div class="tick-marks tm-bottom"></div>
+  <div class="tick-marks tm-left"></div>
+  <div class="tick-marks tm-right"></div>
+
+  <!-- Separator lines -->
+  <div class="h-line hl-top"></div>
+  <div class="h-line hl-bot"></div>
+
+  <!-- Heavy CRT scanlines -->
+  <div class="scanlines"></div>
+
+  <!-- VS flash (top-right corner) -->
+  <div class="vs-flash">VS</div>
+
+  <!-- KO flash (bottom-left corner) -->
+  <div class="ko-flash">KO</div>
+
+  <!-- Round indicator dots -->
+  <div class="round-dots">
+    <div class="round-dot filled"></div>
+    <div class="round-dot filled"></div>
+    <div class="round-dot"></div>
+  </div>
+
+  <!-- Player label -->
+  <div class="player-label">PLAYER 1</div>
+
+</div>
+
+<script>
+// ═════════════════════════════════════════
+//  HIT SPARK PARTICLE SYSTEM
+// ═════════════════════════════════════════
+
+const canvas = document.getElementById('sparkCanvas');
+const ctx = canvas.getContext('2d');
+const frameW = 384, frameH = 264;
+canvas.width = frameW + 60; canvas.height = frameH + 60;
+const cx = canvas.width / 2, cy = canvas.height / 2;
+
+const SPARK_COLORS = [
+  { r: 255, g: 32, b: 32 },
+  { r: 255, g: 230, b: 0 },
+  { r: 255, g: 255, b: 255 },
+  { r: 255, g: 140, b: 0 },
+];
+
+class HitSpark {
+  constructor(x, y) {
+    this.x = x; this.y = y;
+    this.angle = Math.random() * Math.PI * 2;
+    this.speed = 2 + Math.random() * 5;
+    this.size = 1 + Math.random() * 3;
+    this.life = 15 + Math.random() * 20;
+    this.maxLife = this.life;
+    this.color = SPARK_COLORS[Math.floor(Math.random() * SPARK_COLORS.length)];
+    this.drag = 0.94 + Math.random() * 0.04;
+    // Some sparks are lines (streaks), some are dots
+    this.isStreak = Math.random() < 0.4;
+    this.length = 4 + Math.random() * 8;
+  }
+  update() {
+    this.x += Math.cos(this.angle) * this.speed;
+    this.y += Math.sin(this.angle) * this.speed;
+    this.speed *= this.drag;
+    this.life--;
+  }
+  draw(ctx) {
+    const a = (this.life / this.maxLife);
+    const { r, g, b } = this.color;
+    if (this.isStreak) {
+      const ex = this.x - Math.cos(this.angle) * this.length * (this.speed / 3);
+      const ey = this.y - Math.sin(this.angle) * this.length * (this.speed / 3);
+      ctx.beginPath();
+      ctx.moveTo(this.x, this.y);
+      ctx.lineTo(ex, ey);
+      ctx.strokeStyle = `rgba(${r},${g},${b},${a})`;
+      ctx.lineWidth = this.size * 0.6;
+      ctx.shadowColor = `rgba(${r},${g},${b},${a})`;
+      ctx.shadowBlur = 6;
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+    } else {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size * a, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${r},${g},${b},${a})`;
+      ctx.shadowColor = `rgba(${r},${g},${b},${a})`;
+      ctx.shadowBlur = 8;
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    }
+  }
+  get dead() { return this.life <= 0; }
+}
+
+// Ambient border sparks (constant subtle sparks along edges)
+class BorderEmber {
+  constructor() { this.reset(); }
+  reset() {
+    const side = Math.floor(Math.random() * 4);
+    const hw = frameW / 2, hh = frameH / 2;
+    switch (side) {
+      case 0: this.x = cx + (Math.random() - 0.5) * frameW; this.y = cy - hh; break;
+      case 1: this.x = cx + hw; this.y = cy + (Math.random() - 0.5) * frameH; break;
+      case 2: this.x = cx + (Math.random() - 0.5) * frameW; this.y = cy + hh; break;
+      case 3: this.x = cx - hw; this.y = cy + (Math.random() - 0.5) * frameH; break;
+    }
+    this.vx = (Math.random() - 0.5) * 0.8;
+    this.vy = -0.5 - Math.random() * 1.5; // float upward
+    this.life = 30 + Math.random() * 60;
+    this.maxLife = this.life;
+    this.size = 0.5 + Math.random() * 1.5;
+    this.color = SPARK_COLORS[Math.floor(Math.random() * SPARK_COLORS.length)];
+  }
+  update() {
+    this.x += this.vx;
+    this.y += this.vy;
+    this.vy -= 0.02; // slight upward acceleration
+    this.life--;
+    if (this.life <= 0) this.reset();
+  }
+  draw(ctx) {
+    const a = (this.life / this.maxLife) * 0.7;
+    const { r, g, b } = this.color;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(${r},${g},${b},${a})`;
+    ctx.shadowColor = `rgba(${r},${g},${b},${a * 0.8})`;
+    ctx.shadowBlur = 4;
+    ctx.fill();
+    ctx.shadowBlur = 0;
+  }
+}
+
+let hitSparks = [];
+const embers = Array.from({ length: 20 }, () => new BorderEmber());
+
+// Spawn hit spark bursts at random border positions
+function spawnHitBurst() {
+  const side = Math.floor(Math.random() * 4);
+  const hw = frameW / 2, hh = frameH / 2;
+  let x, y;
+  switch (side) {
+    case 0: x = cx + (Math.random() - 0.5) * frameW * 0.6; y = cy - hh; break;
+    case 1: x = cx + hw; y = cy + (Math.random() - 0.5) * frameH * 0.6; break;
+    case 2: x = cx + (Math.random() - 0.5) * frameW * 0.6; y = cy + hh; break;
+    case 3: x = cx - hw; y = cy + (Math.random() - 0.5) * frameH * 0.6; break;
+  }
+  const count = 8 + Math.floor(Math.random() * 12);
+  for (let i = 0; i < count; i++) {
+    hitSparks.push(new HitSpark(x, y));
+  }
+}
+
+function scheduleHit() {
+  spawnHitBurst();
+  setTimeout(scheduleHit, 800 + Math.random() * 3000);
+}
+setTimeout(scheduleHit, 1500);
+
+// Combo counter
+const comboEl = document.querySelector('.combo');
+let comboCount = 0;
+function tickCombo() {
+  comboCount++;
+  if (comboCount > 99) comboCount = 1;
+  comboEl.textContent = comboCount + ' HIT';
+  setTimeout(tickCombo, 2000 + Math.random() * 4000);
+}
+setTimeout(tickCombo, 3000);
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Update & draw embers
+  embers.forEach(e => { e.update(); e.draw(ctx); });
+
+  // Update & draw hit sparks
+  hitSparks.forEach(s => { s.update(); s.draw(ctx); });
+  hitSparks = hitSparks.filter(s => !s.dead);
+
+  requestAnimationFrame(animate);
+}
+animate();
+</script>
+</body>
+</html>

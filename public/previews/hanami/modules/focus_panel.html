@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920,height=1080">
+<title>HANAMI - Focus Panel</title>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body{ background:transparent; }
+
+  .hm-focus{
+    position:fixed;
+    left:16px; top:100px;
+    width:266px;
+    border-radius:8px;
+    z-index:10;
+  }
+
+  .hm-focus-inner{
+    position:relative;
+    padding:18px 16px 16px;
+    display:flex; flex-direction:column; gap:14px;
+  }
+
+  /* header */
+  .hm-focus-header{
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .hm-focus-title-row{
+    display:flex; align-items:center; gap:8px;
+  }
+  .hm-focus-title{
+    font-family:'Zen Old Mincho',serif;
+    font-size:16px; font-weight:600;
+    color:var(--ink);
+    letter-spacing:2px;
+  }
+  .hm-live-dot{
+    width:6px; height:6px;
+    border-radius:50%;
+    background:var(--sakura);
+    animation: hmLivePulse 2.5s ease-in-out infinite;
+    flex-shrink:0;
+  }
+  @keyframes hmLivePulse{
+    0%,100%{ opacity:.5; box-shadow:0 0 0 0 rgba(212,98,138,0.3); }
+    50%{ opacity:1; box-shadow:0 0 6px 2px rgba(212,98,138,0.15); }
+  }
+  .hm-focus-tag{
+    font-family:'Noto Sans JP',sans-serif;
+    font-size:10px;
+    color:var(--text-mid);
+    letter-spacing:1px;
+    text-transform:lowercase;
+    background:rgba(42,36,32,0.03);
+    border:1px solid var(--border-dim);
+    border-radius:3px;
+    padding:2px 7px;
+  }
+
+  /* divider */
+  .hm-focus-divider{
+    margin:0;
+  }
+
+  /* items */
+  .hm-focus-item{
+    display:flex; flex-direction:column; gap:4px;
+  }
+  .hm-item-label-row{
+    display:flex; align-items:center; gap:7px;
+  }
+  .hm-item-label{
+    font-family:'Noto Sans JP',sans-serif;
+    font-size:11px;
+    color:var(--text-mid);
+    letter-spacing:1px;
+    text-transform:lowercase;
+  }
+  .hm-item-value{
+    font-family:'Zen Old Mincho',serif;
+    font-size:18px; font-weight:500;
+    color:var(--ink);
+    letter-spacing:1px;
+    padding-left:17px;
+    min-height:20px;
+  }
+</style>
+</head>
+<body>
+
+<div class="hm-focus hm-panel">
+  <div class="hm-focus-inner">
+
+    <!-- header -->
+    <div class="hm-focus-header">
+      <div class="hm-focus-title-row">
+        <span class="hm-focus-title" data-config="sideTitle">PERGAMINO</span>
+        <span class="hm-live-dot"></span>
+      </div>
+      <span class="hm-focus-tag" data-config="sideTag">en vivo</span>
+    </div>
+
+    <div class="hm-divider hm-focus-divider"></div>
+
+    <!-- item 1: sakura petal -->
+    <div class="hm-focus-item">
+      <div class="hm-item-label-row">
+        <span class="hm-petal sm"></span>
+        <span class="hm-item-label" data-config="sideLabel1">ultimo visitante</span>
+      </div>
+      <span class="hm-item-value" data-config="sidePrimary"></span>
+    </div>
+
+    <!-- item 2: wisteria petal -->
+    <div class="hm-focus-item">
+      <div class="hm-item-label-row">
+        <span class="hm-petal sm wisteria"></span>
+        <span class="hm-item-label" data-config="sideLabel2">lazos</span>
+      </div>
+      <span class="hm-item-value" data-config="sideSecondary"></span>
+    </div>
+
+    <!-- item 3: vermillion petal -->
+    <div class="hm-focus-item">
+      <div class="hm-item-label-row">
+        <span class="hm-petal sm vermillion"></span>
+        <span class="hm-item-label" data-config="sideLabel3">ultimo guardian</span>
+      </div>
+      <span class="hm-item-value" data-config="sideTertiary"></span>
+    </div>
+
+  </div>
+
+  <!-- washi texture -->
+  <div class="hm-washi-texture"></div>
+</div>
+
+<script src="../config/config.js"></script>
+<script src="../shared.js"></script>
+</body>
+</html>

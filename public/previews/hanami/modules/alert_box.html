@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920,height=1080">
+<title>HANAMI - Alert Box</title>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body{ background:transparent; }
+
+  .hm-alert{
+    position:fixed;
+    left:50%; top:110px;
+    transform:translateX(-50%);
+    width:560px;
+    border-radius:8px;
+    z-index:100;
+  }
+
+  /* sakura accent line on top (overrides .hm-panel::before) */
+  .hm-alert::before{
+    content:""; position:absolute;
+    left:0; right:0; top:0; height:3px;
+    background: linear-gradient(90deg,
+      transparent,
+      var(--sakura) 15%,
+      var(--sakura-soft) 50%,
+      var(--sakura) 85%,
+      transparent);
+    opacity:.6;
+    border-radius:8px 8px 0 0;
+    pointer-events:none;
+    z-index:2;
+  }
+
+  /* shimmer sweep */
+  .hm-alert-shimmer{
+    position:absolute; inset:0;
+    border-radius:8px;
+    background: linear-gradient(105deg,
+      transparent 30%,
+      rgba(212,98,138,0.06) 42%,
+      rgba(196,162,101,0.08) 50%,
+      rgba(212,98,138,0.06) 58%,
+      transparent 70%);
+    background-size:200% 100%;
+    animation: hmShimmerSweep 4s ease-in-out infinite;
+    pointer-events:none;
+    z-index:1;
+  }
+
+  /* corner petal ornaments */
+  .hm-alert-petal{
+    position:absolute;
+    pointer-events:none;
+    z-index:3;
+  }
+  .hm-alert-petal .hm-petal{ animation: hmOrnamentPulse 4s ease-in-out infinite; }
+  .hm-alert-petal.tl{ top:10px; left:12px; }
+  .hm-alert-petal.tr{ top:10px; right:12px; }
+  .hm-alert-petal.bl{ bottom:10px; left:12px; }
+  .hm-alert-petal.br{ bottom:10px; right:12px; }
+
+  /* content */
+  .hm-alert-content{
+    position:relative;
+    padding:28px 32px 24px;
+    display:flex; flex-direction:column;
+    align-items:center; text-align:center;
+    gap:12px;
+    z-index:4;
+  }
+
+  /* header row */
+  .hm-alert-header{
+    display:flex; align-items:center; gap:10px;
+  }
+  .hm-alert-icon{
+    width:12px; height:12px;
+    border-radius:50%;
+    background: linear-gradient(135deg, var(--sakura), var(--sakura-soft));
+    flex-shrink:0;
+    box-shadow: 0 0 8px rgba(212,98,138,0.2);
+  }
+  .hm-alert-title{
+    font-family:'Zen Old Mincho',serif;
+    font-size:13px; font-weight:600;
+    color:var(--sakura);
+    letter-spacing:3px;
+  }
+
+  /* body */
+  .hm-alert-body{
+    display:flex; flex-direction:column;
+    align-items:center; gap:6px;
+  }
+  .hm-alert-text{
+    font-family:'Zen Old Mincho',serif;
+    font-size:24px; font-weight:600;
+    color:var(--ink);
+    letter-spacing:2px;
+    line-height:1.3;
+  }
+  .hm-alert-sub{
+    font-family:'Noto Sans JP',sans-serif;
+    font-size:12px;
+    font-style:italic;
+    color:var(--text-mid);
+    letter-spacing:1px;
+  }
+</style>
+</head>
+<body>
+
+<div class="hm-alert hm-panel">
+
+  <!-- shimmer -->
+  <div class="hm-alert-shimmer"></div>
+
+  <!-- corner petals -->
+  <div class="hm-alert-petal tl"><span class="hm-petal sm"></span></div>
+  <div class="hm-alert-petal tr"><span class="hm-petal sm wisteria"></span></div>
+  <div class="hm-alert-petal bl"><span class="hm-petal sm wisteria"></span></div>
+  <div class="hm-alert-petal br"><span class="hm-petal sm"></span></div>
+
+  <!-- content -->
+  <div class="hm-alert-content">
+
+    <div class="hm-alert-header">
+      <span class="hm-alert-icon"></span>
+      <span class="hm-alert-title" data-config="alertTitle">OFRENDA RECIBIDA</span>
+    </div>
+
+    <div class="hm-alert-body">
+      <span class="hm-alert-text" data-config="alertText">UN NUEVO PETALO CAE EN EL JARDIN</span>
+      <span class="hm-alert-sub" data-config="alertSub">el viento trae buenas nuevas</span>
+    </div>
+
+  </div>
+
+  <!-- washi texture -->
+  <div class="hm-washi-texture"></div>
+</div>
+
+<script src="../config/config.js"></script>
+<script src="../shared.js"></script>
+</body>
+</html>

@@ -1,0 +1,128 @@
+STREAMLAYER by El Novato — CHECKLIST DE PENDIENTES
+====================================================
+Última actualización: 2026-03-21
+
+Prioridad: 🔴 Crítico (sin esto no se vende) | 🟡 Importante | 🟢 Nice to have
+
+====================================================
+PRODUCTO (lo que se entrega al cliente)
+====================================================
+
+🔴 Crear los packs reales de cada estilo (HTML/CSS/JS)
+   - [ ] Minimal (limpio, blanco/negro, Inter)
+   - [ ] Aurora Grid (ya existe como referencia en docs/)
+   - [ ] Gacha/Anime (pastel, Nunito, bordes suaves)
+   - [ ] Retro Arcade (pixel art, Press Start 2P)
+   - [ ] Pro Esports (agresivo, Bebas Neue, rojo/negro)
+
+🔴 Definir variantes starter vs full por estilo
+   - [ ] Starter: 4 módulos (camera, chat, alerts/panels, starting)
+   - [ ] Full: 8 módulos + 5 presets + dual-mode
+
+🟡 Validar que todos los packs funcionan en OBS real
+   - [ ] Testear como Browser Source local (archivo local)
+   - [ ] Testear en StreamElements (custom widget)
+   - [ ] Testear en diferentes resoluciones de monitor
+   - [ ] Testear en OBS Studio + Streamlabs OBS
+
+🟡 Mejorar el config.js para que sea más robusto
+   - [ ] Validación básica (si falta una coma, que no se rompa todo)
+   - [ ] Comentarios en el config para guiar al usuario
+
+🟢 Agregar variantes de color por estilo
+   - [ ] Cada estilo con 2-3 paletas alternativas
+
+====================================================
+WEB (la plataforma de venta)
+====================================================
+
+🔴 Integrar Mercado Pago como pasarela de pago
+   - [ ] Checkout Pro o Checkout API
+   - [ ] Webhook de confirmación de pago
+   - [ ] Manejo de estados (pendiente, aprobado, rechazado)
+
+🔴 Implementar descarga real del ZIP
+   - [ ] Generar/servir ZIP con la estructura del pack
+   - [ ] Link de descarga post-compra (puede ser temporal)
+   - [ ] Decidir hosting de archivos (Vercel? S3? Google Drive?)
+
+🟡 Mejorar el preview del Builder
+   - [ ] Que el preview cambie visualmente según el estilo elegido
+   - [ ] Agregar tabs por escena (gameplay, starting, brb, ending)
+   - [ ] Preview más fiel al overlay real
+
+🟡 Freemium / lead magnet
+   - [ ] 1 estilo gratuito con export limitado
+   - [ ] O demo descargable con watermark
+   - [ ] Captura de email antes de descargar gratis
+
+🟡 SEO y meta tags
+   - [ ] Open Graph tags para compartir en redes
+   - [ ] Meta descriptions por página
+   - [ ] Favicon final
+
+🟡 Analytics
+   - [ ] Google Analytics o similar
+   - [ ] Eventos: visita home, click pack, agregar carrito, checkout, descarga
+   - [ ] Tracking de conversión
+
+🟢 Página "Cómo funciona"
+   - [ ] Screenshots de OBS con el overlay instalado
+   - [ ] Video corto mostrando el proceso
+   - [ ] FAQ básico
+
+🟢 Responsive fino
+   - [ ] Testear en 375px (iPhone SE)
+   - [ ] Testear en tablet
+   - [ ] Ajustar preview del overlay en mobile
+
+====================================================
+NEGOCIO
+====================================================
+
+🔴 Definir precios finales en pesos argentinos
+   - [ ] Considerar tipo de cambio y poder adquisitivo
+   - [ ] Comparar con competencia local (si existe)
+   - [ ] Decidir si hay precio en USD para mercado global
+
+🟡 Términos y condiciones / licencia de uso
+   - [ ] Qué puede hacer el cliente con el overlay
+   - [ ] Licencia personal vs comercial
+   - [ ] Política de reembolso
+
+🟡 Dominio y deploy
+   - [ ] Registrar dominio (streamlayer.com.ar? elnovato.store?)
+   - [ ] Configurar Vercel con dominio custom
+   - [ ] SSL automático
+
+🟡 Redes sociales como canal de venta
+   - [ ] Contenido de preview/demo para IG y TikTok
+   - [ ] Link en bio de todas las redes
+   - [ ] Mostrar overlays en streams propios como demo viva
+
+🟢 Email marketing
+   - [ ] Captura de emails (newsletter o descarga gratis)
+   - [ ] Email post-compra con guía de instalación
+   - [ ] Notificación de nuevos estilos
+
+====================================================
+FUTURO (post-MVP, no hacer ahora)
+====================================================
+
+- Generación automática de overlays con IA
+- Cuentas de usuario con historial de compras
+- Panel admin para gestionar estilos y pedidos
+- Scene collections / installer automático para OBS
+- Animaciones premium (.webm) como add-on
+- Marketplace para que otros diseñadores vendan
+- Suscripción mensual con acceso a toda la biblioteca
+- Integración Streamlabs + Kick + YouTube
+
+====================================================
+NOTAS
+====================================================
+
+- Stripe NO funciona en Argentina. Usar Mercado Pago.
+- El pack de referencia (Aurora Grid) está en docs/aurora_grid_modular_pack/
+- El análisis de mercado está en la raíz (.docx)
+- Agregar items a este archivo libremente. Marcar con [x] lo completado.

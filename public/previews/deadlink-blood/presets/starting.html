@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920,height=1080">
+  <title>Deadlink — Boot Sequence</title>
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .scene{
+      position:absolute; inset:0;
+      display:flex; align-items:center; justify-content:center;
+    }
+
+    .card{
+      position:relative; width:780px;
+      padding:40px 48px;
+      background:var(--bg-panel);
+      border:1px solid var(--border-mid);
+      clip-path: polygon(
+        0 10px, 10px 0, calc(100% - 10px) 0, 100% 10px,
+        100% calc(100% - 10px), calc(100% - 10px) 100%,
+        10px 100%, 0 calc(100% - 10px)
+      );
+      box-shadow: var(--glow-green), 0 12px 60px rgba(0,0,0,0.6);
+      text-align:left;
+    }
+
+    /* scanlines */
+    .card::after{
+      content:""; position:absolute; inset:0;
+      background: repeating-linear-gradient(0deg, transparent 0 2px, rgba(255,26,46,0.025) 2px 4px);
+      pointer-events:none; z-index:2;
+    }
+
+    /* top green line */
+    .card::before{
+      content:""; position:absolute; left:20px; right:20px; top:0; height:1px;
+      background:linear-gradient(90deg, transparent, var(--green), transparent);
+      opacity:.4;
+    }
+
+    .tag{
+      font-size:10px; letter-spacing:3px; color:var(--text-dim);
+      text-transform:uppercase; margin-bottom:16px;
+    }
+
+    .heading{
+      font-size:44px; letter-spacing:6px; color:var(--green);
+      text-transform:uppercase; line-height:1;
+      text-shadow: 0 0 20px rgba(255,26,46,0.3);
+      margin-bottom:8px;
+    }
+    .heading .accent{ color:var(--cyan); }
+
+    /* boot progress bar */
+    .progress-wrap{
+      width:100%; height:3px; margin:16px 0 20px;
+      background:rgba(255,26,46,0.08);
+      position:relative; overflow:hidden;
+    }
+    .progress-bar{
+      height:100%; width:0%;
+      background:var(--green);
+      box-shadow: 0 0 8px rgba(255,26,46,0.4);
+      animation: bootProgress 4s ease-out infinite;
+    }
+    @keyframes bootProgress{
+      0%{ width:0%; }
+      70%{ width:85%; }
+      100%{ width:85%; }
+    }
+
+    .sub{
+      font-size:15px; color:var(--text-mid);
+      margin-bottom:24px;
+    }
+
+    .chips{
+      display:flex; gap:10px; flex-wrap:wrap;
+    }
+    .chip{
+      display:flex; align-items:center; gap:6px;
+      padding:6px 12px;
+      background:rgba(255,26,46,0.03);
+      border:1px solid var(--border-dim);
+      font-size:10px; letter-spacing:1.5px; color:var(--green);
+      text-transform:uppercase;
+    }
+    .chip .ok{ color:var(--green); }
+    .chip .wait{ color:var(--cyan); animation: dlBlink 1s step-end infinite; }
+
+    .note{
+      position:absolute; left:50%; bottom:36px; transform:translateX(-50%);
+      font-size:9px; letter-spacing:3px; color:var(--text-dim);
+      text-transform:uppercase;
+    }
+
+    /* matrix background */
+    .rain{
+      position:absolute; inset:0; overflow:hidden; pointer-events:none;
+    }
+    .rain-col{
+      position:absolute; top:-200px; width:16px;
+      font-size:12px; color:var(--green); line-height:16px;
+      animation: rainFall linear infinite;
+      white-space:pre;
+      opacity:.25;
+      text-shadow: 0 0 6px rgba(255,26,46,0.4);
+    }
+    .rain-col.cyan{ color:var(--cyan); text-shadow: 0 0 6px rgba(255,140,0,0.4); opacity:.2; }
+    .rain-col.dim{ opacity:.12; }
+    .rain-col.bright{ opacity:.4; text-shadow: 0 0 10px rgba(255,26,46,0.6); }
+    @keyframes rainFall{
+      0%{ transform:translateY(-100%); }
+      100%{ transform:translateY(1200px); }
+    }
+  </style>
+</head>
+<body>
+  <div class="rain">
+    <div class="rain-col bright" style="left:3%;animation-duration:7s;animation-delay:0s">0A1F&#10;3B7E&#10;C4D2&#10;9F01&#10;E8A3</div>
+    <div class="rain-col" style="left:9%;animation-duration:10s;animation-delay:1.2s">7C2D&#10;A1B0&#10;4E9F&#10;D3C8&#10;6FA2</div>
+    <div class="rain-col cyan" style="left:16%;animation-duration:9s;animation-delay:0.3s">FF01&#10;D2A8&#10;4C7B&#10;90E3&#10;1BF6</div>
+    <div class="rain-col dim" style="left:22%;animation-duration:11s;animation-delay:2.5s">B4E1&#10;2D8C&#10;F0A7&#10;5139&#10;8E6B</div>
+    <div class="rain-col" style="left:30%;animation-duration:7s;animation-delay:0.5s">A3C9&#10;7E12&#10;D4B6&#10;08FF&#10;5A3D</div>
+    <div class="rain-col bright" style="left:38%;animation-duration:8.5s;animation-delay:1.8s">E2F0&#10;1B9A&#10;C87D&#10;3456&#10;AF0E</div>
+    <div class="rain-col cyan" style="left:45%;animation-duration:9.5s;animation-delay:0.7s">1C3A&#10;E7D4&#10;8B0F&#10;A265&#10;49C8</div>
+    <div class="rain-col dim" style="left:53%;animation-duration:8s;animation-delay:3s">D6F2&#10;0A4B&#10;7E1C&#10;3958&#10;BC0D</div>
+    <div class="rain-col" style="left:60%;animation-duration:10s;animation-delay:1.5s">82C1&#10;F9A0&#10;3D7E&#10;B654&#10;0E28</div>
+    <div class="rain-col bright" style="left:68%;animation-duration:6.5s;animation-delay:0.4s">43AE&#10;9D17&#10;B28C&#10;6F05&#10;E4DA</div>
+    <div class="rain-col cyan" style="left:75%;animation-duration:11s;animation-delay:2s">A7F3&#10;2C8E&#10;D104&#10;6B59&#10;F0AD</div>
+    <div class="rain-col" style="left:82%;animation-duration:8s;animation-delay:1s">F1B3&#10;5A02&#10;C8E6&#10;2D7F&#10;9041</div>
+    <div class="rain-col dim" style="left:89%;animation-duration:9s;animation-delay:0.9s">3E7C&#10;B0D4&#10;18A6&#10;CF52&#10;940B</div>
+    <div class="rain-col bright" style="left:95%;animation-duration:7.5s;animation-delay:2.2s">6DA1&#10;F83B&#10;027E&#10;C5D9&#10;4A16</div>
+  </div>
+
+  <div class="scene">
+    <div class="card">
+      <div class="tag" data-config="startingTag">// boot sequence</div>
+      <div class="heading"><span data-config="startingTitle">Iniciando</span> <span class="accent" data-config="startingAccent">Sistema</span></div>
+      <div class="progress-wrap"><div class="progress-bar"></div></div>
+      <div class="sub" data-config="startingSub">Cargando modulos del stream...</div>
+      <div class="chips">
+        <div class="chip"><span class="ok">[OK]</span> <span data-config="startingChip1">overlay</span></div>
+        <div class="chip"><span class="ok">[OK]</span> <span data-config="startingChip2">audio</span></div>
+        <div class="chip"><span class="wait">[..]</span> <span data-config="startingChip3">escena</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="note" data-config="startingNote">deadlink v1.0 // boot</div>
+  <script src="../config/config.js"></script>
+  <script src="../shared.js"></script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920,height=1080">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    /* CHAT IS ON THE LEFT (inverted from Lumenfall/Ironhold) */
+    .wrap{ position:absolute; left:16px; top:86px; width:236px; height:740px; }
+
+    .chat{
+      position:absolute; inset:0;
+      background:var(--bg-panel);
+      border:1px solid var(--border-dim);
+      clip-path: polygon(
+        0 6px, 6px 0, calc(100% - 6px) 0, 100% 6px,
+        100% calc(100% - 6px), calc(100% - 6px) 100%,
+        6px 100%, 0 calc(100% - 6px)
+      );
+      box-shadow: var(--glow-green);
+      overflow:hidden;
+    }
+
+    /* terminal title bar */
+    .chat-head{
+      position:relative; display:flex; align-items:center; justify-content:space-between;
+      padding:10px 12px 8px; z-index:1;
+    }
+    .chat-head::after{
+      content:""; position:absolute; left:12px; right:12px; bottom:0; height:1px;
+      border-top:1px dashed rgba(255,26,46,0.35);
+    }
+    .chat-title{
+      font-size:12px; letter-spacing:2px; color:var(--green);
+      text-transform:uppercase;
+    }
+    .chat-sub{
+      font-size:9px; letter-spacing:1px; color:var(--text-dim);
+      text-transform:lowercase;
+    }
+
+    /* blinking prompt at bottom */
+    .chat-prompt{
+      position:absolute; bottom:10px; left:12px;
+      font-size:10px; color:var(--text-mid);
+    }
+
+    /* scanlines */
+    .chat-scan{
+      position:absolute; inset:0;
+      background: repeating-linear-gradient(0deg, transparent 0 2px, rgba(255,26,46,0.02) 2px 4px);
+      pointer-events:none; z-index:2;
+    }
+
+    /* vertical data stream on left edge */
+    .data-edge{
+      position:absolute; left:6px; top:50px; bottom:50px;
+      width:1px;
+      border-left:1px dashed rgba(255,26,46,0.20);
+      pointer-events:none;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="chat">
+      <div class="chat-scan"></div>
+      <div class="chat-head">
+        <span class="chat-title" data-config="chatTitle">TERMINAL</span>
+        <span class="chat-sub" data-config="chatSubtitle">stdin://chat</span>
+      </div>
+      <div class="data-edge"></div>
+      <div class="chat-prompt">> <span class="dl-cursor"></span></div>
+    </div>
+  </div>
+  <script src="../config/config.js"></script>
+  <script src="../shared.js"></script>
+</body>
+</html>

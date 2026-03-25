@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920,height=1080">
+  <title>Deadlink — Shutdown</title>
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .scene{
+      position:absolute; inset:0;
+      display:flex; align-items:center; justify-content:center;
+    }
+
+    .card{
+      position:relative; width:740px;
+      padding:38px 44px;
+      background:var(--bg-panel);
+      border:1px solid var(--border-mid);
+      clip-path: polygon(
+        0 10px, 10px 0, calc(100% - 10px) 0, 100% 10px,
+        100% calc(100% - 10px), calc(100% - 10px) 100%,
+        10px 100%, 0 calc(100% - 10px)
+      );
+      box-shadow: var(--glow-red), 0 12px 60px rgba(0,0,0,0.6);
+      text-align:left;
+    }
+
+    .card::after{
+      content:""; position:absolute; inset:0;
+      background: repeating-linear-gradient(0deg, transparent 0 2px, rgba(255,32,64,0.015) 2px 4px);
+      pointer-events:none;
+    }
+    .card::before{
+      content:""; position:absolute; left:20px; right:20px; top:0; height:1px;
+      background:linear-gradient(90deg, transparent, var(--red), transparent);
+      opacity:.3;
+    }
+
+    .tag{
+      font-size:10px; letter-spacing:3px; color:var(--text-dim);
+      text-transform:uppercase; margin-bottom:14px;
+    }
+
+    .heading{
+      font-size:42px; letter-spacing:6px; color:var(--text);
+      text-transform:uppercase; line-height:1;
+      text-shadow: 0 0 16px rgba(255,32,64,0.12);
+      margin-bottom:8px;
+    }
+    .heading .accent{ color:var(--red-soft); }
+
+    .divider{
+      width:160px; height:1px; margin:14px 0;
+      border-top:1px dashed rgba(255,32,64,0.15);
+    }
+
+    .sub{
+      font-size:14px; color:var(--text-mid);
+      margin-bottom:22px;
+    }
+
+    .chips{ display:flex; gap:10px; flex-wrap:wrap; }
+    .chip{
+      display:flex; align-items:center; gap:6px;
+      padding:6px 12px;
+      background:rgba(255,32,64,0.03);
+      border:1px solid rgba(255,32,64,0.12);
+      font-size:10px; letter-spacing:1.5px; color:var(--red-soft);
+      text-transform:uppercase;
+    }
+
+    .note{
+      position:absolute; left:50%; bottom:36px; transform:translateX(-50%);
+      font-size:9px; letter-spacing:3px; color:var(--text-dim);
+      text-transform:uppercase;
+    }
+
+    /* shutdown fade effect */
+    @keyframes shutdownFade{
+      0%,80%{ opacity:1; }
+      100%{ opacity:.5; }
+    }
+    .card{ animation: shutdownFade 6s ease-in-out infinite; }
+
+    /* matrix background — red tint for shutdown */
+    .rain{
+      position:absolute; inset:0; overflow:hidden; pointer-events:none;
+    }
+    .rain-col{
+      position:absolute; top:-200px; width:16px;
+      font-size:12px; color:var(--green); line-height:16px;
+      animation: rainFall linear infinite;
+      white-space:pre;
+      opacity:.2;
+      text-shadow: 0 0 6px rgba(255,26,46,0.3);
+    }
+    .rain-col.red{ color:var(--red-soft); text-shadow: 0 0 6px rgba(255,32,64,0.4); opacity:.22; }
+    .rain-col.dim{ opacity:.1; }
+    .rain-col.bright{ opacity:.35; text-shadow: 0 0 10px rgba(255,26,46,0.5); }
+    @keyframes rainFall{
+      0%{ transform:translateY(-100%); }
+      100%{ transform:translateY(1200px); }
+    }
+  </style>
+</head>
+<body>
+  <div class="rain">
+    <div class="rain-col red" style="left:5%;animation-duration:8s;animation-delay:0s">0A1F&#10;3B7E&#10;C4D2&#10;9F01&#10;E8A3</div>
+    <div class="rain-col" style="left:13%;animation-duration:10s;animation-delay:1.5s">7C2D&#10;A1B0&#10;4E9F&#10;D3C8&#10;6FA2</div>
+    <div class="rain-col bright" style="left:24%;animation-duration:7.5s;animation-delay:0.3s">B4E1&#10;2D8C&#10;F0A7&#10;5139&#10;8E6B</div>
+    <div class="rain-col red" style="left:35%;animation-duration:9s;animation-delay:2s">A3C9&#10;7E12&#10;D4B6&#10;08FF&#10;5A3D</div>
+    <div class="rain-col dim" style="left:46%;animation-duration:11s;animation-delay:0.8s">1C3A&#10;E7D4&#10;8B0F&#10;A265&#10;49C8</div>
+    <div class="rain-col red" style="left:56%;animation-duration:8.5s;animation-delay:1s">E2F0&#10;1B9A&#10;C87D&#10;3456&#10;AF0E</div>
+    <div class="rain-col bright" style="left:67%;animation-duration:9.5s;animation-delay:0.5s">D6F2&#10;0A4B&#10;7E1C&#10;3958&#10;BC0D</div>
+    <div class="rain-col" style="left:78%;animation-duration:7s;animation-delay:2.5s">43AE&#10;9D17&#10;B28C&#10;6F05&#10;E4DA</div>
+    <div class="rain-col red" style="left:87%;animation-duration:10s;animation-delay:1.2s">F1B3&#10;5A02&#10;C8E6&#10;2D7F&#10;9041</div>
+    <div class="rain-col bright" style="left:95%;animation-duration:8s;animation-delay:0.7s">6DA1&#10;F83B&#10;027E&#10;C5D9&#10;4A16</div>
+  </div>
+
+  <div class="scene">
+    <div class="card">
+      <div class="tag" data-config="endingTag">// shutdown</div>
+      <div class="heading"><span data-config="endingTitle">Cerrando</span> <span class="accent" data-config="endingAccent">Conexion</span></div>
+      <div class="divider"></div>
+      <div class="sub" data-config="endingSub">Gracias por conectarte. Nos vemos en la proxima sesion.</div>
+      <div class="chips">
+        <div class="chip">[<span data-config="endingChip1">sesion cerrada</span>]</div>
+        <div class="chip">[<span data-config="endingChip2">gracias</span>]</div>
+        <div class="chip">[<span data-config="endingChip3">desconectando</span>]</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="note" data-config="endingNote">deadlink v1.0 // shutdown</div>
+  <script src="../config/config.js"></script>
+  <script src="../shared.js"></script>
+</body>
+</html>

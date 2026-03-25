@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=420,height=320">
+<title>Neon Reactor Sunshine — Camera Frame</title>
+<style>
+  /* ═══════════════════════════════════════════
+     NEON REACTOR SUNSHINE — Animated Camera Frame
+     Browser Source: 420 × 320, transparent bg
+     Webcam goes ABOVE this source in OBS
+  ═══════════════════════════════════════════ */
+
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{
+    width:420px;height:320px;
+    background:transparent;
+    overflow:hidden;
+    font-family:'Orbitron',sans-serif;
+  }
+
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+
+  .frame-wrap{
+    position:absolute;
+    left:50%;top:50%;
+    transform:translate(-50%,-50%);
+    width:380px;height:260px;
+  }
+
+  .border-outer{
+    position:absolute;inset:0;
+    border:2px solid rgba(255,200,0,.6);
+    border-radius:6px;
+    box-shadow:
+      0 0 8px rgba(255,200,0,.4),
+      0 0 20px rgba(255,200,0,.15),
+      inset 0 0 8px rgba(255,200,0,.1);
+    animation:borderPulse 3s ease-in-out infinite;
+  }
+  .border-inner{
+    position:absolute;inset:6px;
+    border:1px solid rgba(255,200,0,.3);
+    border-radius:3px;
+    box-shadow:
+      0 0 6px rgba(255,200,0,.2),
+      inset 0 0 6px rgba(255,200,0,.08);
+    animation:borderPulse 3s ease-in-out infinite .5s;
+  }
+
+  @keyframes borderPulse{
+    0%,100%{border-color:rgba(255,200,0,.6);box-shadow:0 0 8px rgba(255,200,0,.4),0 0 20px rgba(255,200,0,.15),inset 0 0 8px rgba(255,200,0,.1)}
+    33%{border-color:rgba(255,120,0,.6);box-shadow:0 0 8px rgba(255,120,0,.4),0 0 20px rgba(255,120,0,.15),inset 0 0 8px rgba(255,120,0,.1)}
+    66%{border-color:rgba(255,60,30,.6);box-shadow:0 0 8px rgba(255,60,30,.4),0 0 20px rgba(255,60,30,.15),inset 0 0 8px rgba(255,60,30,.1)}
+  }
+
+  .corner{position:absolute;width:28px;height:28px}
+  .corner::before,.corner::after{
+    content:'';position:absolute;
+    background:rgba(255,200,0,.9);
+    box-shadow:0 0 8px rgba(255,200,0,.8),0 0 16px rgba(255,200,0,.4);
+    animation:cornerGlow 3s ease-in-out infinite;
+  }
+  .corner::before{width:28px;height:2px}
+  .corner::after{width:2px;height:28px}
+  .c-tl{top:-1px;left:-1px}.c-tl::before{top:0;left:0}.c-tl::after{top:0;left:0}
+  .c-tr{top:-1px;right:-1px}.c-tr::before{top:0;right:0}.c-tr::after{top:0;right:0}
+  .c-bl{bottom:-1px;left:-1px}.c-bl::before{bottom:0;left:0}.c-bl::after{bottom:0;left:0}
+  .c-br{bottom:-1px;right:-1px}.c-br::before{bottom:0;right:0}.c-br::after{bottom:0;right:0}
+
+  @keyframes cornerGlow{
+    0%,100%{background:rgba(255,200,0,.9);box-shadow:0 0 8px rgba(255,200,0,.8),0 0 16px rgba(255,200,0,.4)}
+    33%{background:rgba(255,120,0,.9);box-shadow:0 0 8px rgba(255,120,0,.8),0 0 16px rgba(255,120,0,.4)}
+    66%{background:rgba(255,60,30,.9);box-shadow:0 0 8px rgba(255,60,30,.8),0 0 16px rgba(255,60,30,.4)}
+  }
+
+  .corner-dot{
+    position:absolute;width:6px;height:6px;border-radius:50%;
+    background:#ffc800;
+    box-shadow:0 0 6px #ffc800,0 0 12px #ffc800,0 0 24px rgba(255,200,0,.4);
+    animation:dotPulse 1.5s ease-in-out infinite;
+  }
+  .d-tl{top:-3px;left:-3px;animation-delay:0s}
+  .d-tr{top:-3px;right:-3px;animation-delay:.375s}
+  .d-br{bottom:-3px;right:-3px;animation-delay:.75s}
+  .d-bl{bottom:-3px;left:-3px;animation-delay:1.125s}
+  @keyframes dotPulse{0%,100%{transform:scale(1);opacity:.8}50%{transform:scale(1.8);opacity:1}}
+
+  .travel-light{
+    position:absolute;width:40px;height:3px;
+    background:linear-gradient(90deg,transparent,#ffc800,transparent);
+    border-radius:2px;
+    box-shadow:0 0 10px #ffc800,0 0 20px rgba(255,200,0,.5);
+    filter:blur(.5px);
+  }
+  .tl-top{top:-1.5px;left:0;animation:travelTop 3s linear infinite}
+  .tl-bottom{bottom:-1.5px;right:0;animation:travelBottom 3s linear infinite}
+  .tl-left{
+    top:0;left:-1.5px;width:3px;height:40px;
+    background:linear-gradient(180deg,transparent,#ff7800,transparent);
+    box-shadow:0 0 10px #ff7800,0 0 20px rgba(255,120,0,.5);
+    animation:travelLeft 3.5s linear infinite;
+  }
+  .tl-right{
+    top:0;right:-1.5px;width:3px;height:40px;
+    background:linear-gradient(180deg,transparent,#ff3c1e,transparent);
+    box-shadow:0 0 10px #ff3c1e,0 0 20px rgba(255,60,30,.5);
+    animation:travelRight 3.5s linear infinite;
+  }
+
+  @keyframes travelTop{0%{left:-40px;opacity:0}5%{opacity:1}95%{opacity:1}100%{left:calc(100% + 40px);opacity:0}}
+  @keyframes travelBottom{0%{right:-40px;opacity:0}5%{opacity:1}95%{opacity:1}100%{right:calc(100% + 40px);opacity:0}}
+  @keyframes travelLeft{0%{top:calc(100% + 40px);opacity:0}5%{opacity:1}95%{opacity:1}100%{top:-40px;opacity:0}}
+  @keyframes travelRight{0%{top:-40px;opacity:0}5%{opacity:1}95%{opacity:1}100%{top:calc(100% + 40px);opacity:0}}
+
+  .edge-accent{position:absolute;background:rgba(255,200,0,.15);backdrop-filter:blur(4px)}
+  .ea-top,.ea-bottom{width:60px;height:4px;left:50%;transform:translateX(-50%);border-radius:2px}
+  .ea-top{top:-2px}.ea-bottom{bottom:-2px}
+  .ea-left,.ea-right{width:4px;height:40px;top:50%;transform:translateY(-50%);border-radius:2px}
+  .ea-left{left:-2px}.ea-right{right:-2px}
+  .ea-top::after,.ea-bottom::after,.ea-left::after,.ea-right::after{
+    content:'';position:absolute;inset:0;
+    background:linear-gradient(90deg,transparent,rgba(255,200,0,.5),transparent);
+    border-radius:2px;animation:edgePulse 2s ease-in-out infinite;
+  }
+  .ea-left::after,.ea-right::after{background:linear-gradient(180deg,transparent,rgba(255,120,0,.5),transparent)}
+  @keyframes edgePulse{0%,100%{opacity:.3}50%{opacity:1}}
+
+  .glitch-layer{position:absolute;inset:0;opacity:0;pointer-events:none}
+  .glitch-layer.g1{border:2px solid rgba(255,120,0,.7);border-radius:6px;animation:glitch1 8s step-end infinite}
+  .glitch-layer.g2{border:2px solid rgba(255,220,100,.7);border-radius:6px;animation:glitch2 8s step-end infinite}
+  @keyframes glitch1{0%,92%,96%,100%{opacity:0;transform:translate(0)}93%{opacity:.7;transform:translate(4px,-2px)}94%{opacity:.5;transform:translate(-3px,1px)}95%{opacity:.8;transform:translate(2px,3px)}}
+  @keyframes glitch2{0%,90%,94.5%,100%{opacity:0;transform:translate(0)}91%{opacity:.6;transform:translate(-4px,2px)}92.5%{opacity:.4;transform:translate(3px,-3px)}93.5%{opacity:.7;transform:translate(-1px,-2px)}}
+
+  .scanlines{
+    position:absolute;inset:0;
+    background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.06) 2px,rgba(0,0,0,.06) 4px);
+    pointer-events:none;border-radius:6px;animation:scanMove 10s linear infinite;
+  }
+  @keyframes scanMove{0%{background-position:0 0}100%{background-position:0 100px}}
+
+  .hud-label{
+    position:absolute;bottom:-22px;left:50%;transform:translateX(-50%);
+    font-family:'Orbitron',sans-serif;font-size:9px;font-weight:700;
+    letter-spacing:4px;text-transform:uppercase;
+    color:rgba(255,200,0,.7);text-shadow:0 0 6px rgba(255,200,0,.5);
+    white-space:nowrap;animation:labelFlicker 4s ease-in-out infinite;
+  }
+  @keyframes labelFlicker{0%,100%{opacity:.7}48%{opacity:.7}49%{opacity:.2}50%{opacity:.8}51%{opacity:.3}52%{opacity:.7}}
+
+  .reactor-glow{
+    position:absolute;inset:20px;border-radius:4px;
+    background:radial-gradient(ellipse at center,rgba(255,200,0,.04) 0%,transparent 70%);
+    animation:reactorPulse 4s ease-in-out infinite;pointer-events:none;
+  }
+  @keyframes reactorPulse{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:1;transform:scale(1.02)}}
+
+  .energy-ring{position:absolute;inset:-12px;border:2px dashed rgba(255,200,0,.12);border-radius:10px;animation:ringRotate 20s linear infinite}
+  .energy-ring.r2{inset:-16px;border-color:rgba(255,120,0,.08);animation:ringRotate 30s linear infinite reverse}
+  @keyframes ringRotate{0%,100%{opacity:.4}25%{opacity:.8}50%{opacity:.3}75%{opacity:.7}}
+
+  #particleCanvas{position:absolute;inset:-30px;width:calc(100% + 60px);height:calc(100% + 60px);pointer-events:none}
+</style>
+</head>
+<body>
+<div class="frame-wrap">
+  <canvas id="particleCanvas"></canvas>
+  <div class="energy-ring"></div>
+  <div class="energy-ring r2"></div>
+  <div class="reactor-glow"></div>
+  <div class="border-outer"></div>
+  <div class="border-inner"></div>
+  <div class="corner c-tl"></div><div class="corner c-tr"></div>
+  <div class="corner c-bl"></div><div class="corner c-br"></div>
+  <div class="corner-dot d-tl"></div><div class="corner-dot d-tr"></div>
+  <div class="corner-dot d-br"></div><div class="corner-dot d-bl"></div>
+  <div class="travel-light tl-top"></div><div class="travel-light tl-bottom"></div>
+  <div class="travel-light tl-left"></div><div class="travel-light tl-right"></div>
+  <div class="edge-accent ea-top"></div><div class="edge-accent ea-bottom"></div>
+  <div class="edge-accent ea-left"></div><div class="edge-accent ea-right"></div>
+  <div class="scanlines"></div>
+  <div class="glitch-layer g1"></div><div class="glitch-layer g2"></div>
+  <div class="hud-label">◆ LIVE ◆</div>
+</div>
+<script>
+const canvas = document.getElementById('particleCanvas');
+const ctx = canvas.getContext('2d');
+const frameW = 380, frameH = 260;
+canvas.width = frameW + 60; canvas.height = frameH + 60;
+const cx = canvas.width / 2, cy = canvas.height / 2;
+
+const COLORS = [
+  { r: 255, g: 200, b: 0 },
+  { r: 255, g: 120, b: 0 },
+  { r: 255, g: 60, b: 30 },
+  { r: 255, g: 160, b: 50 },
+];
+
+class OrbitalParticle {
+  constructor() { this.reset(); }
+  reset() {
+    this.side = Math.floor(Math.random() * 4);
+    this.progress = Math.random();
+    this.speed = 0.001 + Math.random() * 0.003;
+    this.offset = (Math.random() - 0.5) * 20;
+    this.size = 1 + Math.random() * 2.5;
+    this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
+    this.alpha = 0.3 + Math.random() * 0.7;
+    this.pulse = Math.random() * Math.PI * 2;
+    this.pulseSpeed = 0.02 + Math.random() * 0.04;
+    this.trail = []; this.maxTrail = 6 + Math.floor(Math.random() * 8);
+  }
+  getPosition() {
+    const hw = (frameW / 2) + 2, hh = (frameH / 2) + 2, perim = (hw + hh) * 2;
+    let d = this.progress * perim, x, y;
+    if (d < hw * 2) { x = -hw + d; y = -hh + this.offset; }
+    else if (d < hw * 2 + hh * 2) { d -= hw * 2; x = hw + this.offset; y = -hh + d; }
+    else if (d < hw * 4 + hh * 2) { d -= hw * 2 + hh * 2; x = hw - d; y = hh + this.offset; }
+    else { d -= hw * 4 + hh * 2; x = -hw + this.offset; y = hh - d; }
+    return { x: cx + x, y: cy + y };
+  }
+  update() {
+    this.progress += this.speed; if (this.progress > 1) this.progress -= 1;
+    this.pulse += this.pulseSpeed;
+    const pos = this.getPosition();
+    this.trail.unshift({ x: pos.x, y: pos.y });
+    if (this.trail.length > this.maxTrail) this.trail.pop();
+  }
+  draw(ctx) {
+    const a = this.alpha * (0.5 + 0.5 * Math.sin(this.pulse));
+    const { r, g, b } = this.color;
+    for (let i = 1; i < this.trail.length; i++) {
+      const t = this.trail[i], ta = a * (1 - i / this.trail.length) * 0.5;
+      ctx.beginPath(); ctx.arc(t.x, t.y, this.size * (1 - i / this.trail.length * 0.5), 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${r},${g},${b},${ta})`; ctx.fill();
+    }
+    const pos = this.trail[0] || this.getPosition();
+    ctx.beginPath(); ctx.arc(pos.x, pos.y, this.size, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(${r},${g},${b},${a})`;
+    ctx.shadowColor = `rgba(${r},${g},${b},${a})`; ctx.shadowBlur = 10; ctx.fill(); ctx.shadowBlur = 0;
+  }
+}
+
+class SparkParticle {
+  constructor() { this.reset(); }
+  reset() {
+    const side = Math.floor(Math.random() * 4), hw = frameW / 2, hh = frameH / 2;
+    switch (side) {
+      case 0: this.x = cx + (Math.random() - 0.5) * frameW; this.y = cy - hh - 5 - Math.random() * 15; break;
+      case 1: this.x = cx + hw + 5 + Math.random() * 15; this.y = cy + (Math.random() - 0.5) * frameH; break;
+      case 2: this.x = cx + (Math.random() - 0.5) * frameW; this.y = cy + hh + 5 + Math.random() * 15; break;
+      case 3: this.x = cx - hw - 5 - Math.random() * 15; this.y = cy + (Math.random() - 0.5) * frameH; break;
+    }
+    this.vx = (Math.random() - 0.5) * 0.5; this.vy = (Math.random() - 0.5) * 0.5;
+    this.life = 60 + Math.random() * 120; this.maxLife = this.life;
+    this.size = 0.5 + Math.random() * 1.5;
+    this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
+  }
+  update() { this.x += this.vx; this.y += this.vy; this.vx += (Math.random() - 0.5) * 0.1; this.vy += (Math.random() - 0.5) * 0.1; this.life--; if (this.life <= 0) this.reset(); }
+  draw(ctx) {
+    const a = (this.life / this.maxLife) * 0.8, { r, g, b } = this.color;
+    ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(${r},${g},${b},${a})`; ctx.shadowColor = `rgba(${r},${g},${b},${a * 0.8})`;
+    ctx.shadowBlur = 6; ctx.fill(); ctx.shadowBlur = 0;
+  }
+}
+
+const orbitals = Array.from({ length: 25 }, () => new OrbitalParticle());
+const sparks = Array.from({ length: 30 }, () => new SparkParticle());
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  orbitals.forEach(p => { p.update(); p.draw(ctx); });
+  sparks.forEach(p => { p.update(); p.draw(ctx); });
+  requestAnimationFrame(animate);
+}
+animate();
+</script>
+</body>
+</html>

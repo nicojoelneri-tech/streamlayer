@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920,height=1080">
+<title>Hanami — Comenzando</title>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body{ background:transparent; }
+
+  /* ── Falling petals background ── */
+  .petals-bg{
+    position:absolute; inset:0; overflow:hidden; pointer-events:none;
+  }
+  .petal-fall{
+    position:absolute;
+    width:10px; height:14px;
+    border-radius:50% 50% 50% 0;
+    opacity:0;
+    animation: petalDrift linear infinite;
+  }
+  .petal-fall.sakura{ background:var(--sakura); }
+  .petal-fall.sakura-pale{ background:var(--sakura-pale); }
+  .petal-fall.wisteria{ background:var(--wisteria); }
+  .petal-fall.vermillion{ background:var(--vermillion); }
+  .petal-fall.gold{ background:var(--gold); }
+
+  @keyframes petalDrift{
+    0%{
+      opacity:0;
+      transform:translateX(-30px) translateY(-20px) rotate(0deg);
+    }
+    10%{ opacity:.5; }
+    80%{ opacity:.4; }
+    100%{
+      opacity:0;
+      transform:translateX(300px) translateY(1100px) rotate(360deg);
+    }
+  }
+
+  /* ── Scene layout ── */
+  .scene{
+    position:absolute; inset:0;
+    display:flex; align-items:center; justify-content:center;
+  }
+
+  /* ── Card ── */
+  .card{
+    position:relative; width:800px;
+    padding:44px 52px;
+    background:var(--bg-panel);
+    border:1px solid var(--border-dim);
+    border-radius:8px;
+    box-shadow:
+      var(--glow-sakura),
+      0 12px 60px rgba(42,36,32,0.08);
+    text-align:left;
+  }
+
+  /* washi texture */
+  .card::after{
+    content:""; position:absolute; inset:0;
+    border-radius:8px;
+    background:
+      radial-gradient(ellipse at 25% 25%, rgba(212,98,138,0.02), transparent 40%),
+      radial-gradient(ellipse at 75% 75%, rgba(123,94,167,0.02), transparent 40%);
+    pointer-events:none;
+  }
+
+  /* brush stroke accent top */
+  .card::before{
+    content:""; position:absolute;
+    left:20px; right:20px; top:0; height:2px;
+    background: linear-gradient(90deg,
+      transparent,
+      var(--sakura) 20%,
+      var(--wisteria) 50%,
+      var(--sakura) 80%,
+      transparent);
+    opacity:.35; border-radius:2px;
+  }
+
+  .tag{
+    font-size:10px; letter-spacing:3px; color:var(--text-dim);
+    text-transform:lowercase; margin-bottom:16px;
+    font-family:'Noto Sans JP',sans-serif;
+  }
+
+  .heading{
+    font-family:'Zen Old Mincho',serif;
+    font-size:48px; font-weight:600;
+    letter-spacing:5px; color:var(--ink);
+    line-height:1.1; margin-bottom:8px;
+  }
+  .heading .accent{ color:var(--sakura); }
+
+  /* ink brush divider */
+  .brush-divider{
+    width:180px; height:1px; margin:16px 0 18px;
+    background:linear-gradient(90deg,
+      transparent 5%,
+      rgba(42,36,32,0.12) 15%,
+      rgba(212,98,138,0.18) 50%,
+      rgba(42,36,32,0.12) 85%,
+      transparent 95%);
+  }
+
+  .sub{
+    font-size:15px; color:var(--text-mid);
+    font-style:italic; margin-bottom:24px;
+    font-family:'Noto Sans JP',sans-serif;
+  }
+
+  .chips{ display:flex; gap:10px; flex-wrap:wrap; }
+  .chip{
+    display:flex; align-items:center; gap:7px;
+    padding:7px 14px;
+    background:rgba(212,98,138,0.04);
+    border:1px solid var(--border-dim);
+    border-radius:4px;
+    font-size:10px; letter-spacing:1.5px;
+    color:var(--ink-soft);
+    font-family:'Noto Sans JP',sans-serif;
+  }
+  .chip .hm-petal{ width:8px; height:8px; }
+  .chip .hm-petal::before{ width:6px; height:9px; }
+
+  .chip.wisteria{
+    background:rgba(123,94,167,0.04);
+    border-color:rgba(123,94,167,0.12);
+    color:var(--wisteria);
+  }
+  .chip.vermillion{
+    background:rgba(196,78,63,0.04);
+    border-color:rgba(196,78,63,0.12);
+    color:var(--vermillion);
+  }
+
+  .note{
+    position:absolute; left:50%; bottom:36px; transform:translateX(-50%);
+    font-size:9px; letter-spacing:3px; color:var(--text-dim);
+    font-family:'Noto Sans JP',sans-serif;
+  }
+
+  /* ── Corner petal ornaments ── */
+  .corner-petal{
+    position:absolute; pointer-events:none;
+    width:14px; height:20px;
+    border-radius:50% 50% 50% 0;
+    background:var(--sakura);
+    opacity:.2;
+    animation: hmOrnamentPulse 5s ease-in-out infinite;
+  }
+  .corner-petal.tl{ top:12px; left:12px; transform:rotate(45deg); }
+  .corner-petal.tr{ top:12px; right:12px; transform:rotate(135deg); }
+  .corner-petal.bl{ bottom:12px; left:12px; transform:rotate(-45deg); }
+  .corner-petal.br{ bottom:12px; right:12px; transform:rotate(-135deg); }
+</style>
+</head>
+<body>
+
+<!-- Falling petals background -->
+<div class="petals-bg">
+  <div class="petal-fall sakura" style="left:3%;top:-10px;width:8px;height:12px;animation-duration:8s;animation-delay:0s;transform:rotate(20deg)"></div>
+  <div class="petal-fall sakura-pale" style="left:10%;top:-10px;width:12px;height:16px;animation-duration:10s;animation-delay:1.2s;transform:rotate(-15deg)"></div>
+  <div class="petal-fall wisteria" style="left:18%;top:-10px;width:7px;height:10px;animation-duration:9s;animation-delay:0.5s"></div>
+  <div class="petal-fall sakura" style="left:28%;top:-10px;width:10px;height:14px;animation-duration:11s;animation-delay:2.3s;transform:rotate(40deg)"></div>
+  <div class="petal-fall vermillion" style="left:36%;top:-10px;width:6px;height:9px;animation-duration:7.5s;animation-delay:0.8s"></div>
+  <div class="petal-fall sakura-pale" style="left:45%;top:-10px;width:9px;height:13px;animation-duration:9.5s;animation-delay:1.8s;transform:rotate(-30deg)"></div>
+  <div class="petal-fall sakura" style="left:55%;top:-10px;width:11px;height:15px;animation-duration:8.5s;animation-delay:0.3s;transform:rotate(10deg)"></div>
+  <div class="petal-fall wisteria" style="left:63%;top:-10px;width:8px;height:11px;animation-duration:10.5s;animation-delay:2.8s"></div>
+  <div class="petal-fall gold" style="left:72%;top:-10px;width:7px;height:10px;animation-duration:7s;animation-delay:1.5s;transform:rotate(55deg)"></div>
+  <div class="petal-fall sakura" style="left:80%;top:-10px;width:10px;height:14px;animation-duration:9s;animation-delay:0.7s;transform:rotate(-20deg)"></div>
+  <div class="petal-fall sakura-pale" style="left:88%;top:-10px;width:13px;height:17px;animation-duration:8s;animation-delay:3s;transform:rotate(25deg)"></div>
+  <div class="petal-fall vermillion" style="left:95%;top:-10px;width:6px;height:9px;animation-duration:10s;animation-delay:1s"></div>
+</div>
+
+<div class="scene">
+  <div class="card">
+    <!-- Corner ornaments -->
+    <div class="corner-petal tl"></div>
+    <div class="corner-petal tr"></div>
+    <div class="corner-petal bl"></div>
+    <div class="corner-petal br"></div>
+
+    <div class="tag" data-config="startingTag">// preparando la sesion</div>
+    <div class="heading">
+      <span data-config="startingTitle">Comenzando</span>
+      <span class="accent" data-config="startingAccent">Hanami</span>
+    </div>
+    <div class="brush-divider"></div>
+    <div class="sub" data-config="startingSub">Preparando el jardin para la transmision...</div>
+    <div class="chips">
+      <div class="chip"><span class="hm-petal sm"></span> <span data-config="startingChip1">escena</span></div>
+      <div class="chip wisteria"><span class="hm-petal sm wisteria"></span> <span data-config="startingChip2">audio</span></div>
+      <div class="chip vermillion"><span class="hm-petal sm vermillion"></span> <span data-config="startingChip3">overlay</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="note" data-config="startingNote">hanami v1.0 // inicio</div>
+
+<script src="../config/config.js"></script>
+<script src="../shared.js"></script>
+</body>
+</html>

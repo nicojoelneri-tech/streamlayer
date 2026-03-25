@@ -1,0 +1,275 @@
+/* ================================================================
+   RECOIL — Tactical FPS Overlay
+   Palette: Crimson red + Steel blue on gunmetal dark
+   Typography: Bebas Neue (display) + Barlow Condensed (body)
+   Geometry: Asymmetric chevron cuts (top-right + bottom-left)
+   ================================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;500;600;700&display=swap');
+
+/* ── Design Tokens ── */
+:root {
+  --red:          #e63946;
+  --red-soft:     #f07080;
+  --steel:        #5c8aad;
+  --steel-soft:   #8ab4d4;
+  --amber:        #f0a030;
+  --amber-soft:   #f4c06c;
+
+  --bg-dark:      rgba(12, 14, 18, 0.93);
+  --bg-panel:     rgba(18, 22, 28, 0.88);
+  --bg-glass:     rgba(230, 57, 70, 0.04);
+
+  --border-dim:   rgba(230, 57, 70, 0.16);
+  --border-mid:   rgba(230, 57, 70, 0.36);
+  --border-bright:rgba(230, 57, 70, 0.60);
+
+  --text:         #e8eaed;
+  --text-mid:     rgba(232, 234, 237, 0.60);
+  --text-dim:     rgba(232, 234, 237, 0.30);
+
+  --glow-red:     0 0 8px rgba(230,57,70,0.30), 0 0 20px rgba(230,57,70,0.10);
+  --glow-steel:   0 0 8px rgba(92,138,173,0.25), 0 0 20px rgba(92,138,173,0.08);
+  --glow-amber:   0 0 8px rgba(240,160,48,0.25), 0 0 20px rgba(240,160,48,0.08);
+
+  --cut: 14px;    /* chevron corner cut size */
+
+  --font-body:    'Barlow Condensed', sans-serif;
+  --font-display: 'Bebas Neue', sans-serif;
+}
+
+/* ── Reset ── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+  width: 1920px; height: 1080px; overflow: hidden;
+  background: transparent;
+  font-family: var(--font-body);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Clip-path: asymmetric chevron (top-right + bottom-left cut) ── */
+.rc-clip {
+  clip-path: polygon(
+    0 0, calc(100% - var(--cut)) 0,
+    100% var(--cut), 100% 100%,
+    var(--cut) 100%, 0 calc(100% - var(--cut))
+  );
+}
+
+/* Mirror chevron (top-left + bottom-right cut) */
+.rc-clip-mirror {
+  clip-path: polygon(
+    var(--cut) 0, 100% 0,
+    100% calc(100% - var(--cut)),
+    calc(100% - var(--cut)) 100%, 0 100%,
+    0 var(--cut)
+  );
+}
+
+/* ── Base Panel ── */
+.rc-panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-mid);
+  box-shadow: var(--glow-red);
+  position: relative;
+  clip-path: polygon(
+    0 0, calc(100% - var(--cut)) 0,
+    100% var(--cut), 100% 100%,
+    var(--cut) 100%, 0 calc(100% - var(--cut))
+  );
+}
+
+.rc-panel::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--red), transparent 70%);
+  pointer-events: none;
+}
+
+/* ── Corner Chevron Marks ── */
+.rc-corner {
+  position: absolute;
+  width: 18px; height: 18px;
+  pointer-events: none;
+}
+.rc-corner::before, .rc-corner::after {
+  content: '';
+  position: absolute;
+  background: var(--red);
+}
+/* Top-left: straight corner */
+.rc-corner--tl { top: 2px; left: 2px; }
+.rc-corner--tl::before { width: 16px; height: 2px; top: 0; left: 0; }
+.rc-corner--tl::after  { width: 2px; height: 16px; top: 0; left: 0; }
+
+/* Top-right: angled (matches cut) */
+.rc-corner--tr { top: 12px; right: 2px; }
+.rc-corner--tr::before { width: 16px; height: 2px; top: 0; right: 0; }
+.rc-corner--tr::after  { width: 2px; height: 16px; top: 0; right: 0; }
+
+/* Bottom-left: angled (matches cut) */
+.rc-corner--bl { bottom: 12px; left: 2px; }
+.rc-corner--bl::before { width: 16px; height: 2px; bottom: 0; left: 0; }
+.rc-corner--bl::after  { width: 2px; height: 16px; bottom: 0; left: 0; }
+
+/* Bottom-right: straight corner */
+.rc-corner--br { bottom: 2px; right: 2px; }
+.rc-corner--br::before { width: 16px; height: 2px; bottom: 0; right: 0; }
+.rc-corner--br::after  { width: 2px; height: 16px; bottom: 0; right: 0; }
+
+/* ── Scanlines ── */
+.rc-scanlines::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent, transparent 3px,
+    rgba(230,57,70,0.008) 3px, rgba(230,57,70,0.008) 4px
+  );
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* ── Chevron ornament › ── */
+.rc-chevron {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-weight: 700;
+  color: var(--red);
+  font-size: 14px;
+  line-height: 1;
+  opacity: 0.7;
+}
+
+/* ── Red accent bar ── */
+.rc-accent-bar {
+  width: 3px;
+  background: var(--red);
+  box-shadow: 0 0 6px rgba(230,57,70,0.4);
+}
+
+/* ── Divider ── */
+.rc-divider {
+  height: 1px;
+  background: linear-gradient(90deg, var(--red), var(--border-dim) 50%, transparent);
+  margin: 8px 0;
+}
+
+/* ── Status dot ── */
+.rc-dot {
+  display: inline-block;
+  width: 7px; height: 7px;
+  background: var(--red);
+  box-shadow: 0 0 6px var(--red);
+  animation: rcPulse 2s ease-in-out infinite;
+}
+.rc-dot--steel { background: var(--steel); box-shadow: 0 0 6px var(--steel); }
+.rc-dot--amber { background: var(--amber); box-shadow: 0 0 6px var(--amber); }
+
+/* Diamond shape for dot */
+.rc-diamond {
+  display: inline-block;
+  width: 7px; height: 7px;
+  background: var(--red);
+  transform: rotate(45deg);
+  box-shadow: 0 0 6px var(--red);
+  animation: rcPulse 2s ease-in-out infinite;
+}
+
+/* ── Typography ── */
+.rc-title {
+  font-family: var(--font-display);
+  font-weight: 400; /* Bebas Neue is already bold */
+  text-transform: uppercase;
+  letter-spacing: 3px;
+}
+
+.rc-label {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-dim);
+}
+
+.rc-tag {
+  display: inline-block;
+  padding: 2px 12px;
+  background: rgba(230,57,70,0.12);
+  border: 1px solid var(--border-dim);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--red);
+}
+
+/* ── Animations ── */
+@keyframes rcPulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.35; }
+}
+
+@keyframes rcGlow {
+  0%, 100% { box-shadow: var(--glow-red); }
+  50%      { box-shadow: 0 0 14px rgba(230,57,70,0.45), 0 0 30px rgba(230,57,70,0.15); }
+}
+
+@keyframes rcFlicker {
+  0%, 100% { opacity: 1; }
+  93%      { opacity: 0.75; }
+  94%      { opacity: 1; }
+  97%      { opacity: 0.85; }
+}
+
+@keyframes rcGlitch {
+  0%, 100% { transform: translate(0); }
+  25%      { transform: translate(-1px, 1px); }
+  50%      { transform: translate(1px, 0); }
+  75%      { transform: translate(-1px, -1px); }
+}
+
+@keyframes rcTicker {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes rcSweep {
+  0%   { left: -100px; }
+  100% { left: 100%; }
+}
+
+@keyframes rcAlertFlash {
+  0%, 100% { border-color: var(--red); box-shadow: var(--glow-red); }
+  50%      { border-color: rgba(230,57,70,0.2); box-shadow: none; }
+}
+
+@keyframes rcProgressBar {
+  0%   { width: 0; }
+  100% { width: 85%; }
+}
+
+@keyframes rcFadeLoop {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.45; }
+}
+
+@keyframes rcRecBlink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+@keyframes rcRadarSweep {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ── Highlight class for ticker ── */
+.hl {
+  color: var(--red);
+  font-weight: 700;
+}

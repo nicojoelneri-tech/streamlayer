@@ -1,0 +1,191 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+:root{
+  /* void */
+  --bg-void:  rgba(0, 0, 0, 0.95);
+  --bg-panel: rgba(4, 8, 4, 0.92);
+  --bg-glass: rgba(8, 16, 8, 0.55);
+
+  /* borders */
+  --border-dim: rgba(0, 255, 65, 0.35);
+  --border-mid: rgba(0, 255, 65, 0.55);
+
+  /* signal */
+  --green:      #00ff41;
+  --green-soft: #4dff7c;
+  --green-dim:  #0a3d12;
+  --red:        #ff2040;
+  --red-soft:   #ff6b6b;
+  --cyan:       #00d4ff;
+  --cyan-soft:  #66d9ff;
+  --static:     #555555;
+
+  /* text */
+  --text:     rgba(0, 255, 65, 0.92);
+  --text-mid: rgba(0, 255, 65, 0.55);
+  --text-dim: rgba(0, 255, 65, 0.25);
+
+  /* glows */
+  --glow-green: 0 0 12px rgba(0,255,65,0.15), 0 0 30px rgba(0,255,65,0.06);
+  --glow-red:   0 0 12px rgba(255,32,64,0.15), 0 0 30px rgba(255,32,64,0.06);
+  --glow-cyan:  0 0 12px rgba(0,212,255,0.12), 0 0 30px rgba(0,212,255,0.05);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{
+  width:1920px; height:1080px; overflow:hidden;
+  background:transparent;
+  font-family:'Share Tech Mono', monospace;
+  color:var(--text);
+}
+body{position:relative}
+
+/* ═══════════════════════════════════════
+   PANEL BASE — slashed terminal box
+   ═══════════════════════════════════════ */
+.dl-panel{
+  position:relative;
+  background: var(--bg-panel);
+  border:1px solid var(--border-dim);
+  clip-path: polygon(
+    0 8px, 8px 0, calc(100% - 8px) 0, 100% 8px,
+    100% calc(100% - 8px), calc(100% - 8px) 100%,
+    8px 100%, 0 calc(100% - 8px)
+  );
+  box-shadow: var(--glow-green);
+  overflow:hidden;
+}
+
+/* scanline overlay */
+.dl-panel::after{
+  content:""; position:absolute; inset:0;
+  background: repeating-linear-gradient(
+    0deg, transparent 0 2px, rgba(0,255,65,0.04) 2px 4px
+  );
+  pointer-events:none; z-index:10;
+}
+
+/* ═══════════════════════════════════════
+   DECORATIVE ELEMENTS
+   ═══════════════════════════════════════ */
+
+/* blinking cursor */
+.dl-cursor{
+  display:inline-block; width:8px; height:14px;
+  background:var(--green);
+  vertical-align:middle; margin-left:4px;
+  animation: dlBlink 1s step-end infinite;
+}
+.dl-cursor.red{ background:var(--red); }
+
+/* bracket markers (replace diamonds/fleurs) */
+.dl-bracket{
+  font-family:'Share Tech Mono',monospace;
+  font-size:11px; color:var(--green);
+  opacity:.6; flex-shrink:0;
+}
+.dl-bracket.red{ color:var(--red); }
+.dl-bracket.cyan{ color:var(--cyan); }
+
+/* corner L-brackets for frames */
+.dl-corner{
+  position:absolute; width:14px; height:14px; pointer-events:none;
+}
+.dl-corner::before, .dl-corner::after{
+  content:""; position:absolute; background:var(--green);
+}
+.dl-corner::before{ width:14px; height:1px; }
+.dl-corner::after{ width:1px; height:14px; }
+.dl-corner.tl::before{ top:0; left:0; }
+.dl-corner.tl::after{ top:0; left:0; }
+.dl-corner.tr::before{ top:0; right:0; }
+.dl-corner.tr::after{ top:0; right:0; }
+.dl-corner.bl::before{ bottom:0; left:0; }
+.dl-corner.bl::after{ bottom:0; left:0; }
+.dl-corner.br::before{ bottom:0; right:0; }
+.dl-corner.br::after{ bottom:0; right:0; }
+
+/* divider — dashed line */
+.dl-divider{
+  height:1px;
+  border-top:1px dashed rgba(0,255,65,0.40);
+}
+
+/* scanlines standalone */
+.dl-scanlines{
+  position:absolute; inset:0;
+  background: repeating-linear-gradient(
+    0deg, transparent 0 2px, rgba(0,255,65,0.02) 2px 4px
+  );
+  pointer-events:none;
+}
+
+/* ═══════════════════════════════════════
+   ANIMATIONS
+   ═══════════════════════════════════════ */
+
+/* cursor blink */
+@keyframes dlBlink{
+  0%,100%{ opacity:1; }
+  50%{ opacity:0; }
+}
+
+/* glitch — text distortion */
+@keyframes dlGlitch{
+  0%,92%,100%{ transform:translate(0); clip-path:none; }
+  93%{ transform:translate(-3px, 1px); clip-path:inset(20% 0 60% 0); }
+  94%{ transform:translate(2px, -1px); clip-path:inset(60% 0 10% 0); }
+  95%{ transform:translate(0); clip-path:none; }
+  96%{ transform:translate(4px, 0); clip-path:inset(40% 0 30% 0); }
+  97%{ transform:translate(-2px, 1px); clip-path:inset(10% 0 70% 0); }
+  98%{ transform:translate(0); clip-path:none; }
+}
+
+/* panel flicker */
+.dl-flicker{ animation: dlFlicker 8s linear infinite; }
+@keyframes dlFlicker{
+  0%,88%,92%,96%,100%{ opacity:1; }
+  89%{ opacity:.85; }
+  90%{ opacity:.95; }
+  93%{ opacity:.88; }
+  94%{ opacity:.92; }
+  97%{ opacity:.86; }
+}
+
+/* subtle brightness pulse */
+.dl-pulse{ animation: dlPulse 3s ease-in-out infinite; }
+@keyframes dlPulse{
+  0%,100%{ opacity:1; }
+  50%{ opacity:.6; }
+}
+
+/* data stream (ticker) */
+@keyframes dlTicker{
+  0%{ transform:translateX(0); }
+  100%{ transform:translateX(-50%); }
+}
+
+/* red alert flash */
+@keyframes dlAlertFlash{
+  0%,90%,100%{ border-color:rgba(255,32,64,0.3); }
+  95%{ border-color:rgba(255,32,64,0.7); }
+}
+
+/* shimmer for alerts */
+@keyframes dlShimmer{
+  0%{ background-position:100% 0; }
+  100%{ background-position:-100% 0; }
+}
+
+/* ornament pulse (for compatibility) */
+@keyframes dlOrnamentPulse{
+  0%,100%{ opacity:.4; }
+  50%{ opacity:.8; }
+}
+
+/* rec dot blink */
+@keyframes dlRecBlink{
+  0%,100%{ opacity:1; }
+  50%{ opacity:.2; }
+}
