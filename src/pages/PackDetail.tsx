@@ -6,6 +6,7 @@ import { STYLES } from '../data/styles'
 import { ALL_MODULES } from '../data/modules'
 import { useStore } from '../store/useStore'
 import { formatPrice } from '../utils/formatPrice'
+import { useCurrency } from '../hooks/useCurrency'
 import LivePreview from '../components/LivePreview'
 import OverlayPreview from '../components/OverlayPreview'
 
@@ -42,6 +43,7 @@ export default function PackDetail() {
   const isPack = pack.category === 'pack'
   const isFrame = pack.category === 'camera-frame'
   const isMobile = useIsMobile()
+  const { code, rate, loading: currencyLoading } = useCurrency()
   const [activeImage, setActiveImage] = useState(0)
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const [previewFullscreen, setPreviewFullscreen] = useState(false)
@@ -192,10 +194,17 @@ export default function PackDetail() {
           <div className="mt-6 flex items-baseline gap-3">
             {pack.price > 0 ? (
               <>
-                <span className="text-3xl font-bold text-white">{formatPrice(pack.price)}</span>
+                <span className={`text-3xl font-bold text-white transition-opacity ${currencyLoading ? 'opacity-40' : ''}`}>
+                  {formatPrice(pack.price, code, rate)}
+                </span>
                 {pack.originalPrice && (
                   <span className="text-lg text-surface-500 line-through">
-                    {formatPrice(pack.originalPrice)}
+                    {formatPrice(pack.originalPrice, code, rate)}
+                  </span>
+                )}
+                {!currencyLoading && code !== 'USD' && (
+                  <span className="text-sm text-surface-500">
+                    (USD {formatPrice(pack.price, 'USD', 1)})
                   </span>
                 )}
               </>

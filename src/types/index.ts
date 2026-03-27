@@ -25,7 +25,7 @@ export interface OverlayPack {
   category: ProductCategory
   style: OverlayStyle
   description: string
-  price: number
+  price: number        // en centavos USD (ej: 1299 = $12.99)
   originalPrice?: number
   modules: ModuleType[]
   previewColors: string[]
@@ -35,4 +35,5 @@ export interface OverlayPack {
   previewUrl?: string
   previewSize?: [number, number]
   previewCrop?: [number, number, number, number] // [x, y, width, height]
+  buyUrl?: string      // URL de checkout de Lemon Squeezy
 }

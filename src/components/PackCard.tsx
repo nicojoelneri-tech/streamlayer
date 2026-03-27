@@ -5,6 +5,7 @@ import type { OverlayPack } from '../types'
 import { useStore } from '../store/useStore'
 import { STYLES } from '../data/styles'
 import { formatPrice } from '../utils/formatPrice'
+import { useCurrency } from '../hooks/useCurrency'
 import LivePreview from './LivePreview'
 
 function useIsMobile(breakpoint = 768) {
@@ -24,6 +25,7 @@ export default function PackCard({ pack }: { pack: OverlayPack }) {
   const inCart = cart.includes(pack.id)
   const styleInfo = STYLES.find((s) => s.id === pack.style)
   const isMobile = useIsMobile()
+  const { code, rate, loading: currencyLoading } = useCurrency()
 
   const isHeavyPreview = pack.previewUrl && pack.category === 'pack'
   const useStaticFallback = isMobile && isHeavyPreview
@@ -124,10 +126,12 @@ export default function PackCard({ pack }: { pack: OverlayPack }) {
           <div className="flex items-baseline gap-2">
             {pack.price > 0 ? (
               <>
-                <span className="text-lg font-bold text-white">{formatPrice(pack.price)}</span>
+                <span className={`text-lg font-bold text-white transition-opacity ${currencyLoading ? 'opacity-40' : ''}`}>
+                  {formatPrice(pack.price, code, rate)}
+                </span>
                 {pack.originalPrice && (
                   <span className="text-sm text-surface-500 line-through">
-                    {formatPrice(pack.originalPrice)}
+                    {formatPrice(pack.originalPrice, code, rate)}
                   </span>
                 )}
               </>
