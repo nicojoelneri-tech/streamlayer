@@ -262,6 +262,7 @@ export const PACKS: OverlayPack[] = [
     previewUrl: '/frames/dark-conquest/index.html',
     tag: 'Nuevo',
     featured: true,
+    buyUrl: 'https://payhip.com/b/h2lky',
   },
   {
     id: 'frame-pro-league',
@@ -275,6 +276,7 @@ export const PACKS: OverlayPack[] = [
     previewUrl: '/frames/pro-league/index.html',
     tag: 'Nuevo',
     featured: true,
+    buyUrl: 'https://payhip.com/b/0yYCo',
   },
   {
     id: 'frame-pro-league-field',
@@ -288,6 +290,7 @@ export const PACKS: OverlayPack[] = [
     previewUrl: '/frames/pro-league-field/index.html',
     tag: 'Nuevo',
     featured: true,
+    buyUrl: 'https://payhip.com/b/VUQbO',
   },
   {
     id: 'frame-pro-league-royal',
@@ -301,6 +304,7 @@ export const PACKS: OverlayPack[] = [
     previewUrl: '/frames/pro-league-royal/index.html',
     tag: 'Nuevo',
     featured: true,
+    buyUrl: 'https://payhip.com/b/BJWuI',
   },
   {
     id: 'frame-pixelcraft',
@@ -315,6 +319,7 @@ export const PACKS: OverlayPack[] = [
     previewSize: [440, 340],
     tag: 'Nuevo',
     featured: true,
+    buyUrl: 'https://payhip.com/b/Vqij1',
   },
   {
     id: 'frame-horror-static',
