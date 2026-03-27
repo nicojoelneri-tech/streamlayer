@@ -44,5 +44,5 @@ window.CHAT_CONFIG = {
   // ── MODO DEMO ──────────────────────────────────────────────
   // true: mensajes falsos para previsualizar
   // false: se conecta al chat real de Twitch
-  demoMode: false,
+  demoMode: true,
 };
