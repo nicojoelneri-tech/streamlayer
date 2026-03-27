@@ -11,10 +11,14 @@ interface PayhipButtonProps {
  * Requiere que payhip.js esté cargado en index.html.
  */
 export default function PayhipButton({ url, className = '', children }: PayhipButtonProps) {
+  // Extrae el ID del producto de la URL (ej: https://payhip.com/b/EZQC7 → EZQC7)
+  const productId = url.split('/').pop() ?? ''
+
   return (
     <a
       href={url}
       className={`payhip-buy-button ${className}`}
+      data-product={productId}
       data-theme="none"
     >
       {children}
