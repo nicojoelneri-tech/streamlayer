@@ -206,6 +206,7 @@ export const PACKS: OverlayPack[] = [
     previewUrl: '/frames/neon-reactor/index.html',
     tag: 'Nuevo',
     featured: true,
+    buyUrl: 'https://payhip.com/b/rbE8o',
   },
   {
     id: 'frame-neon-reactor-rainbow',
@@ -219,6 +220,7 @@ export const PACKS: OverlayPack[] = [
     previewUrl: '/frames/neon-reactor-rainbow/index.html',
     tag: 'Nuevo',
     featured: true,
+    buyUrl: 'https://payhip.com/b/0H39w',
   },
   {
     id: 'frame-neon-reactor-sunshine',
@@ -232,6 +234,7 @@ export const PACKS: OverlayPack[] = [
     previewUrl: '/frames/neon-reactor-sunshine/index.html',
     tag: 'Nuevo',
     featured: true,
+    buyUrl: 'https://payhip.com/b/V9p0A',
   },
   {
     id: 'frame-arcade-fighter',
@@ -245,6 +248,7 @@ export const PACKS: OverlayPack[] = [
     previewUrl: '/frames/arcade-fighter/index.html',
     tag: 'Nuevo',
     featured: true,
+    buyUrl: 'https://payhip.com/b/jRWnH',
   },
   {
     id: 'frame-dark-conquest',
