@@ -248,7 +248,7 @@ export const PACKS: OverlayPack[] = [
     previewUrl: '/frames/arcade-fighter/index.html',
     tag: 'Nuevo',
     featured: true,
-    buyUrl: 'https://payhip.com/b/jRWnH',
+    buyUrl: 'https://go.hotmart.com/T105105135H',
   },
   {
     id: 'frame-dark-conquest',
