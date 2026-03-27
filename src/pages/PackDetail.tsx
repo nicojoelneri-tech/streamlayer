@@ -9,6 +9,7 @@ import { formatPrice } from '../utils/formatPrice'
 import { useCurrency } from '../hooks/useCurrency'
 import LivePreview from '../components/LivePreview'
 import OverlayPreview from '../components/OverlayPreview'
+import PayhipButton from '../components/PayhipButton'
 
 function useIsMobile(breakpoint = 768) {
   const [isMobile, setIsMobile] = useState(() => window.innerWidth < breakpoint)
@@ -214,27 +215,37 @@ export default function PackDetail() {
           </div>
 
           {pack.price > 0 ? (
-            <button
-              onClick={() => addToCart(pack.id)}
-              disabled={inCart}
-              className={`mt-6 flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl py-3.5 text-base font-semibold transition-colors sm:w-auto sm:px-8 ${
-                inCart
-                  ? 'bg-success/20 text-success'
-                  : 'bg-primary-600 text-white hover:bg-primary-500'
-              }`}
-            >
-              {inCart ? (
-                <>
-                  <Check className="h-5 w-5" />
-                  En el carrito
-                </>
-              ) : (
-                <>
-                  <ShoppingCart className="h-5 w-5" />
-                  Agregar al carrito
-                </>
-              )}
-            </button>
+            pack.buyUrl ? (
+              <PayhipButton
+                url={pack.buyUrl}
+                className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl py-3.5 text-base font-semibold text-white no-underline transition-colors bg-primary-600 hover:bg-primary-500 sm:w-auto sm:px-8"
+              >
+                <ShoppingCart className="h-5 w-5" />
+                Comprar ahora
+              </PayhipButton>
+            ) : (
+              <button
+                onClick={() => addToCart(pack.id)}
+                disabled={inCart}
+                className={`mt-6 flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl py-3.5 text-base font-semibold transition-colors sm:w-auto sm:px-8 ${
+                  inCart
+                    ? 'bg-success/20 text-success'
+                    : 'bg-primary-600 text-white hover:bg-primary-500'
+                }`}
+              >
+                {inCart ? (
+                  <>
+                    <Check className="h-5 w-5" />
+                    En el carrito
+                  </>
+                ) : (
+                  <>
+                    <ShoppingCart className="h-5 w-5" />
+                    Agregar al carrito
+                  </>
+                )}
+              </button>
+            )
           ) : (
             <div className="mt-6 rounded-xl border border-surface-700 bg-surface-800/50 px-6 py-3.5 text-center text-sm text-surface-400">
               Disponible próximamente

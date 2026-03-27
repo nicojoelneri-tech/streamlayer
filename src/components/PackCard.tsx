@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { ShoppingCart, Eye } from 'lucide-react'
+import { ShoppingCart, Eye, CreditCard } from 'lucide-react'
 import type { OverlayPack } from '../types'
 import { useStore } from '../store/useStore'
 import { STYLES } from '../data/styles'
 import { formatPrice } from '../utils/formatPrice'
 import { useCurrency } from '../hooks/useCurrency'
 import LivePreview from './LivePreview'
+import PayhipButton from './PayhipButton'
 
 function useIsMobile(breakpoint = 768) {
   const [isMobile, setIsMobile] = useState(() => window.innerWidth < breakpoint)
@@ -140,24 +141,34 @@ export default function PackCard({ pack }: { pack: OverlayPack }) {
             )}
           </div>
           {pack.price > 0 ? (
-            <button
-              onClick={() => addToCart(pack.id)}
-              disabled={inCart}
-              className={`rounded-lg px-3 py-2 text-xs font-medium transition-colors ${
-                inCart
-                  ? 'bg-success/20 text-success cursor-default'
-                  : 'bg-primary-600 text-white hover:bg-primary-500 cursor-pointer'
-              }`}
-            >
-              {inCart ? (
-                'Agregado'
-              ) : (
-                <span className="flex items-center gap-1.5">
-                  <ShoppingCart className="h-3.5 w-3.5" />
-                  Agregar
-                </span>
-              )}
-            </button>
+            pack.buyUrl ? (
+              <PayhipButton
+                url={pack.buyUrl}
+                className="flex items-center gap-1.5 rounded-lg bg-primary-600 px-3 py-2 text-xs font-medium text-white no-underline transition-colors hover:bg-primary-500"
+              >
+                <CreditCard className="h-3.5 w-3.5" />
+                Comprar
+              </PayhipButton>
+            ) : (
+              <button
+                onClick={() => addToCart(pack.id)}
+                disabled={inCart}
+                className={`rounded-lg px-3 py-2 text-xs font-medium transition-colors ${
+                  inCart
+                    ? 'bg-success/20 text-success cursor-default'
+                    : 'bg-primary-600 text-white hover:bg-primary-500 cursor-pointer'
+                }`}
+              >
+                {inCart ? (
+                  'Agregado'
+                ) : (
+                  <span className="flex items-center gap-1.5">
+                    <ShoppingCart className="h-3.5 w-3.5" />
+                    Agregar
+                  </span>
+                )}
+              </button>
+            )
           ) : (
             <span className="rounded-lg bg-surface-800 px-3 py-2 text-xs font-medium text-surface-500">
               Pronto

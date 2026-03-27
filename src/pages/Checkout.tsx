@@ -1,9 +1,10 @@
 import { Link } from 'react-router-dom'
-import { Trash2, ShoppingCart, ArrowRight, Package, ExternalLink } from 'lucide-react'
+import { Trash2, ShoppingCart, ArrowRight, Package } from 'lucide-react'
 import { PACKS } from '../data/packs'
 import { useStore } from '../store/useStore'
 import { formatPrice } from '../utils/formatPrice'
 import { useCurrency } from '../hooks/useCurrency'
+import PayhipButton from '../components/PayhipButton'
 
 export default function Checkout() {
   const cart = useStore((s) => s.cart)
@@ -68,15 +69,12 @@ export default function Checkout() {
                   {formatPrice(pack.price, code, rate)}
                 </span>
                 {pack.buyUrl ? (
-                  <a
-                    href={pack.buyUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <PayhipButton
+                    url={pack.buyUrl}
                     className="flex items-center gap-1.5 rounded-lg bg-primary-600 px-3 py-2 text-xs font-semibold text-white no-underline transition-colors hover:bg-primary-500"
                   >
                     Pagar
-                    <ExternalLink className="h-3 w-3" />
-                  </a>
+                  </PayhipButton>
                 ) : (
                   <span className="rounded-lg bg-surface-800 px-3 py-2 text-xs text-surface-500">
                     Pronto
