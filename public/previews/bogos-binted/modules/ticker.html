@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920,height=1080">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    body { background: transparent; }
+
+    /* Posición: y=1020, h=60 */
+    .ticker-wrap {
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 1920px; height: 60px;
+      background: #040415;
+      border-top: 2px solid var(--border);
+      box-shadow: 0 -4px 20px rgba(57,255,20,0.15);
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    /* Línea superior brillante */
+    .ticker-wrap::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border-hi), transparent);
+    }
+
+    /* Tag izquierdo fijo */
+    .ticker-tag {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 20px 0 22px;
+      height: 100%;
+      background: var(--green-dark);
+      border-right: 2px solid var(--border);
+      flex-shrink: 0;
+      font-family: var(--font-display);
+      font-size: 22px;
+      color: var(--green);
+      text-shadow: var(--glow-sm);
+      animation: neon-flicker 8s infinite;
+      white-space: nowrap;
+    }
+    .ticker-tag-suit {
+      font-family: var(--font-terminal);
+      font-size: 18px;
+      opacity: 0.7;
+    }
+
+    /* Track scrollable */
+    .ticker-track-wrap {
+      flex: 1;
+      overflow: hidden;
+      height: 100%;
+      display: flex;
+      align-items: center;
+    }
+    .ticker-track {
+      display: flex;
+      align-items: center;
+      white-space: nowrap;
+      font-family: var(--font-ui);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: 0.04em;
+      animation: ticker-scroll 60s linear infinite;
+      will-change: transform;
+    }
+    .ticker-suit {
+      color: var(--pink);
+      opacity: 0.90;
+      margin: 0 10px;
+      text-shadow: 0 0 7px rgba(217,70,239,0.6), 0 0 16px rgba(217,70,239,0.3);
+    }
+
+    /* Fade edges */
+    .ticker-fade-left,
+    .ticker-fade-right {
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 60px;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .ticker-fade-left  { left: 0;  background: linear-gradient(90deg, #040415, transparent); }
+    .ticker-fade-right { right: 0; background: linear-gradient(270deg, #040415, transparent); }
+  </style>
+</head>
+<body>
+  <div class="ticker-wrap">
+    <!-- Tag fijo -->
+    <div class="ticker-tag">
+      <span class="ticker-tag-suit">★</span>
+      <span data-config="tickerTag">★</span>
+      <span class="ticker-tag-suit">★</span>
+    </div>
+
+    <!-- Contenido scrollable -->
+    <div class="ticker-track-wrap">
+      <div class="ticker-track" data-ticker-track></div>
+    </div>
+
+    <div class="ticker-fade-left"></div>
+    <div class="ticker-fade-right"></div>
+  </div>
+
+  <script src="../config/config.js"></script>
+  <script src="../shared.js"></script>
+  <script>
+    // Ajusta velocidad según largo del contenido
+    var track = document.querySelector('.ticker-track');
+    if (track) {
+      var w = track.scrollWidth / 2;
+      var speed = Math.max(40, w / 80); // px/s aprox
+      track.style.animationDuration = speed + 's';
+    }
+  </script>
+</body>
+</html>

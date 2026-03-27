@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920,height=1080">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    body { background: var(--bg); }
+
+    /* ── Layout gameplay ──
+       Top HUD:      y=0,   h=80
+       Camera:       x=0,   y=80,  w=350, h=263
+       Focus panel:  x=0,   y=343, w=350, h=677
+       Game frame:   x=350, y=80,  w=1570,h=940
+       Ticker:       y=1020,h=60
+    */
+
+    /* ── TOP HUD ── */
+    .hud {
+      position: absolute; top: 0; left: 0;
+      width: 1920px; height: 80px;
+      display: flex; align-items: center;
+      padding: 0 28px;
+      background: var(--panel);
+      border-bottom: 2px solid var(--border);
+      box-shadow: var(--glow-md);
+    }
+    .hud::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border-hi), transparent);
+    }
+    .hud-left  { display: flex; align-items: center; gap: 14px; min-width: 360px; }
+    .hud-center{ flex: 1; display: flex; align-items: center; justify-content: center; }
+    .hud-right { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; min-width: 360px; }
+    .hud-suit  { font-family: var(--font-terminal); font-size: 22px; color: var(--green); opacity: 0.50; text-shadow: var(--glow-xs); }
+    .mode-badge {
+      display: flex; align-items: center; gap: 8px;
+      padding: 7px 20px;
+      background: var(--green-dark); border: 1.5px solid var(--border);
+      clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+      font-family: var(--font-ui); font-size: 13px; font-weight: 700;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--green); text-shadow: var(--glow-sm);
+      animation: neon-flicker 9s infinite;
+    }
+    .hud-title {
+      font-family: var(--font-display); font-size: 40px;
+      color: var(--green); text-shadow: var(--glow-lg);
+      letter-spacing: 0.03em; line-height: 1;
+      animation: neon-flicker 14s infinite;
+    }
+    .hud-channel { font-family: var(--font-ui); font-size: 16px; font-weight: 700; color: var(--text); letter-spacing: 0.06em; }
+    .hud-status  { font-family: var(--font-ui); font-size: 12px; color: #C084FC; text-shadow: 0 0 6px rgba(217,70,239,0.35); letter-spacing: 0.03em; }
+    .hud-line { position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--green), transparent); box-shadow: var(--glow-sm); }
+
+    /* ── CAMERA ── */
+    .cam {
+      position: absolute; left: 0; top: 80px;
+      width: 350px; height: 263px;
+      border: 2px solid var(--border);
+      box-shadow: var(--glow-md), inset 0 0 30px rgba(57,255,20,0.04);
+      background: rgba(57,255,20,0.02);
+    }
+    .cam-label {
+      position: absolute; bottom: 8px; right: 10px;
+      font-family: var(--font-terminal); font-size: 14px;
+      color: var(--text-dim); letter-spacing: 0.1em; opacity: 0.7;
+    }
+
+    /* ── FOCUS PANEL ── */
+    .focus {
+      position: absolute; left: 0; top: 343px;
+      width: 350px; height: 677px;
+      background: var(--panel);
+      border: 1.5px solid var(--border);
+      box-shadow: var(--glow-sm), inset 0 0 40px rgba(57,255,20,0.03);
+      display: flex; flex-direction: column;
+    }
+    .focus-header {
+      padding: 12px 16px 10px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(57,255,20,0.05);
+    }
+    .focus-title-row { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+    .focus-suit { font-family: var(--font-terminal); font-size: 18px; color: var(--green); opacity: 0.7; text-shadow: var(--glow-xs); }
+    .focus-title {
+      font-family: var(--font-display); font-size: 22px;
+      color: var(--green); text-shadow: var(--glow-sm);
+      letter-spacing: 0.03em; flex: 1;
+      animation: neon-flicker 13s infinite;
+    }
+    .focus-tag {
+      display: inline-flex; align-items: center;
+      padding: 2px 10px;
+      background: var(--purple-dark); border: 1px solid rgba(168,85,247,0.45);
+      font-family: var(--font-ui); font-size: 10px; font-weight: 700;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--purple); text-shadow: var(--glow-purple);
+    }
+    .focus-body { flex: 1; display: flex; flex-direction: column; padding: 8px 0; }
+    .stat-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 18px;
+      border-bottom: 1px solid rgba(57,255,20,0.12);
+    }
+    .stat-row:last-child { border-bottom: none; }
+    .stat-label { font-family: var(--font-ui); font-size: 13px; font-weight: 600; color: #C084FC; text-shadow: 0 0 6px rgba(217,70,239,0.30); letter-spacing: 0.1em; text-transform: uppercase; }
+    .stat-value {
+      font-family: var(--font-terminal); font-size: 44px;
+      color: var(--green); text-shadow: var(--glow-md); line-height: 1;
+      animation: neon-flicker 7s infinite;
+    }
+    .focus-footer {
+      padding: 10px 16px; border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center; gap: 12px;
+    }
+    .focus-footer .line { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); }
+    .focus-footer .suits { font-family: var(--font-terminal); font-size: 16px; color: var(--green); opacity: 0.45; text-shadow: var(--glow-xs); }
+
+    /* ── GAME FRAME ── */
+    .game {
+      position: absolute; left: 350px; top: 80px;
+      width: 1570px; height: 940px;
+    }
+    .game-border {
+      position: absolute; inset: 0;
+      border: 2px solid var(--border);
+      box-shadow: var(--glow-md), inset 0 0 60px rgba(57,255,20,0.03);
+      pointer-events: none;
+    }
+    .game-corner {
+      position: absolute; width: 44px; height: 44px;
+    }
+    .game-corner .bh, .game-corner .bv {
+      position: absolute; background: var(--green); box-shadow: var(--glow-sm);
+    }
+    .game-corner .bh { top: 0; left: 0; width: 100%; height: 3px; }
+    .game-corner .bv { top: 0; left: 0; width: 3px; height: 100%; }
+    .gc-tl { top: -1px; left: -1px; }
+    .gc-tr { top: -1px; right: -1px; transform: scaleX(-1); }
+    .gc-bl { bottom: -1px; left: -1px; transform: scaleY(-1); }
+    .gc-br { bottom: -1px; right: -1px; transform: scale(-1,-1); }
+    .game-suit {
+      position: absolute;
+      font-family: var(--font-terminal); font-size: 16px;
+      color: var(--green); text-shadow: var(--glow-sm);
+    }
+    .gs-tl { top: 7px; left: 9px; }
+    .gs-tr { top: 7px; right: 9px; }
+    .gs-bl { bottom: 7px; left: 9px; }
+    .gs-br { bottom: 7px; right: 9px; }
+    .game-label {
+      position: absolute; top: -1px; left: 50%; transform: translateX(-50%);
+      display: flex; align-items: center; gap: 10px;
+      background: var(--panel); border: 1.5px solid var(--border); border-top: none;
+      padding: 0 20px 5px;
+      font-family: var(--font-ui); font-size: 12px; font-weight: 700;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--green); text-shadow: var(--glow-xs); white-space: nowrap;
+    }
+    .game-area-hint {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      pointer-events: none;
+    }
+    .game-area-text {
+      font-family: var(--font-terminal); font-size: 22px;
+      color: rgba(57,255,20,0.12); letter-spacing: 0.2em;
+    }
+
+    /* ── CHAT PANEL ── */
+    .chat {
+      position: absolute; right: 0; top: 80px;
+      width: 350px; height: 940px;
+      background: var(--panel);
+      border: 1.5px solid var(--border);
+      box-shadow: var(--glow-sm);
+      display: flex; flex-direction: column;
+    }
+    .chat-header {
+      padding: 10px 14px 8px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(57,255,20,0.05);
+    }
+    .chat-title-row { display: flex; align-items: center; gap: 8px; margin-bottom: 3px; }
+    .chat-suit { font-family: var(--font-terminal); font-size: 16px; color: var(--green); opacity: 0.7; text-shadow: var(--glow-xs); }
+    .chat-title {
+      font-family: var(--font-display); font-size: 20px;
+      color: var(--green); text-shadow: var(--glow-sm);
+      flex: 1; animation: neon-flicker 11s infinite;
+    }
+    .chat-sub { font-family: var(--font-terminal); font-size: 14px; color: var(--text-dim); letter-spacing: 0.12em; }
+    .chat-body { flex: 1; position: relative; overflow: hidden; }
+    .chat-scan { position: absolute; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, rgba(57,255,20,0.25), transparent); animation: scan-sweep 6s linear infinite; }
+
+    /* ── TICKER ── */
+    .ticker {
+      position: absolute; bottom: 0; left: 0;
+      width: 1920px; height: 60px;
+      background: #040415;
+      border-top: 2px solid var(--border);
+      box-shadow: 0 -4px 20px rgba(57,255,20,0.15);
+      display: flex; align-items: center; overflow: hidden;
+    }
+    .ticker::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border-hi), transparent);
+    }
+    .ticker-tag-el {
+      display: flex; align-items: center; gap: 8px;
+      padding: 0 20px 0 22px; height: 100%;
+      background: var(--green-dark); border-right: 2px solid var(--border);
+      flex-shrink: 0;
+      font-family: var(--font-display); font-size: 22px;
+      color: var(--green); text-shadow: var(--glow-sm);
+      animation: neon-flicker 8s infinite; white-space: nowrap;
+    }
+    .ticker-track-wrap { flex: 1; overflow: hidden; height: 100%; display: flex; align-items: center; }
+    .ticker-track {
+      display: flex; align-items: center; white-space: nowrap;
+      font-family: var(--font-ui); font-size: 15px; font-weight: 600;
+      color: var(--text); letter-spacing: 0.04em;
+      animation: ticker-scroll 60s linear infinite;
+    }
+    .ticker-suit { color: #D946EF; opacity: 0.90; margin: 0 10px; text-shadow: 0 0 7px rgba(217,70,239,0.6); }
+  </style>
+</head>
+<body>
+  <!-- TOP HUD -->
+  <div class="hud">
+    <div class="hud-left">
+      <span class="hud-suit">♠</span>
+      <div class="mode-badge">
+        <span class="dot-live"></span>
+        <span data-config="streamMode">PLAYING</span>
+      </div>
+    </div>
+    <div class="hud-center">
+      <div class="hud-title" data-config="hudCenter">BOGOS BINTED?</div>
+    </div>
+    <div class="hud-right">
+      <div class="hud-channel" data-config="channelName">TuCanal</div>
+      <div class="hud-status" data-config="statusLine">¡Aliens y cartas!</div>
+    </div>
+    <span class="hud-suit" style="margin-left:16px">♣</span>
+    <div class="hud-line"></div>
+  </div>
+
+  <!-- CAMERA -->
+  <div class="cam">
+    <div class="cam-label">WEBCAM</div>
+  </div>
+
+  <!-- FOCUS PANEL -->
+  <div class="focus">
+    <div class="focus-header">
+      <div class="focus-title-row">
+        <span class="focus-suit">♦</span>
+        <div class="focus-title" data-config="sideTitle">ALIEN INTEL</div>
+      </div>
+      <span class="focus-tag" data-config="sideTag">CLASSIFIED</span>
+    </div>
+    <div class="focus-body">
+      <div class="stat-row">
+        <div class="stat-label" data-config="sideLabel1">Followers</div>
+        <div class="stat-value" data-config="sidePrimary">1337</div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-label" data-config="sideLabel2">Subs</div>
+        <div class="stat-value" data-config="sideSecondary">420</div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-label" data-config="sideLabel3">Viewers</div>
+        <div class="stat-value" data-config="sideTertiary">42</div>
+      </div>
+    </div>
+    <div class="focus-footer">
+      <div class="line"></div>
+      <span class="suits">♠ ♥ ♦ ♣</span>
+      <div class="line"></div>
+    </div>
+  </div>
+
+  <!-- GAME FRAME -->
+  <div class="game">
+    <div class="game-border"></div>
+    <div class="game-label">
+      <span>♠</span>
+      <span data-config="gameLabel">Bogos Binted?</span>
+      <span>♠</span>
+    </div>
+    <div class="game-corner gc-tl"><div class="bh"></div><div class="bv"></div></div>
+    <div class="game-corner gc-tr"><div class="bh"></div><div class="bv"></div></div>
+    <div class="game-corner gc-bl"><div class="bh"></div><div class="bv"></div></div>
+    <div class="game-corner gc-br"><div class="bh"></div><div class="bv"></div></div>
+    <span class="game-suit gs-tl">♠</span>
+    <span class="game-suit gs-tr">♥</span>
+    <span class="game-suit gs-bl">♣</span>
+    <span class="game-suit gs-br">♦</span>
+    <div class="game-area-hint">
+      <div class="game-area-text">[ GAME CAPTURE ]</div>
+    </div>
+  </div>
+
+  <!-- TICKER -->
+  <div class="ticker">
+    <div class="ticker-tag-el">
+      <span>★</span>
+      <span data-config="tickerTag">★</span>
+      <span>★</span>
+    </div>
+    <div class="ticker-track-wrap">
+      <div class="ticker-track" data-ticker-track></div>
+    </div>
+  </div>
+
+  <script src="../config/config.js"></script>
+  <script src="../shared.js"></script>
+  <script>
+    var track = document.querySelector('.ticker-track');
+    if (track) {
+      var w = track.scrollWidth / 2;
+      track.style.animationDuration = Math.max(40, w / 80) + 's';
+    }
+  </script>
+</body>
+</html>

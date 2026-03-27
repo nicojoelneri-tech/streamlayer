@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920,height=1080">
+<title>Chat — Bogos Binted</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=VT323&family=Exo+2:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --green:        #39FF14;
+    --green-border: rgba(57, 255, 20, 0.58);
+    --green-glow:   rgba(57, 255, 20, 0.28);
+    --pink:         #D946EF;
+    --pink-dim:     #C084FC;
+    --bg-card:      #040415;
+    --text:         #DDFFD5;
+    --font-display: 'Fredoka One', cursive;
+    --font-ui:      'Exo 2', sans-serif;
+    --font-terminal:'VT323', monospace;
+    --font-size:        16px;
+    --username-size:    18px;
+    --chat-width:       338px;
+    --chat-left:        5px;
+    --chat-bottom:      65px;
+    --chat-max-height:  570px;
+  }
+
+  body {
+    width: 1920px;
+    height: 1080px;
+    background: transparent;
+    overflow: hidden;
+  }
+
+  /* ── Contenedor ── */
+  #chat-container {
+    position: absolute;
+    bottom: var(--chat-bottom);
+    left: var(--chat-left);
+    width: var(--chat-width);
+    max-height: var(--chat-max-height);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 8px;
+    overflow: hidden;
+  }
+
+  #chat-container.align-right {
+    left: auto;
+    right: var(--chat-left);
+  }
+
+  /* ══════════════════════════════════════════════════════════
+     MENSAJE — Carta alienígena de casino
+     ══════════════════════════════════════════════════════════ */
+  .chat-message {
+    position: relative;
+    width: 100%;
+  }
+
+  /* Panel de la carta */
+  .msg-card {
+    background: var(--bg-card);
+    border: 1.5px solid var(--green-border);
+    box-shadow:
+      0 0 7px var(--green-glow),
+      0 0 20px rgba(57,255,20,0.08);
+    padding: 8px 14px 8px 18px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Barra lateral — gradiente green → pink, firma visual del pack */
+  .msg-bar {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, var(--green) 0%, var(--pink) 100%);
+    box-shadow: 0 0 8px rgba(57,255,20,0.45);
+  }
+
+  /* Palo de carta en esquina inferior derecha */
+  .msg-corner {
+    position: absolute;
+    bottom: 3px; right: 7px;
+    font-family: var(--font-terminal);
+    font-size: 13px;
+    color: var(--pink);
+    opacity: 0.38;
+    line-height: 1;
+    z-index: 0;
+  }
+
+  /* Scanlines sutiles */
+  .msg-card::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent 0, transparent 2px,
+      rgba(0,0,0,0.10) 2px, rgba(0,0,0,0.10) 4px
+    );
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  /* Contenido sobre scanlines */
+  .msg-content { position: relative; z-index: 1; }
+
+  /* ── Header: username + palos ── */
+  .msg-header {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 3px;
+    flex-wrap: nowrap;
+    overflow: hidden;
+  }
+
+  .msg-suit-l {
+    font-family: var(--font-terminal);
+    font-size: 15px;
+    color: var(--green);
+    opacity: 0.72;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+
+  .msg-suit-r {
+    font-family: var(--font-terminal);
+    font-size: 14px;
+    color: var(--pink);
+    opacity: 0.75;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+
+  .msg-username {
+    font-family: var(--font-display);
+    font-size: var(--username-size);
+    line-height: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* color viene del inline style (color Twitch del usuario) */
+  }
+
+  /* ── Badges ── */
+  .msg-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px; height: 16px;
+    font-family: var(--font-terminal);
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+    border-radius: 2px;
+  }
+  .badge-broadcaster { background: #FF3B3B; color: #fff; }
+  .badge-moderator   { background: #39FF14; color: #030310; }
+  .badge-vip         { background: #D946EF; color: #fff; }
+  .badge-subscriber  { background: #A855F7; color: #fff; }
+
+  /* ── Texto del mensaje ── */
+  .msg-text {
+    font-family: var(--font-ui);
+    font-size: var(--font-size);
+    font-weight: 400;
+    color: var(--text);
+    line-height: 1.40;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  /* ══════════════════════════════════════════════════════════
+     ANIMACIONES
+     ══════════════════════════════════════════════════════════ */
+
+  /* Entrada: slide desde izquierda (consistente con alert_box) */
+  .chat-message {
+    animation: msgEnter 0.42s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+
+  @keyframes msgEnter {
+    from { transform: translateX(-36px); opacity: 0; }
+    to   { transform: translateX(0);     opacity: 1; }
+  }
+
+  /* Salida: fade + sube */
+  .chat-message.removing {
+    animation: msgExit 0.32s ease-in forwards;
+  }
+
+  @keyframes msgExit {
+    from { transform: translateY(0);     opacity: 1; }
+    to   { transform: translateY(-18px); opacity: 0; }
+  }
+
+  /* Pulso sutil del borde al aparecer */
+  .msg-card {
+    animation: cardGlow 0.6s ease-out forwards;
+  }
+
+  @keyframes cardGlow {
+    0%   { box-shadow: 0 0 14px rgba(57,255,20,0.55), 0 0 35px rgba(57,255,20,0.20); }
+    100% { box-shadow: 0 0 7px rgba(57,255,20,0.28),  0 0 20px rgba(57,255,20,0.08); }
+  }
+
+  /* ── Status indicator ── */
+  #status-indicator {
+    position: fixed;
+    bottom: 62px; left: 8px;
+    font-family: var(--font-terminal);
+    font-size: 14px;
+    color: var(--green);
+    opacity: 0.38;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    pointer-events: none;
+    letter-spacing: 0.08em;
+  }
+  #status-indicator .dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: #FF3B3B;
+    flex-shrink: 0;
+  }
+  #status-indicator.connected .dot {
+    background: var(--green);
+    box-shadow: 0 0 5px var(--green);
+  }
+</style>
+</head>
+<body>
+
+<div id="status-indicator">
+  <span class="dot"></span>
+  <span id="status-text">OFFLINE</span>
+</div>
+
+<div id="chat-container"></div>
+
+<script src="../_shared/twitch-chat.js"></script>
+<script src="../_shared/chat-engine.js"></script>
+<script src="config.js"></script>
+<script>
+(function() {
+  var C = window.CHAT_CONFIG;
+  var root = document.documentElement;
+
+  // Aplicar config a CSS vars
+  root.style.setProperty('--chat-left',       C.chatLeft);
+  root.style.setProperty('--chat-bottom',     C.chatBottom);
+  root.style.setProperty('--chat-width',      C.chatWidth + 'px');
+  root.style.setProperty('--chat-max-height', C.chatMaxHeight);
+
+  // Posición
+  var container = document.getElementById('chat-container');
+  if (C.alignment === 'right') container.classList.add('align-right');
+
+  // ── Sanitizar texto ──
+  function sanitize(text) {
+    var div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  // ── Badges ──
+  function renderBadges(badges) {
+    if (!C.showBadges || !badges) return '';
+    var html = '';
+    if (badges.broadcaster) html += '<span class="msg-badge badge-broadcaster">B</span>';
+    if (badges.moderator)   html += '<span class="msg-badge badge-moderator">M</span>';
+    if (badges.vip)         html += '<span class="msg-badge badge-vip">V</span>';
+    if (badges.subscriber)  html += '<span class="msg-badge badge-subscriber">S</span>';
+    return html;
+  }
+
+  // ── Alternar palos de carta por mensaje ──
+  // ♠♥ en header, ♣♦ como corner — rota para variedad visual
+  var SUITS_L  = ['♠', '♣', '♠', '♦'];
+  var SUITS_R  = ['♥', '♥', '♦', '♥'];
+  var CORNERS  = ['♣', '♦', '♣', '♥'];
+  var msgCount = 0;
+
+  // ── Template del mensaje ──
+  function messageTemplate(msg) {
+    var idx    = msgCount % 4;
+    var suitL  = SUITS_L[idx];
+    var suitR  = SUITS_R[idx];
+    var corner = CORNERS[idx];
+    msgCount++;
+
+    var badgesHtml = renderBadges(msg.badges);
+
+    // Si el color del usuario es muy claro o no viene, usar verde
+    var userColor = msg.color && msg.color !== '#000000' ? msg.color : '#39FF14';
+
+    return (
+      '<div class="msg-bar"></div>' +
+      '<span class="msg-corner">' + corner + '</span>' +
+      '<div class="msg-content">' +
+        '<div class="msg-header">' +
+          '<span class="msg-suit-l">' + suitL + '</span>' +
+          badgesHtml +
+          '<span class="msg-username" style="color:' + userColor + '">' +
+            sanitize(msg.displayName) +
+          '</span>' +
+          '<span class="msg-suit-r">' + suitR + '</span>' +
+        '</div>' +
+        '<div class="msg-text">' + sanitize(msg.message) + '</div>' +
+      '</div>'
+    );
+  }
+
+  // ── Motor de chat ──
+  var engine = new ChatEngine({
+    container:         container,
+    maxVisible:        C.maxMessages,
+    animationDuration: C.animationSpeed,
+    messageTemplate:   messageTemplate,
+  });
+
+  // Override entrada: usar animación CSS
+  engine.displayMessage = async function(msgData) {
+    if (this.visibleMessages.length >= this.maxVisible) {
+      await this.removeOldest();
+    }
+    var el = document.createElement('div');
+    el.className = 'chat-message';
+    el.innerHTML = '<div class="msg-card">' + this.messageTemplate(msgData) + '</div>';
+    this.container.appendChild(el);
+    this.visibleMessages.push(el);
+    if (this.messageDuration) {
+      setTimeout(function() { engine.removeMessage(el); }, engine.messageDuration);
+    }
+  };
+
+  // Override salida: usar clase CSS
+  engine.animateOut = async function(el) {
+    el.classList.add('removing');
+    await this.wait(340);
+    if (el.parentNode) el.parentNode.removeChild(el);
+  };
+
+  // ── Status ──
+  var statusEl   = document.getElementById('status-indicator');
+  var statusText = document.getElementById('status-text');
+
+  // ── Modo demo o real ──
+  if (C.demoMode) {
+    statusText.textContent = 'DEMO';
+    statusEl.classList.add('connected');
+    startDemo();
+  } else {
+    var chat = new TwitchChat(C.channel);
+    chat.on('connected', function() {
+      statusEl.classList.add('connected');
+      statusText.textContent = 'LIVE :: #' + C.channel;
+    });
+    chat.on('disconnected', function() {
+      statusEl.classList.remove('connected');
+      statusText.textContent = 'RECONNECTING...';
+    });
+    chat.on('message', function(msg) {
+      engine.addMessage(msg);
+    });
+    chat.connect();
+  }
+
+  // ── Demo: mensajes de prueba con temática alien casino ──
+  function startDemo() {
+    var msgs = [
+      { displayName: 'AlienGamer', color: '#39FF14',
+        message: 'bogos binted?? qué juego es este jajaja', badges: { subscriber: '1' } },
+      { displayName: 'PixelWitch', color: '#D946EF',
+        message: 'primera vez que veo este stream, parece muy copado!', badges: {} },
+      { displayName: 'ElNovato_mod', color: '#22C55E',
+        message: 'GG esa mano estuvo increíble', badges: { moderator: '1' } },
+      { displayName: 'GalaxyBrain', color: '#A855F7',
+        message: 'bro cómo sabés qué carta te van a tirar??', badges: {} },
+      { displayName: 'CasinoKing', color: '#FBBF24',
+        message: 'Bueno gente les cuento que llevo 3 horas jugando esto y sigo sin entender las reglas pero me encanta jajaja, alguien me explica?', badges: { vip: '1' } },
+      { displayName: 'StreamHost', color: '#FF3B3B',
+        message: 'gracias por el host!!! 👽', badges: { broadcaster: '1' } },
+      { displayName: 'NightOwl_tv', color: '#60A5FA',
+        message: 'ese alien verde me da miedo', badges: {} },
+      { displayName: 'TurboAlien', color: '#F472B6',
+        message: 'LETSGOOO el momento perfecto', badges: { subscriber: '1' } },
+      { displayName: 'CósmicoJr', color: '#34D399',
+        message: 'acabo de llegar, van ganando?', badges: {} },
+      { displayName: 'ProGamer99',  color: '#FB923C',
+        message: 'ese move no lo vi venir', badges: { subscriber: '1' } },
+    ];
+
+    var i = 0;
+    function sendNext() {
+      engine.addMessage(msgs[i % msgs.length]);
+      i++;
+      var delay = 2200 + Math.random() * 2800;
+      setTimeout(sendNext, delay);
+    }
+    setTimeout(sendNext, 600);
+  }
+
+})();
+</script>
+</body>
+</html>

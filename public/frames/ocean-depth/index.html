@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=420,height=320">
+<title>Ocean Depth — Camera Frame</title>
+<style>
+  /* ═══════════════════════════════════════════
+     OCEAN DEPTH — Underwater Camera Frame
+     Browser Source: 420 × 320, transparent bg
+     Webcam goes ABOVE this source in OBS
+  ═══════════════════════════════════════════ */
+
+  @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@600&display=swap');
+
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:420px;height:320px;background:transparent;overflow:hidden}
+
+  .frame-wrap{
+    position:absolute;left:50%;top:50%;
+    transform:translate(-50%,-50%);
+    width:380px;height:260px;
+  }
+
+  /* ── Ocean border — depth gradient (mask punch-out for transparent center) ── */
+  .border-ocean{
+    position:absolute;inset:0;
+    border-radius:10px;
+    padding:3px;
+    background:linear-gradient(to bottom,#7dd3fc,#0c4a6e 70%,#052e16);
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite:xor;
+    mask-composite:exclude;
+    box-shadow:0 0 12px rgba(34,211,238,.25);
+  }
+
+  /* ── Caustic light on TOP border ── */
+  .caustic{
+    position:absolute;top:-2px;left:10px;right:10px;height:12px;
+    border-radius:10px 10px 0 0;
+    background:
+      repeating-linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(125,211,252,.25) 8%,
+        transparent 16%
+      );
+    animation:causticShift 3s ease-in-out infinite;
+    pointer-events:none;
+  }
+  @keyframes causticShift{
+    0%{background-position:0 0;opacity:.6}
+    50%{background-position:40px 0;opacity:.9}
+    100%{background-position:80px 0;opacity:.6}
+  }
+
+  /* ── Water surface SVG wavy line ── */
+  .water-surface{
+    position:absolute;top:-4px;left:5px;right:5px;height:14px;
+    overflow:visible;pointer-events:none;
+  }
+  .water-surface svg{width:100%;height:14px}
+  .water-surface path{
+    fill:none;stroke:#7dd3fc;stroke-width:1.5;opacity:.5;
+  }
+  @keyframes waveMove{
+    0%{d:path('M0,7 Q47,2 95,7 T190,7 T285,7 T380,7')}
+    50%{d:path('M0,7 Q47,12 95,7 T190,7 T285,7 T380,7')}
+    100%{d:path('M0,7 Q47,2 95,7 T190,7 T285,7 T380,7')}
+  }
+
+  /* ── Coral shapes — bottom left ── */
+  .coral{position:absolute;pointer-events:none}
+  .coral-1{
+    bottom:-1px;left:8px;
+    width:18px;height:28px;
+    background:#f97316;
+    border-radius:50% 50% 20% 20%;
+    opacity:.75;
+    transform:rotate(-8deg);
+  }
+  .coral-1::before{
+    content:'';position:absolute;
+    left:14px;bottom:0;
+    width:12px;height:20px;
+    background:#f97316;
+    border-radius:50% 50% 20% 20%;
+    opacity:.6;
+    transform:rotate(12deg);
+  }
+  .coral-2{
+    bottom:-1px;left:38px;
+    width:10px;height:22px;
+    background:#059669;
+    border-radius:40% 40% 10% 10%;
+    opacity:.7;
+    animation:seaweedSway 4s ease-in-out infinite;
+    transform-origin:bottom center;
+  }
+  @keyframes seaweedSway{
+    0%,100%{transform:rotate(-5deg)}
+    50%{transform:rotate(5deg)}
+  }
+
+  /* ── Coral shapes — bottom right ── */
+  .coral-3{
+    bottom:-1px;right:10px;
+    width:16px;height:24px;
+    background:#f97316;
+    border-radius:50% 50% 20% 20%;
+    opacity:.7;
+    transform:rotate(6deg);
+  }
+  .coral-3::before{
+    content:'';position:absolute;
+    right:14px;bottom:0;
+    width:10px;height:18px;
+    background:#059669;
+    border-radius:40% 40% 10% 10%;
+    opacity:.8;
+    animation:seaweedSway 5s ease-in-out infinite;
+    transform-origin:bottom center;
+  }
+
+  /* ── Fish ── */
+  .fish-wrap{
+    position:absolute;top:6px;left:0;right:0;height:16px;
+    pointer-events:none;overflow:hidden;
+  }
+  .fish{
+    position:absolute;top:2px;
+    animation:swimAcross 12s linear infinite;
+  }
+  @keyframes swimAcross{
+    0%{left:-30px}
+    100%{left:400px}
+  }
+  .fish-body{
+    width:14px;height:7px;
+    background:#22d3ee;
+    border-radius:60% 40% 40% 60%;
+    position:relative;
+    opacity:.8;
+  }
+  .fish-tail{
+    position:absolute;right:-6px;top:0;
+    width:0;height:0;
+    border-top:4px solid transparent;
+    border-bottom:4px solid transparent;
+    border-left:7px solid #22d3ee;
+    opacity:.8;
+  }
+  .fish-eye{
+    position:absolute;left:3px;top:2px;
+    width:2px;height:2px;
+    background:#0c4a6e;
+    border-radius:50%;
+  }
+
+  /* ── Bioluminescent dots on side borders ── */
+  .biolum{
+    position:absolute;width:4px;height:4px;
+    border-radius:50%;
+    background:#22d3ee;
+    pointer-events:none;
+    animation:bioGlow 4s ease-in-out infinite;
+  }
+  @keyframes bioGlow{
+    0%,100%{opacity:0;box-shadow:0 0 2px #22d3ee}
+    50%{opacity:.9;box-shadow:0 0 8px #22d3ee,0 0 16px rgba(34,211,238,.4)}
+  }
+  .biolum-1{left:-2px;top:60px;animation-delay:0s}
+  .biolum-2{right:-2px;top:120px;animation-delay:1.5s}
+  .biolum-3{left:-2px;top:180px;animation-delay:3s}
+
+  /* ── Bubble canvas ── */
+  #bubbleCanvas{
+    position:absolute;inset:0;
+    width:380px;height:260px;
+    pointer-events:none;
+    border-radius:10px;
+  }
+
+  /* ── Label ── */
+  #label{
+    position:absolute;
+    bottom:4px;left:50%;transform:translateX(-50%);
+    font-family:'Comfortaa',sans-serif;
+    font-size:11px;font-weight:600;letter-spacing:3px;
+    color:#7dd3fc;
+    text-shadow:0 0 8px rgba(34,211,238,.5),0 1px 2px rgba(0,0,0,.3);
+    white-space:nowrap;
+    background:rgba(12,74,110,.4);
+    padding:3px 14px;
+    border-radius:8px;
+    border:1px solid rgba(125,211,252,.25);
+  }
+</style>
+</head>
+<body>
+
+<div class="frame-wrap">
+  <!-- Ocean gradient border -->
+  <div class="border-ocean"></div>
+
+  <!-- Caustic light on top -->
+  <div class="caustic"></div>
+
+  <!-- Water surface wave -->
+  <div class="water-surface">
+    <svg viewBox="0 0 380 14" preserveAspectRatio="none">
+      <path id="wavePath" d="M0,7 Q47,2 95,7 T190,7 T285,7 T380,7"/>
+    </svg>
+  </div>
+
+  <!-- Fish swimming across top -->
+  <div class="fish-wrap">
+    <div class="fish">
+      <div class="fish-body">
+        <div class="fish-eye"></div>
+      </div>
+      <div class="fish-tail"></div>
+    </div>
+  </div>
+
+  <!-- Coral / seaweed bottom corners -->
+  <div class="coral coral-1"></div>
+  <div class="coral coral-2"></div>
+  <div class="coral coral-3"></div>
+
+  <!-- Bioluminescent dots -->
+  <div class="biolum biolum-1"></div>
+  <div class="biolum biolum-2"></div>
+  <div class="biolum biolum-3"></div>
+
+  <!-- Bubble canvas -->
+  <canvas id="bubbleCanvas" width="380" height="260"></canvas>
+</div>
+
+<!-- Label -->
+<div id="label"></div>
+
+<script>
+  const LABEL_TEXT = 'OCEAN DEPTH';
+
+  document.getElementById('label').textContent = LABEL_TEXT;
+
+  /* ── Wave animation ── */
+  const wavePath = document.getElementById('wavePath');
+  let waveT = 0;
+  function animateWave(){
+    waveT += 0.02;
+    const a1 = 4 * Math.sin(waveT);
+    const a2 = 4 * Math.sin(waveT + 1.5);
+    const a3 = 4 * Math.sin(waveT + 3);
+    wavePath.setAttribute('d',
+      `M0,${7+a1} Q47,${2+a2} 95,${7+a1} T190,${7+a3} T285,${7+a2} T380,${7+a1}`
+    );
+    requestAnimationFrame(animateWave);
+  }
+  animateWave();
+
+  /* ── Bubble system (Canvas) ── */
+  const canvas = document.getElementById('bubbleCanvas');
+  const ctx = canvas.getContext('2d');
+  const W = 380, H = 260;
+  const borderW = 3;
+
+  // Bubbles spawn near bottom-left and bottom-right border edges only
+  class Bubble {
+    constructor(){this.reset(true)}
+    reset(init){
+      // Spawn on left or right border edge
+      const side = Math.random() < 0.5;
+      if(side){
+        this.x = Math.random() * 20 + 2;          // left edge zone
+      } else {
+        this.x = W - Math.random() * 20 - 2;      // right edge zone
+      }
+      this.y = init ? Math.random() * H : H + 5;
+      this.r = Math.random() * 4 + 2;
+      this.speed = Math.random() * 0.4 + 0.2;
+      this.wobbleAmp = Math.random() * 1.5 + 0.5;
+      this.wobbleSpeed = Math.random() * 0.02 + 0.01;
+      this.phase = Math.random() * Math.PI * 2;
+      this.opacity = Math.random() * 0.4 + 0.2;
+      this.baseX = this.x;
+    }
+    update(){
+      this.y -= this.speed;
+      this.phase += this.wobbleSpeed;
+      this.x = this.baseX + Math.sin(this.phase) * this.wobbleAmp;
+      if(this.y < -10) this.reset(false);
+    }
+    draw(c){
+      c.beginPath();
+      c.arc(this.x, this.y, this.r, 0, Math.PI*2);
+      c.fillStyle = `rgba(125,211,252,${this.opacity})`;
+      c.fill();
+      // tiny highlight
+      c.beginPath();
+      c.arc(this.x - this.r*0.3, this.y - this.r*0.3, this.r*0.3, 0, Math.PI*2);
+      c.fillStyle = `rgba(255,255,255,${this.opacity * 0.7})`;
+      c.fill();
+    }
+  }
+
+  const bubbles = Array.from({length:24}, () => new Bubble());
+
+  function renderBubbles(){
+    ctx.clearRect(0,0,W,H);
+    bubbles.forEach(b => { b.update(); b.draw(ctx); });
+    requestAnimationFrame(renderBubbles);
+  }
+  renderBubbles();
+</script>
+</body>
+</html>

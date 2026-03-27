@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920,height=1080">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    body { background: transparent; }
+    canvas { position: absolute; top: 0; left: 0; }
+  </style>
+</head>
+<body>
+  <canvas id="c" width="1920" height="1080"></canvas>
+  <script>
+    var cv  = document.getElementById('c');
+    var ctx = cv.getContext('2d');
+
+    // Stinger: panel negro entra por izquierda (0-1.5s), sale por derecha (1.5-3s)
+    // Transition point OBS: 1.5s (frame 90 @ 60fps)
+    var DURATION = 3.0;  // segundos total
+    var MID      = 1.5;  // punto de corte
+    var start    = null;
+    var done     = false;
+
+    function easeInOut(t) {
+      return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+    }
+
+    function draw(ts) {
+      if (!start) start = ts;
+      var elapsed = (ts - start) / 1000;
+
+      ctx.clearRect(0, 0, 1920, 1080);
+
+      if (elapsed <= MID) {
+        // Fase entrada: panel negro avanza de izquierda a derecha
+        var p = easeInOut(Math.min(elapsed / MID, 1));
+        var w = Math.round(p * 1920);
+
+        // Fondo negro
+        ctx.fillStyle = '#030310';
+        ctx.fillRect(0, 0, w, 1080);
+
+        // Borde líder verde neón
+        var edgeW = 6;
+        var grd = ctx.createLinearGradient(w - 40, 0, w + edgeW, 0);
+        grd.addColorStop(0, 'transparent');
+        grd.addColorStop(0.5, 'rgba(57,255,20,0.6)');
+        grd.addColorStop(1, '#39FF14');
+        ctx.fillStyle = grd;
+        ctx.fillRect(w - 40, 0, 50, 1080);
+
+        // Glow edge
+        ctx.shadowColor = '#39FF14';
+        ctx.shadowBlur  = 30;
+        ctx.fillStyle   = 'rgba(57,255,20,0.9)';
+        ctx.fillRect(w, 0, edgeW, 1080);
+        ctx.shadowBlur  = 0;
+
+        // Palos decorativos centrados
+        if (p > 0.5) {
+          ctx.fillStyle   = 'rgba(57,255,20,0.12)';
+          ctx.font        = '180px "VT323", monospace';
+          ctx.textAlign   = 'center';
+          ctx.textBaseline= 'middle';
+          ctx.fillText('♠', 960, 540);
+        }
+
+      } else if (elapsed <= DURATION) {
+        // Fase salida: panel negro sale por la derecha
+        var p2 = easeInOut((elapsed - MID) / MID);
+        var x  = Math.round(p2 * 1920);
+
+        // Fondo negro que se retira
+        ctx.fillStyle = '#030310';
+        ctx.fillRect(x, 0, 1920 - x, 1080);
+
+        // Palo decorativo centrado
+        ctx.fillStyle   = 'rgba(57,255,20,0.08)';
+        ctx.font        = '180px "VT323", monospace';
+        ctx.textAlign   = 'center';
+        ctx.textBaseline= 'middle';
+        ctx.fillText('♠', 960, 540);
+
+        // Borde líder verde neón (borde izquierdo del panel)
+        ctx.shadowColor = '#39FF14';
+        ctx.shadowBlur  = 30;
+        ctx.fillStyle   = 'rgba(57,255,20,0.9)';
+        ctx.fillRect(x - 6, 0, 6, 1080);
+        ctx.shadowBlur  = 0;
+
+        var grd2 = ctx.createLinearGradient(x - 6, 0, x + 40, 0);
+        grd2.addColorStop(0, '#39FF14');
+        grd2.addColorStop(0.5, 'rgba(57,255,20,0.4)');
+        grd2.addColorStop(1, 'transparent');
+        ctx.fillStyle = grd2;
+        ctx.fillRect(x, 0, 40, 1080);
+
+      } else {
+        done = true;
+        ctx.clearRect(0, 0, 1920, 1080);
+      }
+
+      if (!done) requestAnimationFrame(draw);
+    }
+
+    requestAnimationFrame(draw);
+  </script>
+</body>
+</html>

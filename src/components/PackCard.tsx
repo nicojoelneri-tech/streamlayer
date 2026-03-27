@@ -47,6 +47,10 @@ export default function PackCard({ pack }: { pack: OverlayPack }) {
             title={pack.name}
             nativeWidth={pack.previewSize?.[0] ?? (pack.category === 'camera-frame' ? 420 : 1920)}
             nativeHeight={pack.previewSize?.[1] ?? (pack.category === 'camera-frame' ? 320 : 1080)}
+            cropX={pack.previewCrop?.[0]}
+            cropY={pack.previewCrop?.[1]}
+            cropWidth={pack.previewCrop?.[2]}
+            cropHeight={pack.previewCrop?.[3]}
           />
         ) : pack.previewImages?.[0] ? (
           <img
@@ -76,12 +80,6 @@ export default function PackCard({ pack }: { pack: OverlayPack }) {
           </>
         )}
 
-        {pack.tag && (
-          <span className="absolute left-3 top-3 rounded-full bg-primary-600 px-2.5 py-0.5 text-[11px] font-semibold text-white">
-            {pack.tag}
-          </span>
-        )}
-
         <div className="absolute inset-0 flex items-center justify-center gap-2 bg-surface-950/60 opacity-0 transition-opacity group-hover:opacity-100">
           <Link
             to={`/pack/${pack.id}`}
@@ -107,8 +105,15 @@ export default function PackCard({ pack }: { pack: OverlayPack }) {
             </span>
             {pack.category === 'pack' ? (
               <span className="text-[11px] text-surface-500">{pack.modules.length} módulos</span>
+            ) : pack.category === 'chat-theme' ? (
+              <span className="text-[11px] text-surface-500">Tema de chat</span>
             ) : (
               <span className="text-[11px] text-surface-500">Marco individual</span>
+            )}
+            {pack.tag && (
+              <span className="rounded-full bg-primary-600/20 px-2 py-0.5 text-[10px] font-semibold text-primary-400">
+                {pack.tag}
+              </span>
             )}
           </div>
           <h3 className="text-base font-semibold text-white">{pack.name}</h3>

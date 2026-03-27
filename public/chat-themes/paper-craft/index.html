@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920,height=1080">
+<title>Chat — Paper Craft</title>
+<link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Caveat:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --accent: #e85d3a;
+    --accent2: #3a8ee8;
+    --bg: rgba(255, 252, 245, 0.92);
+    --text: #2a2a2a;
+    --font: 'Patrick Hand', cursive;
+    --font-user: 'Caveat', cursive;
+    --font-size: 19px;
+    --username-size: 15px;
+    --chat-width: 500px;
+  }
+
+  body {
+    width: 1920px;
+    height: 1080px;
+    background: transparent;
+    overflow: hidden;
+    font-family: var(--font);
+  }
+
+  /* ── Contenedor ── */
+  #chat-container {
+    position: absolute;
+    bottom: 60px;
+    left: 60px;
+    width: var(--chat-width);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 14px;
+  }
+
+  #chat-container.align-right { left: auto; right: 60px; }
+  #chat-container.align-center { left: 50%; transform: translateX(-50%); }
+
+  /* ══════════════════════════════════════════════════════════
+     MENSAJE — Nota de papel con cinta washi y manchas
+     ══════════════════════════════════════════════════════════ */
+  .chat-message {
+    position: relative;
+    width: 100%;
+    filter: drop-shadow(2px 3px 4px rgba(0,0,0,0.15));
+  }
+
+  /* ── Papel base ── */
+  .msg-paper {
+    position: relative;
+    padding: 16px 20px 16px 24px;
+    background: var(--bg);
+    border-radius: 2px;
+    /* Borde irregular simulado */
+    border-left: 3px solid transparent;
+    border-image: repeating-linear-gradient(
+      180deg,
+      var(--accent) 0px,
+      var(--accent) 8px,
+      transparent 8px,
+      transparent 12px
+    ) 3;
+  }
+
+  /* ── Cinta washi superior ── */
+  .msg-tape {
+    position: absolute;
+    top: -8px;
+    left: 20px;
+    width: 70px;
+    height: 18px;
+    border-radius: 1px;
+    opacity: 0.85;
+    transform: rotate(-2deg);
+  }
+
+  .msg-tape-inner {
+    width: 100%;
+    height: 100%;
+    border-radius: 1px;
+    /* El color se asigna dinámicamente */
+  }
+
+  /* ── Textura de papel (líneas de cuaderno) ── */
+  .msg-paper::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent 0px,
+      transparent 28px,
+      rgba(100, 149, 237, 0.1) 28px,
+      rgba(100, 149, 237, 0.1) 29px
+    );
+    pointer-events: none;
+    border-radius: 2px;
+  }
+
+  /* ── Margen rojo de cuaderno ── */
+  .msg-paper::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 18px;
+    bottom: 0;
+    width: 1.5px;
+    background: rgba(220, 80, 80, 0.25);
+    pointer-events: none;
+  }
+
+  /* ── Mancha de acuarela decorativa ── */
+  .msg-watercolor {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.08;
+    pointer-events: none;
+    filter: blur(8px);
+  }
+
+  /* ── Clip / chinche decorativo ── */
+  .msg-pin {
+    position: absolute;
+    top: -5px;
+    right: 25px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid rgba(0,0,0,0.2);
+    z-index: 2;
+  }
+
+  /* ── Garabato decorativo (asterisco artístico) ── */
+  .msg-doodle {
+    position: absolute;
+    bottom: 6px;
+    right: 12px;
+    font-size: 16px;
+    opacity: 0.15;
+    pointer-events: none;
+  }
+
+  /* ── Header ── */
+  .msg-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 4px;
+    padding-left: 8px;
+  }
+
+  .msg-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    font-size: 12px;
+    flex-shrink: 0;
+    border: 2px solid;
+  }
+
+  .badge-broadcaster {
+    background: rgba(232,93,58,0.15);
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+  .badge-moderator {
+    background: rgba(76,175,80,0.15);
+    color: #4caf50;
+    border-color: #4caf50;
+  }
+  .badge-vip {
+    background: rgba(58,142,232,0.15);
+    color: var(--accent2);
+    border-color: var(--accent2);
+  }
+  .badge-subscriber {
+    background: rgba(156,39,176,0.15);
+    color: #9c27b0;
+    border-color: #9c27b0;
+  }
+
+  .msg-username {
+    font-family: var(--font-user);
+    font-weight: 700;
+    font-size: calc(var(--username-size) + 4px);
+    line-height: 1;
+  }
+
+  .msg-dash {
+    color: rgba(0,0,0,0.25);
+    font-size: 14px;
+  }
+
+  /* ── Texto ── */
+  .msg-text {
+    font-family: var(--font);
+    font-size: var(--font-size);
+    font-weight: 400;
+    color: var(--text);
+    line-height: 1.4;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    padding-left: 8px;
+  }
+
+  /* ══════════════════════════════════════════════════════════
+     ANIMACIONES
+     ══════════════════════════════════════════════════════════ */
+
+  .chat-message {
+    animation: paperDrop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+
+  @keyframes paperDrop {
+    0% {
+      opacity: 0;
+      transform: translateY(30px) rotate(3deg) scale(0.9);
+    }
+    60% {
+      opacity: 1;
+      transform: translateY(-4px) rotate(-1deg) scale(1.02);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0) rotate(0deg) scale(1);
+    }
+  }
+
+  .chat-message.removing {
+    animation: paperFly 0.4s ease forwards;
+  }
+
+  @keyframes paperFly {
+    0% {
+      opacity: 1;
+      transform: translateY(0) rotate(0deg);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-25px) rotate(-4deg) scale(0.85);
+    }
+  }
+
+  /* ── Rotación sutil alterna ── */
+  .chat-message:nth-child(odd) .msg-paper {
+    transform: rotate(-0.5deg);
+  }
+  .chat-message:nth-child(even) .msg-paper {
+    transform: rotate(0.4deg);
+  }
+  .chat-message:nth-child(3n) .msg-paper {
+    transform: rotate(0.7deg);
+  }
+
+  /* ── Status ── */
+  #status-indicator {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    font-family: var(--font);
+    font-size: 13px;
+    color: #999;
+    opacity: 0.5;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    pointer-events: none;
+  }
+
+  #status-indicator .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #ccc;
+  }
+
+  #status-indicator.connected .dot {
+    background: #4caf50;
+    box-shadow: 0 0 6px #4caf50;
+  }
+</style>
+</head>
+<body>
+
+<div id="status-indicator">
+  <span class="dot"></span>
+  <span id="status-text">OFFLINE</span>
+</div>
+
+<div id="chat-container"></div>
+
+<script src="../_shared/twitch-chat.js"></script>
+<script src="../_shared/chat-engine.js"></script>
+<script src="config.js"></script>
+<script>
+(function() {
+  const C = window.CHAT_CONFIG;
+
+  const root = document.documentElement;
+  root.style.setProperty('--accent', C.accentColor);
+  root.style.setProperty('--accent2', C.accentSecondary);
+  root.style.setProperty('--bg', C.bgColor);
+  root.style.setProperty('--text', C.textColor);
+  root.style.setProperty('--font', C.fontFamily);
+  root.style.setProperty('--font-size', C.fontSize);
+  root.style.setProperty('--username-size', C.usernameFontSize);
+  root.style.setProperty('--chat-width', C.chatWidth + 'px');
+
+  const container = document.getElementById('chat-container');
+  if (C.alignment === 'right') container.classList.add('align-right');
+  if (C.alignment === 'center') container.classList.add('align-center');
+
+  // Paleta de colores para cintas washi y manchas
+  const washiColors = [
+    '#e85d3a', '#3a8ee8', '#f4c542', '#4caf50',
+    '#9c27b0', '#ff7eb3', '#00bcd4', '#ff9800'
+  ];
+  const doodleSymbols = ['✿', '★', '♪', '◇', '❋', '✎', '♡', '△'];
+
+  function getColorForUser(name) {
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    return Math.abs(hash);
+  }
+
+  function renderBadges(badges) {
+    if (!C.showBadges || !badges) return '';
+    let html = '';
+    if (badges.broadcaster) html += '<span class="msg-badge badge-broadcaster">✦</span>';
+    if (badges.moderator) html += '<span class="msg-badge badge-moderator">✿</span>';
+    if (badges.vip) html += '<span class="msg-badge badge-vip">★</span>';
+    if (badges.subscriber) html += '<span class="msg-badge badge-subscriber">♪</span>';
+    return html;
+  }
+
+  function sanitize(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  function messageTemplate(msg) {
+    const badgesHtml = renderBadges(msg.badges);
+    const hash = getColorForUser(msg.displayName);
+    const tapeColor = washiColors[hash % washiColors.length];
+    const pinColor = washiColors[(hash + 3) % washiColors.length];
+    const doodle = doodleSymbols[hash % doodleSymbols.length];
+    const waterColor = washiColors[(hash + 5) % washiColors.length];
+
+    // Posición random de la mancha de acuarela
+    const wcTop = 10 + (hash % 60);
+    const wcRight = 5 + (hash % 40);
+    const wcSize = 40 + (hash % 30);
+
+    return `
+      <div class="msg-paper">
+        <div class="msg-tape">
+          <div class="msg-tape-inner" style="background: ${tapeColor}; opacity: 0.45;"></div>
+        </div>
+        <div class="msg-pin" style="background: ${pinColor}; border-color: ${pinColor};"></div>
+        <div class="msg-watercolor" style="
+          background: ${waterColor};
+          top: ${wcTop}%;
+          right: ${wcRight}px;
+          width: ${wcSize}px;
+          height: ${wcSize}px;
+        "></div>
+        <span class="msg-doodle">${doodle}</span>
+        <div class="msg-header">
+          ${badgesHtml}
+          <span class="msg-username" style="color: ${msg.color}">${sanitize(msg.displayName)}</span>
+          <span class="msg-dash">—</span>
+        </div>
+        <div class="msg-text">${sanitize(msg.message)}</div>
+      </div>
+    `;
+  }
+
+  const engine = new ChatEngine({
+    container: container,
+    maxVisible: C.maxMessages,
+    animationDuration: C.animationSpeed,
+    messageTemplate: messageTemplate
+  });
+
+  engine.animateOut = async function(el) {
+    el.classList.add('removing');
+    await this.wait(400);
+    if (el.parentNode) el.parentNode.removeChild(el);
+  };
+
+  engine.displayMessage = async function(msgData) {
+    if (this.visibleMessages.length >= this.maxVisible) {
+      await this.removeOldest();
+    }
+    const el = document.createElement('div');
+    el.className = 'chat-message';
+    el.innerHTML = this.messageTemplate(msgData);
+    this.container.appendChild(el);
+    this.visibleMessages.push(el);
+    if (this.messageDuration) {
+      setTimeout(() => this.removeMessage(el), this.messageDuration);
+    }
+  };
+
+  const statusEl = document.getElementById('status-indicator');
+  const statusText = document.getElementById('status-text');
+
+  if (C.demoMode) {
+    statusText.textContent = 'DEMO';
+    statusEl.classList.add('connected');
+    startDemo();
+  } else {
+    const chat = new TwitchChat(C.channel);
+    chat.on('connected', () => {
+      statusEl.classList.add('connected');
+      statusText.textContent = 'LIVE :: #' + C.channel;
+    });
+    chat.on('disconnected', () => {
+      statusEl.classList.remove('connected');
+      statusText.textContent = 'RECONNECTING...';
+    });
+    chat.on('message', (msg) => engine.addMessage(msg));
+    chat.connect();
+  }
+
+  function startDemo() {
+    const demoMessages = [
+      { displayName: 'Luna', color: '#e85d3a', message: 'Holaa! me encanta el stream de hoy 🎨', badges: { broadcaster: '1' } },
+      { displayName: 'Artie', color: '#3a8ee8', message: 'Alguien sabe cómo se desbloquea el mapa secreto?', badges: {} },
+      { displayName: 'BrushStroke', color: '#9c27b0', message: 'Qué buen juego, me re vició toda la semana', badges: { moderator: '1' } },
+      { displayName: 'Doodles', color: '#4caf50', message: 'Recién llegué, qué onda gente!', badges: { subscriber: '1' } },
+      { displayName: 'Sketchy', color: '#f4c542', message: 'Jajaja eso estuvo buenísimo, no me lo esperaba para nada. La verdad que este juego tiene cada sorpresa que te deja sin palabras', badges: {} },
+      { displayName: 'Palette', color: '#ff7eb3', message: 'Van a hacer otro stream mañana?', badges: { vip: '1' } },
+      { displayName: 'Crayon', color: '#00bcd4', message: 'GG!! tremenda partida', badges: { subscriber: '1' } },
+      { displayName: 'Inky', color: '#ff9800', message: 'este overlay es hermoso, de donde lo sacaron?', badges: {} },
+    ];
+
+    let index = 0;
+    function sendNext() {
+      engine.addMessage(demoMessages[index % demoMessages.length]);
+      index++;
+      setTimeout(sendNext, 2000 + Math.random() * 2800);
+    }
+    setTimeout(() => sendNext(), 500);
+  }
+
+})();
+</script>
+</body>
+</html>

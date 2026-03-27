@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920,height=1080">
+<title>Chat — Cyber HUD</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --accent: #00f0ff;
+    --accent2: #ff003c;
+    --bg: rgba(5, 10, 20, 0.85);
+    --text: #e0e8f0;
+    --font: 'Rajdhani', sans-serif;
+    --font-mono: 'Share Tech Mono', monospace;
+    --font-size: 18px;
+    --username-size: 15px;
+    --chat-width: 520px;
+  }
+
+  body {
+    width: 1920px;
+    height: 1080px;
+    background: transparent;
+    overflow: hidden;
+    font-family: var(--font);
+  }
+
+  /* ── Contenedor principal ── */
+  #chat-container {
+    position: absolute;
+    bottom: 60px;
+    left: 60px;
+    width: var(--chat-width);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+
+  #chat-container.align-right {
+    left: auto;
+    right: 60px;
+  }
+
+  #chat-container.align-center {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  /* ══════════════════════════════════════════════════════════
+     MENSAJE — Panel HUD con esquinas cortadas
+     ══════════════════════════════════════════════════════════ */
+  .chat-message {
+    position: relative;
+    width: 100%;
+  }
+
+  .msg-panel {
+    position: relative;
+    padding: 12px 16px 12px 18px;
+    background: var(--bg);
+    clip-path: polygon(
+      0 0,
+      calc(100% - 22px) 0,
+      100% 22px,
+      100% 100%,
+      22px 100%,
+      0 calc(100% - 22px)
+    );
+    border: none;
+  }
+
+  /* ── Borde neón con clip-path (capa detrás) ── */
+  .msg-border {
+    position: absolute;
+    inset: 0;
+    background: var(--accent);
+    clip-path: polygon(
+      0 0,
+      calc(100% - 22px) 0,
+      100% 22px,
+      100% 100%,
+      22px 100%,
+      0 calc(100% - 22px)
+    );
+    opacity: 0.8;
+    z-index: -1;
+  }
+
+  .msg-panel {
+    /* Inset para crear efecto de borde */
+    margin: 1.5px;
+  }
+
+  .msg-inner {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── Línea de acento superior ── */
+  .msg-accent-line {
+    position: absolute;
+    top: 1px;
+    left: 20px;
+    width: 60px;
+    height: 2px;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent), 0 0 20px var(--accent);
+  }
+
+  /* ── Marca angular esquina superior derecha ── */
+  .msg-corner-mark {
+    position: absolute;
+    top: 6px;
+    right: 30px;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    color: var(--accent);
+    opacity: 0.5;
+    letter-spacing: 1px;
+  }
+
+  /* ── Header: badges + username ── */
+  .msg-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 4px;
+  }
+
+  .msg-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 2px;
+    font-size: 10px;
+    font-weight: 700;
+    color: #000;
+    flex-shrink: 0;
+  }
+
+  .badge-broadcaster { background: var(--accent2); color: #fff; }
+  .badge-moderator { background: #00ad03; color: #fff; }
+  .badge-vip { background: #e005b9; color: #fff; }
+  .badge-subscriber { background: #9147ff; color: #fff; }
+
+  .msg-username {
+    font-family: var(--font);
+    font-weight: 700;
+    font-size: var(--username-size);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    /* color se aplica inline desde el color del usuario */
+  }
+
+  .msg-separator {
+    width: 4px;
+    height: 4px;
+    background: var(--accent);
+    transform: rotate(45deg);
+    flex-shrink: 0;
+    opacity: 0.6;
+  }
+
+  /* ── Texto del mensaje ── */
+  .msg-text {
+    font-family: var(--font);
+    font-size: var(--font-size);
+    font-weight: 400;
+    color: var(--text);
+    line-height: 1.35;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  /* ── Scanline sutil ── */
+  .msg-panel::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent 0px,
+      transparent 3px,
+      rgba(0, 240, 255, 0.02) 3px,
+      rgba(0, 240, 255, 0.02) 4px
+    );
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  /* ══════════════════════════════════════════════════════════
+     ANIMACIONES
+     ══════════════════════════════════════════════════════════ */
+
+  /* Glitch de entrada */
+  .chat-message {
+    animation: msgEnter 0.4s ease forwards;
+  }
+
+  @keyframes msgEnter {
+    0% {
+      opacity: 0;
+      transform: translateX(-20px) skewX(-2deg);
+      filter: hue-rotate(90deg) brightness(2);
+    }
+    40% {
+      opacity: 1;
+      transform: translateX(4px) skewX(1deg);
+      filter: hue-rotate(0deg) brightness(1.3);
+    }
+    70% {
+      transform: translateX(-2px) skewX(0deg);
+      filter: brightness(1);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0) skewX(0deg);
+      filter: brightness(1);
+    }
+  }
+
+  /* Salida */
+  .chat-message.removing {
+    animation: msgExit 0.35s ease forwards;
+  }
+
+  @keyframes msgExit {
+    0% {
+      opacity: 1;
+      transform: translateY(0) scaleY(1);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-20px) scaleY(0.8);
+    }
+  }
+
+  /* ── Parpadeo sutil del borde ── */
+  .msg-border {
+    animation: borderPulse 3s ease-in-out infinite alternate;
+  }
+
+  @keyframes borderPulse {
+    0% { opacity: 0.6; }
+    100% { opacity: 0.9; }
+  }
+
+  /* ── Indicador de conexión ── */
+  #status-indicator {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--accent);
+    opacity: 0.4;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    pointer-events: none;
+  }
+
+  #status-indicator .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent2);
+  }
+
+  #status-indicator.connected .dot {
+    background: #00ff88;
+    box-shadow: 0 0 6px #00ff88;
+  }
+</style>
+</head>
+<body>
+
+<div id="status-indicator">
+  <span class="dot"></span>
+  <span id="status-text">OFFLINE</span>
+</div>
+
+<div id="chat-container"></div>
+
+<script src="../_shared/twitch-chat.js"></script>
+<script src="../_shared/chat-engine.js"></script>
+<script src="config.js"></script>
+<script>
+(function() {
+  const C = window.CHAT_CONFIG;
+
+  // ── Aplicar config a CSS vars ──
+  const root = document.documentElement;
+  root.style.setProperty('--accent', C.accentColor);
+  root.style.setProperty('--accent2', C.accentSecondary);
+  root.style.setProperty('--bg', C.bgColor);
+  root.style.setProperty('--text', C.textColor);
+  root.style.setProperty('--font', C.fontFamily);
+  root.style.setProperty('--font-size', C.fontSize);
+  root.style.setProperty('--username-size', C.usernameFontSize);
+  root.style.setProperty('--chat-width', C.chatWidth + 'px');
+
+  // ── Posición ──
+  const container = document.getElementById('chat-container');
+  if (C.alignment === 'right') container.classList.add('align-right');
+  if (C.alignment === 'center') container.classList.add('align-center');
+
+  // ── Badge rendering ──
+  function renderBadges(badges) {
+    if (!C.showBadges || !badges) return '';
+    let html = '';
+    if (badges.broadcaster) html += '<span class="msg-badge badge-broadcaster">B</span>';
+    if (badges.moderator) html += '<span class="msg-badge badge-moderator">M</span>';
+    if (badges.vip) html += '<span class="msg-badge badge-vip">V</span>';
+    if (badges.subscriber) html += '<span class="msg-badge badge-subscriber">S</span>';
+    return html;
+  }
+
+  // ── Sanitizar texto (prevenir inyección) ──
+  function sanitize(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  // ── Template del mensaje ──
+  function messageTemplate(msg) {
+    const badgesHtml = renderBadges(msg.badges);
+    const sep = badgesHtml ? '<span class="msg-separator"></span>' : '';
+
+    return `
+      <div class="msg-border"></div>
+      <div class="msg-panel">
+        <div class="msg-accent-line"></div>
+        <span class="msg-corner-mark">SYS::MSG</span>
+        <div class="msg-inner">
+          <div class="msg-header">
+            ${badgesHtml}
+            ${sep}
+            <span class="msg-username" style="color: ${msg.color}">${sanitize(msg.displayName)}</span>
+          </div>
+          <div class="msg-text">${sanitize(msg.message)}</div>
+        </div>
+      </div>
+    `;
+  }
+
+  // ── Motor de chat (override animateOut para usar clase CSS) ──
+  const engine = new ChatEngine({
+    container: container,
+    maxVisible: C.maxMessages,
+    animationDuration: C.animationSpeed,
+    messageTemplate: messageTemplate
+  });
+
+  // Override para usar animación CSS de salida
+  const originalAnimateOut = engine.animateOut.bind(engine);
+  engine.animateOut = async function(el) {
+    el.classList.add('removing');
+    await this.wait(350);
+    if (el.parentNode) el.parentNode.removeChild(el);
+  };
+
+  // Override entrada para usar animación CSS
+  engine.displayMessage = async function(msgData) {
+    if (this.visibleMessages.length >= this.maxVisible) {
+      await this.removeOldest();
+    }
+
+    const el = document.createElement('div');
+    el.className = 'chat-message';
+    el.innerHTML = this.messageTemplate(msgData);
+
+    this.container.appendChild(el);
+    this.visibleMessages.push(el);
+
+    if (this.messageDuration) {
+      setTimeout(() => this.removeMessage(el), this.messageDuration);
+    }
+  };
+
+  // ── Status ──
+  const statusEl = document.getElementById('status-indicator');
+  const statusText = document.getElementById('status-text');
+
+  // ── Modo demo o conexión real ──
+  if (C.demoMode) {
+    statusText.textContent = 'DEMO';
+    statusEl.classList.add('connected');
+    startDemo();
+  } else {
+    const chat = new TwitchChat(C.channel);
+    chat.on('connected', () => {
+      statusEl.classList.add('connected');
+      statusText.textContent = 'LIVE :: #' + C.channel;
+    });
+    chat.on('disconnected', () => {
+      statusEl.classList.remove('connected');
+      statusText.textContent = 'RECONNECTING...';
+    });
+    chat.on('message', (msg) => {
+      engine.addMessage(msg);
+    });
+    chat.connect();
+  }
+
+  // ── Demo: mensajes falsos que ciclan ──
+  function startDemo() {
+    const demoMessages = [
+      { displayName: 'NeonRider', color: '#00f0ff', message: 'Este overlay está increíble! 🔥', badges: { subscriber: '1' } },
+      { displayName: 'PixelWitch', color: '#ff6ec7', message: 'Hola a todos!! primera vez acá', badges: {} },
+      { displayName: 'DarkFrame', color: '#ffa657', message: 'GG ese clutch estuvo brutal', badges: { moderator: '1' } },
+      { displayName: 'StreamBot', color: '#7ee787', message: 'Bienvenidos al stream de hoy, vamos a pasarla bien', badges: { vip: '1' } },
+      { displayName: 'CyberNova', color: '#d2a8ff', message: 'Bueno gente les cuento que estuve toda la tarde intentando pasar ese nivel y no hay forma, probé como 20 estrategias distintas y nada, alguien tiene algún tip? ya no sé qué hacer jajaja', badges: {} },
+      { displayName: 'GlitchKing', color: '#ff4a80', message: 'LETSGOOO', badges: { subscriber: '1' } },
+      { displayName: 'NightOwl', color: '#79c0ff', message: 'Qué juego van a jugar después?', badges: {} },
+      { displayName: 'HostChannel', color: '#ff003c', message: 'Gracias por el host!! 💜', badges: { broadcaster: '1' } },
+      { displayName: 'TurboFrag', color: '#ffd700', message: 'ese headshot fue LIMPIO', badges: { subscriber: '1' } },
+      { displayName: 'LunaPlay', color: '#00ced1', message: 'acabo de llegar, qué me perdí?', badges: {} },
+    ];
+
+    let index = 0;
+    function sendNext() {
+      engine.addMessage(demoMessages[index % demoMessages.length]);
+      index++;
+      const delay = 2000 + Math.random() * 2500;
+      setTimeout(sendNext, delay);
+    }
+    // Arrancar con los primeros mensajes rápido
+    setTimeout(() => sendNext(), 500);
+  }
+
+})();
+</script>
+</body>
+</html>

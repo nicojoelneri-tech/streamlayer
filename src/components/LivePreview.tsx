@@ -8,6 +8,10 @@ interface LivePreviewProps {
   className?: string
   fit?: 'width' | 'contain'
   interactive?: boolean
+  cropX?: number
+  cropY?: number
+  cropWidth?: number
+  cropHeight?: number
 }
 
 export default function LivePreview({
@@ -18,9 +22,17 @@ export default function LivePreview({
   className = '',
   fit = 'width',
   interactive = false,
+  cropX,
+  cropY,
+  cropWidth,
+  cropHeight,
 }: LivePreviewProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const [scale, setScale] = useState(0.3)
+
+  const hasCrop = cropWidth != null && cropHeight != null
+  const viewW = hasCrop ? cropWidth! : nativeWidth
+  const viewH = hasCrop ? cropHeight! : nativeHeight
 
   useEffect(() => {
     const el = containerRef.current
@@ -31,9 +43,9 @@ export default function LivePreview({
       const ch = el.clientHeight
 
       if (fit === 'contain' && ch > 0) {
-        setScale(Math.min(cw / nativeWidth, ch / nativeHeight))
+        setScale(Math.min(cw / viewW, ch / viewH))
       } else {
-        setScale(cw / nativeWidth)
+        setScale(cw / viewW)
       }
     }
 
@@ -42,23 +54,28 @@ export default function LivePreview({
     const observer = new ResizeObserver(updateScale)
     observer.observe(el)
     return () => observer.disconnect()
-  }, [nativeWidth, nativeHeight, fit])
+  }, [viewW, viewH, fit])
+
+  const offsetX = hasCrop ? -(cropX ?? 0) * scale : 0
+  const offsetY = hasCrop ? -(cropY ?? 0) * scale : 0
 
   return (
     <div
       ref={containerRef}
       className={`relative overflow-hidden bg-black ${className}`}
-      style={{ aspectRatio: `${nativeWidth}/${nativeHeight}` }}
+      style={{ aspectRatio: `${viewW}/${viewH}` }}
     >
       <iframe
         src={src}
         title={title}
         width={nativeWidth}
         height={nativeHeight}
-        className={`absolute left-0 top-0 border-0 ${interactive ? '' : 'pointer-events-none'}`}
+        className={`absolute border-0 ${interactive ? '' : 'pointer-events-none'}`}
         style={{
           transformOrigin: 'top left',
-          transform: `scale(${scale})`,
+          transform: `translate(${offsetX}px, ${offsetY}px) scale(${scale})`,
+          left: 0,
+          top: 0,
         }}
         loading="lazy"
       />

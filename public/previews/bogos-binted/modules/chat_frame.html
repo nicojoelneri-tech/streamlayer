@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920,height=1080">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    body { background: transparent; }
+
+    /* Posición: x=0 y=343, w=350 h=677 */
+    .chat-panel {
+      position: absolute;
+      left: 0; top: 343px;
+      width: 350px; height: 677px;
+      background: var(--panel);
+      border: 1.5px solid var(--border);
+      box-shadow: var(--glow-sm), inset 0 0 40px rgba(57,255,20,0.03);
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header */
+    .chat-header {
+      padding: 10px 14px 8px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(57,255,20,0.05);
+      flex-shrink: 0;
+    }
+    .chat-header-top {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 3px;
+    }
+    .chat-suit {
+      font-family: var(--font-terminal);
+      font-size: 16px;
+      color: var(--green);
+      opacity: 0.7;
+      text-shadow: var(--glow-xs);
+    }
+    .chat-title {
+      font-family: var(--font-display);
+      font-size: 20px;
+      color: var(--green);
+      text-shadow: var(--glow-sm);
+      letter-spacing: 0.04em;
+      flex: 1;
+      animation: neon-flicker 11s infinite;
+    }
+    .chat-subtitle {
+      font-family: var(--font-terminal);
+      font-size: 14px;
+      color: var(--pink-dim);
+      text-shadow: 0 0 6px rgba(217,70,239,0.35);
+      letter-spacing: 0.12em;
+      padding-left: 2px;
+    }
+
+    /* Área de chat — vacía para el widget real */
+    .chat-body {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Scanline sutil */
+    .chat-body::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent 0, transparent 3px,
+        rgba(0,0,0,0.08) 3px, rgba(0,0,0,0.08) 6px
+      );
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Barra scan animada */
+    .scan-bar {
+      position: absolute;
+      left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(57,255,20,0.25), transparent);
+      top: -4px;
+      animation: scan-sweep 6s linear infinite;
+      z-index: 2;
+    }
+
+    /* Ornamentos de esquinas */
+    .suits span {
+      font-family: var(--font-terminal);
+      font-size: 12px;
+      color: var(--green);
+      opacity: 0.55;
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-panel">
+    <div class="chat-header">
+      <div class="chat-header-top">
+        <span class="chat-suit">♦</span>
+        <div class="chat-title" data-config="chatTitle">TRANSMISSIONS</div>
+        <span class="chat-suit">♦</span>
+      </div>
+      <div class="chat-subtitle" data-config="chatSubtitle">INCOMING SIGNALS</div>
+    </div>
+
+    <div class="chat-body">
+      <div class="scan-bar"></div>
+    </div>
+
+    <!-- Suit corners -->
+    <div class="suits">
+      <span class="s-bl">♣</span>
+      <span class="s-br">♣</span>
+    </div>
+  </div>
+
+  <script src="../config/config.js"></script>
+  <script src="../shared.js"></script>
+</body>
+</html>

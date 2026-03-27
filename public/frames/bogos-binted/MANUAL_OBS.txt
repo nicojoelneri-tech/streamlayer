@@ -1,0 +1,44 @@
+═══════════════════════════════════════════════════════════
+  CAMERA FRAME: BOGOS BINTED — Manual OBS
+═══════════════════════════════════════════════════════════
+
+Temática: Alien Casino — verde neón + rosa/violeta
+
+══ ARCHIVOS ════════════════════════════════════════════════
+
+  index.html    → Horizontal / landscape  (420 × 320)
+  vertical.html → Vertical  / portrait    (320 × 420)
+
+══ SETUP EN OBS ════════════════════════════════════════════
+
+1. Agregá una fuente "Navegador" (Browser Source):
+      URL:    ruta/al/archivo/index.html  (o vertical.html)
+      Ancho:  420  (o 320 para vertical)
+      Alto:   320  (o 420 para vertical)
+      ✓ Fondo transparente
+
+2. Posicionalo y escalalo a tu gusto en OBS.
+
+3. Agregá la captura de webcam ENCIMA de este source
+   en la lista de fuentes de OBS.
+
+══ PERSONALIZAR LABEL ══════════════════════════════════════
+
+  Al final del <script> de cada archivo:
+
+      const LABEL_TEXT = '◆ BOGOS BINTED ◆';
+
+  Cambiá ese texto por lo que quieras:
+      '◆ LIVE ◆'  /  '◆ TU CANAL ◆'  /  '' (vacío = sin label)
+
+══ DISEÑO ══════════════════════════════════════════════════
+
+  · L-brackets en esquinas (igual que el overlay)
+  · ♠ verde  |  ♥ rosa  |  ♣ violeta  |  ♦ verde
+  · Borde verde neón con flash rosa ocasional
+  · Palos de carta orbitando el marco (canvas)
+  · Chispas y mini starfield exterior
+  · Scanlines interiores
+  · Glitch verde + rosa
+
+═══════════════════════════════════════════════════════════

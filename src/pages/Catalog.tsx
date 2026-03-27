@@ -9,6 +9,7 @@ const CATEGORIES: { id: ProductCategory | 'all'; label: string }[] = [
   { id: 'all', label: 'Todo' },
   { id: 'pack', label: 'Packs completos' },
   { id: 'camera-frame', label: 'Marcos de cámara' },
+  { id: 'chat-theme', label: 'Temas de chat' },
 ]
 
 const CATEGORY_INFO: Record<ProductCategory, { title: string; subtitle: string }> = {
@@ -19,6 +20,10 @@ const CATEGORY_INFO: Record<ProductCategory, { title: string; subtitle: string }
   'camera-frame': {
     title: 'Marcos de Cámara',
     subtitle: 'Marcos individuales para tu webcam. Browser Source listo para OBS.',
+  },
+  'chat-theme': {
+    title: 'Temas de Chat',
+    subtitle: 'Cajas de chat animadas para OBS. Browser Source listo para usar con Twitch.',
   },
 }
 

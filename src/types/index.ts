@@ -1,6 +1,6 @@
 export type OverlayStyle = 'minimal' | 'neon' | 'gacha' | 'retro' | 'pro' | 'hacker' | 'japanese'
 
-export type ProductCategory = 'pack' | 'camera-frame'
+export type ProductCategory = 'pack' | 'camera-frame' | 'chat-theme'
 
 export type ModuleType =
   | 'camera'
@@ -34,4 +34,5 @@ export interface OverlayPack {
   previewImages?: string[]
   previewUrl?: string
   previewSize?: [number, number]
+  previewCrop?: [number, number, number, number] // [x, y, width, height]
 }

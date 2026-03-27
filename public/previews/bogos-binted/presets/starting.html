@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920,height=1080">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    body { background: var(--bg); }
+
+    /* Fondo estrellado */
+    .bg-canvas { position: absolute; top: 0; left: 0; z-index: 0; }
+
+    /* Layout */
+    .scene {
+      position: absolute; inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+    }
+
+    /* Panel central */
+    .card {
+      width: 820px;
+      background: var(--panel);
+      border: 2px solid var(--border-hi);
+      box-shadow: var(--glow-lg), inset 0 0 80px rgba(57,255,20,0.05);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 48px 56px 40px;
+      gap: 0;
+      position: relative;
+      animation: pulse-glow 4s ease-in-out infinite;
+    }
+
+    /* Esquinas L */
+    .card-corner {
+      position: absolute;
+      width: 50px; height: 50px;
+    }
+    .card-corner .bh, .card-corner .bv {
+      position: absolute;
+      background: var(--green);
+      box-shadow: var(--glow-sm);
+    }
+    .card-corner .bh { top: 0; left: 0; width: 100%; height: 3px; }
+    .card-corner .bv { top: 0; left: 0; width: 3px; height: 100%; }
+    .cc-tl { top: -1px; left: -1px; }
+    .cc-tr { top: -1px; right: -1px; transform: scaleX(-1); }
+    .cc-bl { bottom: -1px; left: -1px; transform: scaleY(-1); }
+    .cc-br { bottom: -1px; right: -1px; transform: scale(-1,-1); }
+
+    /* Suit corners decorativos */
+    .card-suit {
+      position: absolute;
+      font-family: var(--font-terminal);
+      font-size: 20px;
+      color: var(--green);
+      opacity: 0.60;
+      text-shadow: var(--glow-xs);
+    }
+    .cs-tl { top: 10px; left: 14px; }
+    .cs-tr { top: 10px; right: 14px; }
+    .cs-bl { bottom: 10px; left: 14px; }
+    .cs-br { bottom: 10px; right: 14px; }
+
+    /* Contenido */
+    .s-tag {
+      font-family: var(--font-terminal);
+      font-size: 20px;
+      letter-spacing: 0.18em;
+      color: var(--purple);
+      text-shadow: var(--glow-purple);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      animation: blink 1.2s step-end infinite;
+    }
+
+    .s-title {
+      font-family: var(--font-display);
+      font-size: 88px;
+      color: var(--green);
+      text-shadow: var(--glow-lg);
+      line-height: 1;
+      text-align: center;
+      margin-bottom: 6px;
+      animation: neon-flicker 7s infinite;
+    }
+
+    .s-accent {
+      font-family: var(--font-ui);
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 24px;
+    }
+
+    .divider-suits {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      margin-bottom: 22px;
+    }
+    .divider-suits .line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+    }
+    .divider-suits .suits-row {
+      font-family: var(--font-terminal);
+      font-size: 18px;
+      color: var(--green);
+      opacity: 0.65;
+      text-shadow: var(--glow-xs);
+      letter-spacing: 0.2em;
+    }
+
+    .s-sub {
+      font-family: var(--font-terminal);
+      font-size: 22px;
+      letter-spacing: 0.08em;
+      color: var(--text-dim);
+      margin-bottom: 28px;
+      text-align: center;
+    }
+
+    /* Chips */
+    .chips {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .chip {
+      padding: 8px 22px;
+      background: var(--green-dark);
+      border: 1.5px solid var(--border);
+      font-family: var(--font-ui);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--green);
+      text-shadow: var(--glow-xs);
+      clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
+    }
+
+    .s-note {
+      font-family: var(--font-ui);
+      font-size: 13px;
+      color: var(--text-dim);
+      letter-spacing: 0.06em;
+      text-align: center;
+      font-style: italic;
+    }
+
+    /* Channel en esquina superior */
+    .channel-tag {
+      position: absolute;
+      top: 28px; right: 40px;
+      font-family: var(--font-display);
+      font-size: 26px;
+      color: var(--green);
+      text-shadow: var(--glow-sm);
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+  <!-- Starfield canvas -->
+  <canvas class="bg-canvas" id="bgc" width="1920" height="1080"></canvas>
+
+  <div class="scene">
+    <div class="card">
+      <!-- Corner brackets -->
+      <div class="card-corner cc-tl"><div class="bh"></div><div class="bv"></div></div>
+      <div class="card-corner cc-tr"><div class="bh"></div><div class="bv"></div></div>
+      <div class="card-corner cc-bl"><div class="bh"></div><div class="bv"></div></div>
+      <div class="card-corner cc-br"><div class="bh"></div><div class="bv"></div></div>
+
+      <!-- Suit corners -->
+      <span class="card-suit cs-tl">♠</span>
+      <span class="card-suit cs-tr">♥</span>
+      <span class="card-suit cs-bl">♣</span>
+      <span class="card-suit cs-br">♦</span>
+
+      <div class="s-tag"    data-config="startingTag">INICIANDO TRANSMISIÓN</div>
+      <div class="s-title"  data-config="startingTitle">BOGOS BINTED?</div>
+      <div class="s-accent" data-config="startingAccent">ALIEN CASINO</div>
+
+      <div class="divider-suits">
+        <div class="line"></div>
+        <span class="suits-row">♠ ♥ ♦ ♣</span>
+        <div class="line"></div>
+      </div>
+
+      <div class="s-sub" data-config="startingSub">La stream está por comenzar...</div>
+
+      <div class="chips">
+        <div class="chip" data-config="startingChip1">!seguir</div>
+        <div class="chip" data-config="startingChip2">!discord</div>
+        <div class="chip" data-config="startingChip3">!comandos</div>
+      </div>
+
+      <div class="s-note" data-config="startingNote">Ajusta tu casco y prepara tus cartas</div>
+    </div>
+  </div>
+
+  <!-- Channel name -->
+  <div class="channel-tag" data-config="channelName">TuCanal</div>
+
+  <script src="../config/config.js"></script>
+  <script src="../shared.js"></script>
+  <script>
+    // Starfield ligero
+    var cv = document.getElementById('bgc');
+    var ctx = cv.getContext('2d');
+    var stars = Array.from({length: 300}, function() {
+      return {
+        x: Math.random()*1920, y: Math.random()*1080,
+        r: Math.random()*1.3+0.2,
+        base: Math.random()*0.7+0.15,
+        spd: Math.random()*0.02+0.005,
+        phase: Math.random()*Math.PI*2
+      };
+    });
+    var t = 0;
+    function draw() {
+      ctx.clearRect(0,0,1920,1080);
+      // nebula verde esquina izq
+      var g1 = ctx.createRadialGradient(0,1080,0,0,1080,600);
+      g1.addColorStop(0,'rgba(57,255,20,0.06)'); g1.addColorStop(1,'transparent');
+      ctx.fillStyle=g1; ctx.fillRect(0,0,1920,1080);
+      // nebula morado esquina der
+      var g2 = ctx.createRadialGradient(1920,0,0,1920,0,500);
+      g2.addColorStop(0,'rgba(168,85,247,0.05)'); g2.addColorStop(1,'transparent');
+      ctx.fillStyle=g2; ctx.fillRect(0,0,1920,1080);
+      stars.forEach(function(s) {
+        var tw = Math.sin(t*s.spd+s.phase)*0.38+0.62;
+        ctx.globalAlpha = s.base*tw;
+        ctx.fillStyle   = '#D0F0FF';
+        ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2); ctx.fill();
+      });
+      ctx.globalAlpha=1; t++;
+      requestAnimationFrame(draw);
+    }
+    draw();
+  </script>
+</body>
+</html>

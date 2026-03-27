@@ -1,0 +1,48 @@
+═══════════════════════════════════════════════════════════
+  CHAT THEME: BOGOS BINTED — Manual OBS
+═══════════════════════════════════════════════════════════
+
+DISEÑADO PARA usarse junto con el módulo chat_frame del
+overlay Bogos Binted (x=0, y=343, w=350, h=677).
+
+══ SETUP RÁPIDO ════════════════════════════════════════════
+
+1. Abrí config.js y cambiá:
+      channel: 'tu_canal'    ← tu nombre de canal de Twitch
+      demoMode: false         ← para conectar al chat real
+
+2. En OBS, agregá un Browser Source:
+      URL:    ruta/a/chat_themes/bogos_binted/index.html
+      Ancho:  1920
+      Alto:   1080
+      Fondo:  transparente ✓
+
+3. Posicioná el Browser Source encima del módulo
+   chat_frame de Bogos Binted en el orden de capas de OBS.
+
+══ CAPAS EN OBS (orden de arriba a abajo) ══════════════════
+
+  ↑ chat_theme (bogos_binted) — este archivo
+  ↑ top_hud
+  ↑ game_frame / camera_frame / focus_panel
+  ↓ ambient (fondo)
+
+══ CONFIGURACIÓN ═══════════════════════════════════════════
+
+  channel        → nombre de canal Twitch (sin #)
+  maxMessages    → cuántos mensajes visibles (rec: 4-5)
+  animationSpeed → velocidad en ms (rec: 350-450)
+  chatWidth      → ancho en px (rec: 338 para Bogos Binted)
+  chatLeft       → margen izquierdo (rec: 5px)
+  chatBottom     → margen inferior (rec: 65px)
+  showBadges     → mostrar iconos de mod/sub/vip
+  demoMode       → true para preview, false para live
+
+══ AJUSTE DE POSICIÓN ══════════════════════════════════════
+
+  Si cambiás el layout del overlay ajustá en config.js:
+    chatLeft   = margen desde borde izquierdo
+    chatBottom = margen desde borde inferior
+                 (60px = altura del ticker)
+
+═══════════════════════════════════════════════════════════

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920,height=1080">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    body { background: transparent; }
+
+    /* Área del juego: x=350 y=80, w=1570 h=940 */
+    .frame-wrap {
+      position: absolute;
+      left: 350px; top: 80px;
+      width: 1570px; height: 940px;
+    }
+
+    /* Borde principal */
+    .frame-border {
+      position: absolute;
+      inset: 0;
+      border: 2px solid var(--border);
+      box-shadow: var(--glow-md), inset 0 0 60px rgba(57,255,20,0.04);
+      pointer-events: none;
+    }
+
+    /* Etiqueta de juego — top center */
+    .frame-label {
+      position: absolute;
+      top: -1px; left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--panel);
+      border: 1.5px solid var(--border);
+      border-top: none;
+      padding: 0 20px 5px;
+      font-family: var(--font-ui);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--green);
+      text-shadow: var(--glow-xs);
+      white-space: nowrap;
+    }
+    .frame-label-suit {
+      font-family: var(--font-terminal);
+      font-size: 14px;
+      opacity: 0.7;
+    }
+
+    /* Edge labels laterales */
+    .edge-label {
+      position: absolute;
+      font-family: var(--font-terminal);
+      font-size: 18px;
+      color: var(--text-dim);
+      letter-spacing: 0.12em;
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+    }
+    .edge-left  { left: 6px;  top: 50%; transform: translateY(-50%) rotate(180deg); }
+    .edge-right { right: 6px; top: 50%; transform: translateY(-50%); }
+
+    /* Esquinas L-bracket + palo de carta */
+    .corner-group {
+      position: absolute;
+      width: 44px; height: 44px;
+    }
+    .corner-group .bh,
+    .corner-group .bv {
+      position: absolute;
+      background: var(--green);
+      box-shadow: var(--glow-sm);
+    }
+    .corner-group .bh { top: 0; left: 0; width: 100%; height: 3px; }
+    .corner-group .bv { top: 0; left: 0; width: 3px; height: 100%; }
+    .corner-group .suit {
+      position: absolute;
+      font-family: var(--font-terminal);
+      font-size: 16px;
+      color: var(--green);
+      text-shadow: var(--glow-sm);
+      line-height: 1;
+    }
+
+    /* TL */
+    .c-tl { top: -1px; left: -1px; }
+    .c-tl .suit { top: 6px; left: 7px; }
+
+    /* TR */
+    .c-tr { top: -1px; right: -1px; transform: scaleX(-1); }
+    .c-tr .suit { top: 6px; left: 7px; }
+
+    /* BL */
+    .c-bl { bottom: -1px; left: -1px; transform: scaleY(-1); }
+    .c-bl .suit { top: 6px; left: 7px; }
+
+    /* BR */
+    .c-br { bottom: -1px; right: -1px; transform: scale(-1,-1); }
+    .c-br .suit { top: 6px; left: 7px; }
+  </style>
+</head>
+<body>
+  <div class="frame-wrap">
+    <div class="frame-border"></div>
+
+    <!-- Etiqueta superior -->
+    <div class="frame-label">
+      <span class="frame-label-suit">♠</span>
+      <span data-config="gameLabel">Bogos Binted?</span>
+      <span class="frame-label-suit">♠</span>
+    </div>
+
+    <!-- Edges -->
+    <div class="edge-label edge-left"  data-config="gameEdgeLeft">ROUND</div>
+    <div class="edge-label edge-right" data-config="gameEdgeRight">WINNER</div>
+
+    <!-- Esquinas -->
+    <div class="corner-group c-tl"><div class="bh"></div><div class="bv"></div><span class="suit">♠</span></div>
+    <div class="corner-group c-tr"><div class="bh"></div><div class="bv"></div><span class="suit">♥</span></div>
+    <div class="corner-group c-bl"><div class="bh"></div><div class="bv"></div><span class="suit">♣</span></div>
+    <div class="corner-group c-br"><div class="bh"></div><div class="bv"></div><span class="suit">♦</span></div>
+  </div>
+
+  <script src="../config/config.js"></script>
+  <script src="../shared.js"></script>
+</body>
+</html>

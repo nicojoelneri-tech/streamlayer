@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920,height=1080">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    body { background: transparent; }
+
+    /* Posición: x=20 y=900 (bottom-left) */
+    .alert-wrap {
+      position: absolute;
+      left: 20px; bottom: 80px;
+      width: 420px;
+    }
+
+    .alert-box {
+      background: #040415;
+      border: 2px solid var(--border-hi);
+      box-shadow: var(--glow-lg), inset 0 0 40px rgba(57,255,20,0.06);
+      padding: 16px 20px 14px;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      opacity: 0;
+      transform: translateX(-110px);
+    }
+    .alert-box.show {
+      animation: alert-in 0.5s cubic-bezier(0.22,1,0.36,1) forwards;
+    }
+    .alert-box.hide {
+      animation: alert-out 0.45s ease-in forwards;
+    }
+
+    /* Icono alien */
+    .alert-icon {
+      font-family: var(--font-terminal);
+      font-size: 40px;
+      color: var(--green);
+      text-shadow: var(--glow-md);
+      line-height: 1;
+      flex-shrink: 0;
+      animation: float-v 3s ease-in-out infinite;
+    }
+
+    /* Contenido */
+    .alert-content { flex: 1; overflow: hidden; }
+    .alert-title {
+      font-family: var(--font-display);
+      font-size: 24px;
+      color: var(--green);
+      text-shadow: var(--glow-md);
+      line-height: 1.1;
+      margin-bottom: 4px;
+      animation: neon-flicker 6s infinite;
+    }
+    .alert-text {
+      font-family: var(--font-ui);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+    .alert-sub {
+      font-family: var(--font-terminal);
+      font-size: 16px;
+      color: var(--pink-dim);
+      text-shadow: 0 0 6px rgba(217,70,239,0.4);
+      letter-spacing: 0.06em;
+    }
+
+    /* Borde animado inferior */
+    .alert-progress {
+      position: absolute;
+      bottom: 0; left: 0;
+      height: 3px;
+      background: var(--green);
+      box-shadow: var(--glow-sm);
+      width: 100%;
+      transform-origin: left;
+      animation: shrink 5s linear forwards;
+    }
+    @keyframes shrink {
+      from { transform: scaleX(1); }
+      to   { transform: scaleX(0); }
+    }
+
+    /* Suit corners */
+    .suits span { font-size: 11px; color: var(--green); opacity: 0.55; }
+  </style>
+</head>
+<body>
+  <div class="alert-wrap">
+    <div class="alert-box" id="alertBox">
+      <div class="alert-icon">👽</div>
+      <div class="alert-content">
+        <div class="alert-title"  data-config="alertTitle">¡NUEVO ALIEN!</div>
+        <div class="alert-text"   data-config="alertText">Se unió a la nave</div>
+        <div class="alert-sub"    data-config="alertSub">¡Bienvenido a bordo!</div>
+      </div>
+      <div class="alert-progress" id="alertProgress"></div>
+      <div class="suits">
+        <span class="s-tl">♠</span>
+        <span class="s-tr">♠</span>
+        <span class="s-bl">♣</span>
+        <span class="s-br">♣</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="../config/config.js"></script>
+  <script src="../shared.js"></script>
+  <script>
+    // Demo loop: muestra alerta cada 8s
+    var box = document.getElementById('alertBox');
+
+    function showAlert() {
+      box.classList.remove('hide');
+      box.classList.add('show');
+
+      // Recrear progress bar
+      var old = document.getElementById('alertProgress');
+      if (old) {
+        var np = old.cloneNode(false);
+        old.parentNode.replaceChild(np, old);
+        np.id = 'alertProgress';
+      }
+
+      setTimeout(function () {
+        box.classList.remove('show');
+        box.classList.add('hide');
+        setTimeout(function () {
+          box.classList.remove('hide');
+          box.style.opacity = '0';
+        }, 500);
+      }, 5000);
+    }
+
+    // Espera 1s al cargar, luego cicla cada 8s
+    setTimeout(function () {
+      showAlert();
+      setInterval(showAlert, 8000);
+    }, 1000);
+  </script>
+</body>
+</html>

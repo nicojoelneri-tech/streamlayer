@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=320,height=480">
+<title>Pokemon Trainer — Camera Frame (Vertical)</title>
+<style>
+  /* ═══════════════════════════════════════════
+     POKEMON TRAINER — Animated Camera Frame
+     Browser Source: 320 × 480, transparent bg
+     Webcam goes ABOVE this source in OBS
+  ═══════════════════════════════════════════ */
+
+  @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{
+    width:320px;height:480px;
+    background:transparent;
+    overflow:hidden;
+  }
+
+  .frame-wrap{
+    position:absolute;
+    left:50%;top:50%;
+    transform:translate(-50%,-50%);
+    width:264px;height:400px;
+  }
+
+  /* ── Pokeball split border ── */
+  .border-top{
+    position:absolute;top:0;left:0;right:0;height:50%;
+    border-top:3px solid #ee1515;
+    border-left:3px solid #ee1515;
+    border-right:3px solid #ee1515;
+    border-radius:6px 6px 0 0;
+    background:transparent;
+    pointer-events:none;
+  }
+  .border-bottom{
+    position:absolute;bottom:0;left:0;right:0;height:50%;
+    border-bottom:3px solid #fff;
+    border-left:3px solid #fff;
+    border-right:3px solid #fff;
+    border-radius:0 0 6px 6px;
+    background:transparent;
+    pointer-events:none;
+  }
+
+
+  /* ── Inner trainer card border ── */
+  .inner-border{
+    position:absolute;
+    inset:6px;
+    border:1px solid rgba(255,255,255,.25);
+    border-radius:4px;
+    pointer-events:none;
+  }
+
+  /* ── Tall grass (Gameboy style) ── */
+  .grass-wrap{
+    position:absolute;
+    bottom:-1px;left:0;right:0;
+    height:22px;
+    pointer-events:none;
+    z-index:3;
+    overflow:hidden;
+  }
+  .grass-blade{
+    position:absolute;
+    bottom:0;
+    width:0;height:0;
+    border-left:3px solid transparent;
+    border-right:3px solid transparent;
+    border-bottom:14px solid #2d6a1e;
+  }
+  .grass-blade.dark{border-bottom-color:#1a4a12}
+  .grass-blade.light{border-bottom-color:#4a9e35}
+  .grass-blade.sway{
+    transform-origin:bottom center;
+    animation:grassSway 2.5s ease-in-out infinite;
+  }
+  .grass-blade.sway2{
+    animation:grassSway 3s ease-in-out infinite reverse;
+  }
+  @keyframes grassSway{
+    0%,100%{transform:rotate(-4deg)}
+    50%{transform:rotate(4deg)}
+  }
+  .grass-tall{border-bottom-width:18px;border-left-width:4px;border-right-width:4px}
+  .grass-short{border-bottom-width:10px;border-left-width:2px;border-right-width:2px}
+
+  /* ── HP Bar ── */
+  .hp-bar-wrap{
+    position:absolute;
+    top:7px;left:50px;right:10px;
+    height:6px;
+    background:rgba(48,48,48,.7);
+    border-radius:3px;
+    z-index:3;
+    overflow:hidden;
+    pointer-events:none;
+    border:1px solid rgba(255,255,255,.15);
+  }
+  .hp-bar-fill{
+    position:absolute;
+    top:0;left:0;bottom:0;
+    width:80%;
+    background:linear-gradient(90deg,#4ade80,#22c55e);
+    border-radius:2px;
+    box-shadow:0 0 4px rgba(74,222,128,.5);
+  }
+  .hp-label{
+    position:absolute;
+    top:6px;left:10px;
+    font-family:'Press Start 2P',monospace;
+    font-size:5px;
+    color:#fff;
+    z-index:3;
+    letter-spacing:.5px;
+    text-shadow:0 0 2px rgba(0,0,0,.8);
+    pointer-events:none;
+  }
+
+
+  /* ── Canvas for sparkle particles ── */
+  #sparkle-canvas{
+    position:absolute;
+    inset:0;
+    width:264px;height:400px;
+    z-index:4;
+    pointer-events:none;
+  }
+
+  /* ── Label ── */
+  #label{
+    position:absolute;
+    bottom:-24px;left:50%;
+    transform:translateX(-50%);
+    font-family:'Press Start 2P',monospace;
+    font-size:9px;
+    color:#fff;
+    text-shadow:0 0 6px rgba(238,21,21,.6),0 0 12px rgba(238,21,21,.3);
+    letter-spacing:2px;
+    white-space:nowrap;
+    animation:labelPulse 3s ease-in-out infinite;
+    pointer-events:none;
+  }
+  @keyframes labelPulse{
+    0%,100%{text-shadow:0 0 6px rgba(238,21,21,.6),0 0 12px rgba(238,21,21,.3)}
+    50%{text-shadow:0 0 8px rgba(238,21,21,.8),0 0 18px rgba(238,21,21,.5),0 0 30px rgba(59,130,246,.2)}
+  }
+
+
+  /* ── Corner accents ── */
+  .corner-accent{
+    position:absolute;
+    width:12px;height:12px;
+    pointer-events:none;
+    z-index:3;
+  }
+  .corner-accent::before,.corner-accent::after{
+    content:'';position:absolute;background:#ee1515;
+  }
+  .ca-tl{top:3px;left:3px}
+  .ca-tl::before{width:12px;height:2px;top:0;left:0}
+  .ca-tl::after{width:2px;height:12px;top:0;left:0}
+  .ca-tr{top:3px;right:3px}
+  .ca-tr::before{width:12px;height:2px;top:0;right:0}
+  .ca-tr::after{width:2px;height:12px;top:0;right:0}
+  .ca-bl{bottom:3px;left:3px}
+  .ca-bl::before{width:12px;height:2px;bottom:0;left:0}
+  .ca-bl::after{width:2px;height:12px;bottom:0;left:0}
+  .ca-br{bottom:3px;right:3px}
+  .ca-br::before{width:12px;height:2px;bottom:0;right:0}
+  .ca-br::after{width:2px;height:12px;bottom:0;right:0}
+</style>
+</head>
+<body>
+<div class="frame-wrap">
+  <!-- Border halves -->
+  <div class="border-top"></div>
+  <div class="border-bottom"></div>
+
+  <!-- Inner trainer card border -->
+  <div class="inner-border"></div>
+
+  <!-- Corner accents -->
+  <div class="corner-accent ca-tl"></div>
+  <div class="corner-accent ca-tr"></div>
+  <div class="corner-accent ca-bl"></div>
+  <div class="corner-accent ca-br"></div>
+
+  <!-- Tall grass (Gameboy style) -->
+  <div class="grass-wrap">
+    <div class="grass-blade dark grass-tall sway" style="left:4px"></div>
+    <div class="grass-blade grass-tall sway2" style="left:14px"></div>
+    <div class="grass-blade dark grass-tall sway" style="left:22px;animation-delay:.3s"></div>
+    <div class="grass-blade light grass-tall sway2" style="left:32px"></div>
+    <div class="grass-blade dark grass-tall sway" style="left:44px;animation-delay:.6s"></div>
+    <div class="grass-blade grass-tall sway2" style="left:56px;animation-delay:.2s"></div>
+    <div class="grass-blade dark grass-tall sway" style="right:4px;animation-delay:.5s"></div>
+    <div class="grass-blade grass-tall sway2" style="right:14px;animation-delay:.1s"></div>
+    <div class="grass-blade dark grass-tall sway" style="right:24px;animation-delay:.7s"></div>
+    <div class="grass-blade light grass-tall sway2" style="right:34px;animation-delay:.4s"></div>
+    <div class="grass-blade dark grass-tall sway" style="right:46px"></div>
+    <div class="grass-blade grass-tall sway2" style="right:56px;animation-delay:.3s"></div>
+    <!-- Front layer -->
+    <div class="grass-blade light grass-short sway" style="left:8px;animation-delay:.2s"></div>
+    <div class="grass-blade grass-short sway2" style="left:18px;animation-delay:.5s"></div>
+    <div class="grass-blade light grass-short sway" style="left:38px;animation-delay:.7s"></div>
+    <div class="grass-blade grass-short sway2" style="left:50px"></div>
+    <div class="grass-blade light grass-short sway" style="right:8px;animation-delay:.6s"></div>
+    <div class="grass-blade grass-short sway2" style="right:18px;animation-delay:.3s"></div>
+    <div class="grass-blade light grass-short sway" style="right:40px;animation-delay:.8s"></div>
+    <div class="grass-blade grass-short sway2" style="right:50px;animation-delay:.2s"></div>
+  </div>
+
+  <!-- HP Bar -->
+  <span class="hp-label">HP</span>
+  <div class="hp-bar-wrap"><div class="hp-bar-fill"></div></div>
+
+
+  <!-- Sparkle canvas -->
+  <canvas id="sparkle-canvas" width="264" height="400"></canvas>
+
+  <!-- Label -->
+  <div id="label"></div>
+</div>
+
+<script>
+  const LABEL_TEXT = 'TRAINER';
+
+  document.getElementById('label').textContent = LABEL_TEXT;
+
+  /* ── Pixel sparkle particles on canvas ── */
+  const canvas = document.getElementById('sparkle-canvas');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const MARGIN = 18;
+  const particles = [];
+  const MAX_P = 30;
+
+  function spawnParticle(){
+    const side = Math.floor(Math.random()*4);
+    let x,y;
+    switch(side){
+      case 0: x=Math.random()*W; y=Math.random()*MARGIN; break;
+      case 1: x=Math.random()*W; y=H-Math.random()*MARGIN; break;
+      case 2: x=Math.random()*MARGIN; y=Math.random()*H; break;
+      case 3: x=W-Math.random()*MARGIN; y=Math.random()*H; break;
+    }
+    const colors = ['#fff','#fff','#fde68a','#fbbf24','#fff'];
+    return {
+      x, y,
+      size: Math.random()*3+1.5,
+      life: 1,
+      decay: Math.random()*0.015+0.008,
+      color: colors[Math.floor(Math.random()*colors.length)],
+      vy: (Math.random()-0.5)*0.3,
+      vx: (Math.random()-0.5)*0.3
+    };
+  }
+
+  function animate(){
+    ctx.clearRect(0,0,W,H);
+
+    if(particles.length < MAX_P && Math.random()<0.3){
+      particles.push(spawnParticle());
+    }
+
+    for(let i=particles.length-1;i>=0;i--){
+      const p=particles[i];
+      p.life-=p.decay;
+      p.x+=p.vx;
+      p.y+=p.vy;
+      if(p.life<=0){particles.splice(i,1);continue}
+
+      ctx.globalAlpha=p.life;
+      ctx.fillStyle=p.color;
+      const s=p.size*p.life;
+      ctx.fillRect(Math.floor(p.x),Math.floor(p.y),Math.ceil(s),Math.ceil(s));
+
+      ctx.globalAlpha=p.life*0.3;
+      ctx.fillRect(Math.floor(p.x)-1,Math.floor(p.y)-1,Math.ceil(s)+2,Math.ceil(s)+2);
+    }
+    ctx.globalAlpha=1;
+    requestAnimationFrame(animate);
+  }
+  animate();
+</script>
+</body>
+</html>

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=320,height=420">
+<title>Bogos Binted — Camera Frame Vertical</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=VT323&display=swap" rel="stylesheet">
+<style>
+  /* ═══════════════════════════════════════════
+     BOGOS BINTED — Alien Casino Camera Frame
+     VERTICAL / Portrait
+     Browser Source: 320 × 420, transparent bg
+     Webcam goes ABOVE this source in OBS
+  ═══════════════════════════════════════════ */
+
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{
+    width:320px;height:420px;
+    background:transparent;
+    overflow:hidden;
+  }
+
+  .frame-wrap{
+    position:absolute;
+    left:50%;top:50%;
+    transform:translate(-50%,-50%);
+    width:280px;height:370px;
+  }
+
+  .border-outer{
+    position:absolute;inset:0;
+    border:2px solid rgba(57,255,20,0.65);
+    box-shadow:
+      0 0 8px  rgba(57,255,20,0.45),
+      0 0 22px rgba(57,255,20,0.18),
+      inset 0 0 10px rgba(57,255,20,0.05);
+    animation:borderAnim 11s ease-in-out infinite;
+  }
+  .border-inner{
+    position:absolute;inset:7px;
+    border:1px solid rgba(57,255,20,0.20);
+    box-shadow:inset 0 0 6px rgba(57,255,20,0.06);
+    animation:borderAnim 11s ease-in-out infinite 0.7s;
+  }
+
+  @keyframes borderAnim{
+    0%,80%,100%{
+      border-color:rgba(57,255,20,0.65);
+      box-shadow:0 0 8px rgba(57,255,20,0.45),0 0 22px rgba(57,255,20,0.18),inset 0 0 10px rgba(57,255,20,0.05);
+    }
+    85%{border-color:rgba(57,255,20,0.30);box-shadow:0 0 4px rgba(57,255,20,0.20)}
+    87%{
+      border-color:rgba(217,70,239,0.80);
+      box-shadow:0 0 12px rgba(217,70,239,0.60),0 0 30px rgba(217,70,239,0.25),inset 0 0 14px rgba(217,70,239,0.08);
+    }
+    90%{border-color:rgba(57,255,20,0.65);box-shadow:0 0 8px rgba(57,255,20,0.45),0 0 22px rgba(57,255,20,0.18),inset 0 0 10px rgba(57,255,20,0.05)}
+  }
+
+  .corner{position:absolute;width:34px;height:34px}
+  .corner .bh,.corner .bv{
+    position:absolute;
+    background:#39FF14;
+    box-shadow:0 0 8px rgba(57,255,20,0.75),0 0 20px rgba(57,255,20,0.35);
+    animation:bracketPulse 4s ease-in-out infinite;
+  }
+  .corner .bh{top:0;left:0;width:100%;height:3px}
+  .corner .bv{top:0;left:0;width:3px;height:100%}
+  .c-tl{top:-1px;left:-1px}
+  .c-tr{top:-1px;right:-1px;transform:scaleX(-1)}
+  .c-bl{bottom:-1px;left:-1px;transform:scaleY(-1)}
+  .c-br{bottom:-1px;right:-1px;transform:scale(-1,-1)}
+
+  @keyframes bracketPulse{
+    0%,100%{box-shadow:0 0 8px rgba(57,255,20,0.75),0 0 20px rgba(57,255,20,0.35)}
+    50%     {box-shadow:0 0 12px rgba(57,255,20,1.0),0 0 30px rgba(57,255,20,0.55)}
+  }
+
+  .suit{position:absolute;font-family:'VT323',monospace;font-size:17px;line-height:1}
+  .s-tl{top:5px;left:8px;color:#39FF14;text-shadow:0 0 7px rgba(57,255,20,0.75);animation:suitPulse 4s ease-in-out infinite}
+  .s-tr{top:5px;right:8px;color:#D946EF;text-shadow:0 0 7px rgba(217,70,239,0.75);animation:suitPulse 4s ease-in-out infinite 1s}
+  .s-bl{bottom:5px;left:8px;color:#C084FC;text-shadow:0 0 7px rgba(192,132,252,0.75);animation:suitPulse 4s ease-in-out infinite 2s}
+  .s-br{bottom:5px;right:8px;color:#39FF14;text-shadow:0 0 7px rgba(57,255,20,0.75);animation:suitPulse 4s ease-in-out infinite 3s}
+
+  @keyframes suitPulse{0%,100%{opacity:0.65}50%{opacity:1}}
+
+  .dot{position:absolute;width:5px;height:5px;border-radius:50%}
+  .d-tl{top:-2.5px;left:-2.5px;background:#39FF14;box-shadow:0 0 6px #39FF14,0 0 12px rgba(57,255,20,0.5);animation:dotPop 2s ease-in-out infinite}
+  .d-tr{top:-2.5px;right:-2.5px;background:#D946EF;box-shadow:0 0 6px #D946EF,0 0 12px rgba(217,70,239,0.5);animation:dotPop 2s ease-in-out infinite 0.5s}
+  .d-bl{bottom:-2.5px;left:-2.5px;background:#C084FC;box-shadow:0 0 6px #C084FC,0 0 12px rgba(192,132,252,0.5);animation:dotPop 2s ease-in-out infinite 1s}
+  .d-br{bottom:-2.5px;right:-2.5px;background:#39FF14;box-shadow:0 0 6px #39FF14,0 0 12px rgba(57,255,20,0.5);animation:dotPop 2s ease-in-out infinite 1.5s}
+
+  @keyframes dotPop{0%,100%{transform:scale(1);opacity:0.8}50%{transform:scale(1.9);opacity:1}}
+
+  .edge-suit{position:absolute;font-family:'VT323',monospace;font-size:15px;line-height:1;animation:edgeFade 3s ease-in-out infinite}
+  .es-t{top:-12px;left:50%;transform:translateX(-50%);color:#39FF14;opacity:0.55;text-shadow:0 0 5px rgba(57,255,20,0.5)}
+  .es-b{bottom:-12px;left:50%;transform:translateX(-50%);color:#C084FC;opacity:0.55;text-shadow:0 0 5px rgba(192,132,252,0.5);animation-delay:1.5s}
+  .es-l{left:-13px;top:50%;transform:translateY(-50%);color:#D946EF;opacity:0.55;text-shadow:0 0 5px rgba(217,70,239,0.5);animation-delay:0.75s}
+  .es-r{right:-13px;top:50%;transform:translateY(-50%);color:#39FF14;opacity:0.55;text-shadow:0 0 5px rgba(57,255,20,0.5);animation-delay:2.25s}
+
+  @keyframes edgeFade{0%,100%{opacity:0.55}50%{opacity:1}}
+
+  .traveler{position:absolute;font-family:'VT323',monospace;font-size:16px;line-height:1;pointer-events:none;opacity:0}
+  .tv-top{top:-12px;color:#39FF14;text-shadow:0 0 10px rgba(57,255,20,0.9),0 0 24px rgba(57,255,20,0.45);animation:travelTop 5s linear infinite}
+  .tv-bot{bottom:-12px;color:#D946EF;text-shadow:0 0 10px rgba(217,70,239,0.9),0 0 24px rgba(217,70,239,0.45);animation:travelBot 6s linear infinite 2.5s}
+  .tv-left{left:-14px;color:#C084FC;text-shadow:0 0 10px rgba(192,132,252,0.9),0 0 24px rgba(192,132,252,0.45);animation:travelLeft 5.5s linear infinite 1s}
+  .tv-right{right:-14px;color:#39FF14;text-shadow:0 0 10px rgba(57,255,20,0.9),0 0 24px rgba(57,255,20,0.45);animation:travelRight 5s linear infinite 3.5s}
+
+  @keyframes travelTop{0%{left:-20px;opacity:0}5%{opacity:1}95%{opacity:1}100%{left:calc(100% + 20px);opacity:0}}
+  @keyframes travelBot{0%{right:-20px;opacity:0}5%{opacity:1}95%{opacity:1}100%{right:calc(100% + 20px);opacity:0}}
+  @keyframes travelLeft{0%{top:calc(100% + 20px);opacity:0}5%{opacity:1}95%{opacity:1}100%{top:-20px;opacity:0}}
+  @keyframes travelRight{0%{bottom:calc(100% + 20px);opacity:0}5%{opacity:1}95%{opacity:1}100%{bottom:-20px;opacity:0}}
+
+  .scanlines{
+    position:absolute;inset:0;pointer-events:none;
+    background:repeating-linear-gradient(0deg,transparent 0,transparent 2px,rgba(0,0,0,0.09) 2px,rgba(0,0,0,0.09) 4px);
+    animation:scanMove 14s linear infinite;
+  }
+  @keyframes scanMove{0%{background-position:0 0}100%{background-position:0 80px}}
+
+  .inner-glow{
+    position:absolute;inset:15px;pointer-events:none;
+    background:radial-gradient(ellipse at center,rgba(57,255,20,0.025) 0%,transparent 70%);
+    animation:innerGlow 5s ease-in-out infinite;
+  }
+  @keyframes innerGlow{0%,100%{opacity:0.5}50%{opacity:1}}
+
+  .glitch{position:absolute;inset:0;opacity:0;pointer-events:none}
+  .g1{border:2px solid rgba(57,255,20,0.85);animation:glitch1 12s step-end infinite}
+  .g2{border:2px solid rgba(217,70,239,0.75);animation:glitch2 12s step-end infinite}
+  @keyframes glitch1{0%,90%,94%,100%{opacity:0;transform:translate(0)}91%{opacity:0.75;transform:translate(3px,-2px)}92%{opacity:0.45;transform:translate(-2px,1px)}93%{opacity:0}}
+  @keyframes glitch2{0%,92%,96%,100%{opacity:0;transform:translate(0)}93%{opacity:0.65;transform:translate(-3px,2px)}94.5%{opacity:0.50;transform:translate(2px,-1px)}95%{opacity:0}}
+
+  .hud-label{
+    position:absolute;
+    bottom:-24px;left:50%;
+    transform:translateX(-50%);
+    font-family:'Fredoka One',cursive;
+    font-size:11px;letter-spacing:3px;
+    text-transform:uppercase;
+    color:rgba(57,255,20,0.75);
+    text-shadow:0 0 8px rgba(57,255,20,0.55);
+    white-space:nowrap;
+    animation:labelFlicker 5s ease-in-out infinite;
+  }
+  @keyframes labelFlicker{0%,100%{opacity:0.75}44%{opacity:0.75}45%{opacity:0.20}46%{opacity:0.85}47%{opacity:0.30}48%{opacity:0.75}}
+
+  #pc{
+    position:absolute;inset:-30px;
+    width:calc(100% + 60px);height:calc(100% + 60px);
+    pointer-events:none;
+  }
+</style>
+</head>
+<body>
+
+<div class="frame-wrap">
+  <canvas id="pc"></canvas>
+  <div class="inner-glow"></div>
+  <div class="border-outer"></div>
+  <div class="border-inner"></div>
+  <div class="corner c-tl"><div class="bh"></div><div class="bv"></div></div>
+  <div class="corner c-tr"><div class="bh"></div><div class="bv"></div></div>
+  <div class="corner c-bl"><div class="bh"></div><div class="bv"></div></div>
+  <div class="corner c-br"><div class="bh"></div><div class="bv"></div></div>
+  <span class="suit s-tl">♠</span>
+  <span class="suit s-tr">♥</span>
+  <span class="suit s-bl">♣</span>
+  <span class="suit s-br">♦</span>
+  <div class="dot d-tl"></div>
+  <div class="dot d-tr"></div>
+  <div class="dot d-bl"></div>
+  <div class="dot d-br"></div>
+  <span class="edge-suit es-t">♦</span>
+  <span class="edge-suit es-b">♠</span>
+  <span class="edge-suit es-l">♥</span>
+  <span class="edge-suit es-r">♣</span>
+  <span class="traveler tv-top">♦</span>
+  <span class="traveler tv-bot">♠</span>
+  <span class="traveler tv-left">♥</span>
+  <span class="traveler tv-right">♣</span>
+  <div class="scanlines"></div>
+  <div class="glitch g1"></div>
+  <div class="glitch g2"></div>
+  <div class="hud-label" id="label"></div>
+</div>
+
+<script>
+const LABEL_TEXT = '◆ NOVA SIGNAL ◆';
+document.getElementById('label').textContent = LABEL_TEXT;
+
+const cv  = document.getElementById('pc');
+const ctx = cv.getContext('2d');
+const FW = 280, FH = 370;
+cv.width  = FW + 60; cv.height = FH + 60;
+const CX  = cv.width / 2, CY = cv.height / 2;
+
+const SUITS  = ['♠','♥','♦','♣'];
+const GREEN  = [57,255,20], PINK=[217,70,239], PURPLE=[192,132,252];
+const COLORS = [GREEN,PINK,GREEN,PURPLE,GREEN,PINK,GREEN,PURPLE,GREEN,PINK];
+
+class SuitOrbiter {
+  constructor(i, total) {
+    this.suit=SUITS[i%4]; this.col=COLORS[i%COLORS.length];
+    this.prog=i/total+Math.random()*0.02; this.speed=0.0005+Math.random()*0.0007;
+    this.size=12+Math.floor(Math.random()*7); this.alpha=0.22+Math.random()*0.20;
+    this.pulse=Math.random()*Math.PI*2; this.pulseS=0.016+Math.random()*0.016;
+    this.off=(Math.random()-0.5)*12; this.trail=[]; this.trailLen=3+Math.floor(Math.random()*4);
+  }
+  getPos() {
+    const hw=FW/2+17, hh=FH/2+17, P=(hw+hh)*2;
+    let d=this.prog*P, x, y;
+    if      (d<hw*2)          {x=-hw+d;y=-hh+this.off}
+    else if (d<hw*2+hh*2)     {d-=hw*2;x=hw+this.off;y=-hh+d}
+    else if (d<hw*4+hh*2)     {d-=hw*2+hh*2;x=hw-d;y=hh+this.off}
+    else                       {d-=hw*4+hh*2;x=-hw+this.off;y=hh-d}
+    return {x:CX+x,y:CY+y};
+  }
+  update() {
+    this.prog+=this.speed; if(this.prog>1)this.prog-=1;
+    this.pulse+=this.pulseS;
+    const p=this.getPos(); this.trail.unshift({x:p.x,y:p.y});
+    if(this.trail.length>this.trailLen)this.trail.pop();
+  }
+  draw() {
+    const a=this.alpha*(0.55+0.45*Math.sin(this.pulse)), [r,g,b]=this.col;
+    const pos=this.trail[0]||this.getPos();
+    this.trail.forEach((t,i)=>{
+      if(!i)return;
+      ctx.save(); ctx.globalAlpha=a*(1-i/this.trail.length)*0.38;
+      ctx.fillStyle=`rgb(${r},${g},${b})`; ctx.font=`${Math.round(this.size*(1-i/this.trail.length*0.5))}px VT323,monospace`;
+      ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(this.suit,t.x,t.y); ctx.restore();
+    });
+    ctx.save(); ctx.globalAlpha=a; ctx.fillStyle=`rgb(${r},${g},${b})`;
+    ctx.shadowColor=`rgba(${r},${g},${b},${a*0.85})`; ctx.shadowBlur=14;
+    ctx.font=`${this.size}px VT323,monospace`; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText(this.suit,pos.x,pos.y); ctx.restore();
+  }
+}
+
+class BorderSpark {
+  constructor(){this.reset()}
+  reset(){
+    const side=Math.floor(Math.random()*4), hw=FW/2, hh=FH/2;
+    switch(side){
+      case 0:this.x=CX+(Math.random()-0.5)*FW;this.y=CY-hh-3-Math.random()*14;break;
+      case 1:this.x=CX+hw+3+Math.random()*14;this.y=CY+(Math.random()-0.5)*FH;break;
+      case 2:this.x=CX+(Math.random()-0.5)*FW;this.y=CY+hh+3+Math.random()*14;break;
+      case 3:this.x=CX-hw-3-Math.random()*14;this.y=CY+(Math.random()-0.5)*FH;break;
+    }
+    this.col=Math.random()<0.55?GREEN:(Math.random()<0.5?PINK:PURPLE);
+    this.life=40+Math.random()*90; this.maxL=this.life;
+    this.r=0.5+Math.random()*1.2; this.vx=(Math.random()-0.5)*0.4; this.vy=(Math.random()-0.5)*0.4;
+  }
+  update(){this.x+=this.vx;this.y+=this.vy;this.life--;if(this.life<=0)this.reset()}
+  draw(){
+    const a=(this.life/this.maxL)*0.75,[r,g,b]=this.col;
+    ctx.beginPath(); ctx.arc(this.x,this.y,this.r,0,Math.PI*2);
+    ctx.fillStyle=`rgba(${r},${g},${b},${a})`; ctx.shadowColor=`rgba(${r},${g},${b},${a*0.7})`; ctx.shadowBlur=5;
+    ctx.fill(); ctx.shadowBlur=0;
+  }
+}
+
+const stars=Array.from({length:45},()=>({x:Math.random()*cv.width,y:Math.random()*cv.height,r:Math.random()*0.85+0.15,a:Math.random()*0.22+0.04,spd:Math.random()*0.014+0.004,ph:Math.random()*Math.PI*2}));
+function drawNebula(){
+  const pts=[{x:CX-FW/2-22,y:CY-FH/2-22,c:GREEN},{x:CX+FW/2+22,y:CY-FH/2-22,c:PINK},{x:CX-FW/2-22,y:CY+FH/2+22,c:PURPLE},{x:CX+FW/2+22,y:CY+FH/2+22,c:GREEN}];
+  pts.forEach(p=>{const g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,65);g.addColorStop(0,`rgba(${p.c.join(',')},0.055)`);g.addColorStop(1,'transparent');ctx.fillStyle=g;ctx.fillRect(0,0,cv.width,cv.height);});
+}
+
+const orbiters=Array.from({length:10},(_,i)=>new SuitOrbiter(i,10));
+const sparks=Array.from({length:28},()=>new BorderSpark());
+let t=0;
+
+function animate(){
+  ctx.clearRect(0,0,cv.width,cv.height); ctx.globalAlpha=1;
+  drawNebula();
+  stars.forEach(s=>{const tw=Math.sin(t*s.spd+s.ph)*0.4+0.6;ctx.globalAlpha=s.a*tw;ctx.fillStyle='#CCF0FF';ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fill();});
+  ctx.globalAlpha=1;
+  sparks.forEach(s=>{s.update();s.draw()});
+  orbiters.forEach(o=>{o.update();o.draw()});
+  t++; requestAnimationFrame(animate);
+}
+document.fonts.ready.then(()=>animate());
+</script>
+</body>
+</html>

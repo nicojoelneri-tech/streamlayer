@@ -8,6 +8,7 @@ const NAV_LINKS = [
   { to: '/', label: 'Inicio' },
   { to: '/catalog?category=pack', label: 'Packs' },
   { to: '/catalog?category=camera-frame', label: 'Marcos' },
+  { to: '/catalog?category=chat-theme', label: 'Chats' },
 ]
 
 export default function Header() {
