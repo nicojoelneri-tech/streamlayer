@@ -28,25 +28,18 @@ export default function PackCard({ pack }: { pack: OverlayPack }) {
   const isMobile = useIsMobile()
   const { code, rate, loading: currencyLoading } = useCurrency()
 
-  const isHeavyPreview = pack.previewUrl && pack.category === 'pack'
-  const useStaticFallback = isMobile && isHeavyPreview
+  const showLivePreview = !isMobile && !!pack.previewUrl
 
   return (
     <div className="group flex flex-col overflow-hidden rounded-xl border border-surface-800 bg-surface-900/50 transition-all hover:border-surface-600 hover:shadow-lg hover:shadow-primary-900/20">
       {/* Preview area */}
       <div
         className="relative overflow-hidden bg-surface-900"
-        style={{ aspectRatio: (pack.previewUrl && !useStaticFallback) ? undefined : '16/9' }}
+        style={{ aspectRatio: showLivePreview ? undefined : '16/9' }}
       >
-        {useStaticFallback && pack.previewImages?.[0] ? (
-          <img
-            src={pack.previewImages[0]}
-            alt={pack.name}
-            className="absolute inset-0 h-full w-full object-cover"
-          />
-        ) : pack.previewUrl ? (
+        {showLivePreview ? (
           <LivePreview
-            src={pack.previewUrl}
+            src={pack.previewUrl!}
             title={pack.name}
             nativeWidth={pack.previewSize?.[0] ?? (pack.category === 'camera-frame' ? 420 : 1920)}
             nativeHeight={pack.previewSize?.[1] ?? (pack.category === 'camera-frame' ? 320 : 1080)}
