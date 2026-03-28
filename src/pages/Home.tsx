@@ -128,13 +128,13 @@ export default function Home() {
         className="mx-auto max-w-6xl px-4 py-16"
       >
         <h2 className={`mb-2 text-center text-2xl font-bold sm:text-3xl reveal ${catVisible ? 'is-visible' : ''}`}>
-          Qué vendemos
+          ¿Qué vas a encontrar?
         </h2>
         <p className={`mb-10 text-center text-surface-400 reveal ${catVisible ? 'is-visible' : ''}`} style={{ transitionDelay: '80ms' }}>
           Todo lo que necesitás para darle identidad visual a tu stream.
         </p>
 
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-4 sm:grid-cols-3">
           <Link
             to="/catalog?category=pack"
             className={`group flex items-center gap-5 rounded-xl border border-surface-800 bg-surface-900/50 p-6 transition-all hover:border-primary-500/40 hover:bg-surface-900 no-underline reveal-left ${catVisible ? 'is-visible' : ''}`}
@@ -154,8 +154,8 @@ export default function Home() {
 
           <Link
             to="/catalog?category=camera-frame"
-            className={`group flex items-center gap-5 rounded-xl border border-surface-800 bg-surface-900/50 p-6 transition-all hover:border-primary-500/40 hover:bg-surface-900 no-underline reveal-right ${catVisible ? 'is-visible' : ''}`}
-            style={{ transitionDelay: '260ms' }}
+            className={`group flex items-center gap-5 rounded-xl border border-surface-800 bg-surface-900/50 p-6 transition-all hover:border-primary-500/40 hover:bg-surface-900 no-underline reveal ${catVisible ? 'is-visible' : ''}`}
+            style={{ transitionDelay: '240ms' }}
           >
             <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-primary-600/20 text-primary-400 transition-colors group-hover:bg-primary-600/30">
               <Camera className="h-7 w-7" />
@@ -164,6 +164,23 @@ export default function Home() {
               <h3 className="text-lg font-semibold text-white">Marcos de cámara</h3>
               <p className="mt-1 text-sm text-surface-400">
                 Marco individual para tu webcam. Ideal si ya tenés overlay y solo querés el marco.
+              </p>
+            </div>
+            <ArrowRight className="ml-auto h-5 w-5 shrink-0 text-surface-600 transition-colors group-hover:text-primary-400" />
+          </Link>
+
+          <Link
+            to="/catalog?category=chat-theme"
+            className={`group flex items-center gap-5 rounded-xl border border-surface-800 bg-surface-900/50 p-6 transition-all hover:border-primary-500/40 hover:bg-surface-900 no-underline reveal-right ${catVisible ? 'is-visible' : ''}`}
+            style={{ transitionDelay: '320ms' }}
+          >
+            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-primary-600/20 text-primary-400 transition-colors group-hover:bg-primary-600/30">
+              <Monitor className="h-7 w-7" />
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-white">Temas de chat</h3>
+              <p className="mt-1 text-sm text-surface-400">
+                Caja de chat animada para Twitch. Conectá tu canal y listo.
               </p>
             </div>
             <ArrowRight className="ml-auto h-5 w-5 shrink-0 text-surface-600 transition-colors group-hover:text-primary-400" />
