@@ -27,6 +27,22 @@ export default function PackDetail() {
   const pack = PACKS.find((p) => p.id === id)
   const addToCart = useStore((s) => s.addToCart)
   const cart = useStore((s) => s.cart)
+  const isMobile = useIsMobile()
+  const { code, rate, loading: currencyLoading } = useCurrency()
+  const [activeImage, setActiveImage] = useState(0)
+  const [lightboxOpen, setLightboxOpen] = useState(false)
+  const [previewFullscreen, setPreviewFullscreen] = useState(false)
+
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setPreviewFullscreen(false)
+        setLightboxOpen(false)
+      }
+    }
+    window.addEventListener('keydown', handleKey)
+    return () => window.removeEventListener('keydown', handleKey)
+  }, [])
 
   if (!pack) {
     return (
@@ -43,11 +59,6 @@ export default function PackDetail() {
   const inCart = cart.includes(pack.id)
   const isPack = pack.category === 'pack'
   const isFrame = pack.category === 'camera-frame'
-  const isMobile = useIsMobile()
-  const { code, rate, loading: currencyLoading } = useCurrency()
-  const [activeImage, setActiveImage] = useState(0)
-  const [lightboxOpen, setLightboxOpen] = useState(false)
-  const [previewFullscreen, setPreviewFullscreen] = useState(false)
 
   const openLightbox = (index: number) => {
     setActiveImage(index)
@@ -65,17 +76,6 @@ export default function PackDetail() {
     if (!pack.previewImages) return
     setActiveImage((prev) => (prev + 1) % pack.previewImages!.length)
   }
-
-  useEffect(() => {
-    const handleKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        setPreviewFullscreen(false)
-        setLightboxOpen(false)
-      }
-    }
-    window.addEventListener('keydown', handleKey)
-    return () => window.removeEventListener('keydown', handleKey)
-  }, [])
 
   const backLink = isFrame ? '/catalog?category=camera-frame' : '/catalog?category=pack'
   const backLabel = isFrame ? 'Volver a marcos' : 'Volver al catálogo'

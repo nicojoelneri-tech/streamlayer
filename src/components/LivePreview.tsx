@@ -41,6 +41,7 @@ export default function LivePreview({
     const updateScale = () => {
       const cw = el.clientWidth
       const ch = el.clientHeight
+      if (!cw) return
 
       if (fit === 'contain' && ch > 0) {
         setScale(Math.min(cw / viewW, ch / viewH))
@@ -51,8 +52,14 @@ export default function LivePreview({
 
     updateScale()
 
-    const observer = new ResizeObserver(updateScale)
-    observer.observe(el)
+    let observer: ResizeObserver
+    try {
+      observer = new ResizeObserver(updateScale)
+      observer.observe(el)
+    } catch {
+      window.addEventListener('resize', updateScale)
+      return () => window.removeEventListener('resize', updateScale)
+    }
     return () => observer.disconnect()
   }, [viewW, viewH, fit])
 
