@@ -206,7 +206,7 @@ export const PACKS: OverlayPack[] = [
     previewUrl: '/frames/neon-reactor/index.html',
     tag: 'Nuevo',
     featured: true,
-    buyUrl: 'https://payhip.com/b/rbE8o',
+    buyUrl: 'https://pay.hotmart.com/B105117604Y',
   },
   {
     id: 'frame-neon-reactor-rainbow',
@@ -220,7 +220,7 @@ export const PACKS: OverlayPack[] = [
     previewUrl: '/frames/neon-reactor-rainbow/index.html',
     tag: 'Nuevo',
     featured: true,
-    buyUrl: 'https://payhip.com/b/0H39w',
+    buyUrl: 'https://pay.hotmart.com/W105117612F',
   },
   {
     id: 'frame-neon-reactor-sunshine',
@@ -234,7 +234,7 @@ export const PACKS: OverlayPack[] = [
     previewUrl: '/frames/neon-reactor-sunshine/index.html',
     tag: 'Nuevo',
     featured: true,
-    buyUrl: 'https://payhip.com/b/V9p0A',
+    buyUrl: 'https://pay.hotmart.com/X105117617X',
   },
   {
     id: 'frame-arcade-fighter',
@@ -262,7 +262,7 @@ export const PACKS: OverlayPack[] = [
     previewUrl: '/frames/dark-conquest/index.html',
     tag: 'Nuevo',
     featured: true,
-    buyUrl: 'https://payhip.com/b/h2lky',
+    buyUrl: 'https://pay.hotmart.com/Y105117619N',
   },
   {
     id: 'frame-pro-league',
@@ -276,7 +276,7 @@ export const PACKS: OverlayPack[] = [
     previewUrl: '/frames/pro-league/index.html',
     tag: 'Nuevo',
     featured: true,
-    buyUrl: 'https://pay.hotmart.com/T105105135H',
+    buyUrl: 'https://pay.hotmart.com/A105117623G',
   },
   {
     id: 'frame-pro-league-field',
@@ -290,7 +290,7 @@ export const PACKS: OverlayPack[] = [
     previewUrl: '/frames/pro-league-field/index.html',
     tag: 'Nuevo',
     featured: true,
-    buyUrl: 'https://payhip.com/b/VUQbO',
+    buyUrl: 'https://pay.hotmart.com/X105117646P',
   },
   {
     id: 'frame-pro-league-royal',
@@ -304,7 +304,7 @@ export const PACKS: OverlayPack[] = [
     previewUrl: '/frames/pro-league-royal/index.html',
     tag: 'Nuevo',
     featured: true,
-    buyUrl: 'https://payhip.com/b/BJWuI',
+    buyUrl: 'https://pay.hotmart.com/M105117654M',
   },
   {
     id: 'frame-pixelcraft',
@@ -319,7 +319,7 @@ export const PACKS: OverlayPack[] = [
     previewSize: [440, 340],
     tag: 'Nuevo',
     featured: true,
-    buyUrl: 'https://payhip.com/b/Vqij1',
+    buyUrl: 'https://pay.hotmart.com/I105117660U',
   },
   {
     id: 'frame-horror-static',
@@ -333,6 +333,7 @@ export const PACKS: OverlayPack[] = [
     previewUrl: '/frames/horror-static/index.html',
     tag: 'Nuevo',
     featured: true,
+    buyUrl: 'https://pay.hotmart.com/B105117669M',
   },
   {
     id: 'frame-fortnite-storm',
@@ -346,6 +347,7 @@ export const PACKS: OverlayPack[] = [
     previewUrl: '/frames/fortnite-storm/index.html',
     tag: 'Nuevo',
     featured: true,
+    buyUrl: 'https://pay.hotmart.com/L105117673M',
   },
   {
     id: 'frame-warzone-tactical',
@@ -359,6 +361,7 @@ export const PACKS: OverlayPack[] = [
     previewUrl: '/frames/warzone-tactical/index.html',
     tag: 'Nuevo',
     featured: true,
+    buyUrl: 'https://pay.hotmart.com/X105117681L',
   },
   {
     id: 'frame-vice-city-neon',
@@ -372,6 +375,7 @@ export const PACKS: OverlayPack[] = [
     previewUrl: '/frames/vice-city-neon/index.html',
     tag: 'Nuevo',
     featured: true,
+    buyUrl: 'https://pay.hotmart.com/M105117686H',
   },
   {
     id: 'frame-cyberpunk-rain',
@@ -385,6 +389,7 @@ export const PACKS: OverlayPack[] = [
     previewUrl: '/frames/cyberpunk-rain/index.html',
     tag: 'Nuevo',
     featured: true,
+    buyUrl: 'https://pay.hotmart.com/T105117695X',
   },
   {
     id: 'frame-among-suspect',
@@ -398,6 +403,7 @@ export const PACKS: OverlayPack[] = [
     previewUrl: '/frames/among-suspect/index.html',
     tag: 'Nuevo',
     featured: true,
+    buyUrl: 'https://pay.hotmart.com/I105117702S',
   },
   {
     id: 'frame-rocket-boost',
@@ -411,6 +417,7 @@ export const PACKS: OverlayPack[] = [
     previewUrl: '/frames/rocket-boost/index.html',
     tag: 'Nuevo',
     featured: true,
+    buyUrl: 'https://pay.hotmart.com/Q105117728D',
   },
   {
     id: 'frame-lofi-chill',
@@ -424,6 +431,7 @@ export const PACKS: OverlayPack[] = [
     previewUrl: '/frames/lofi-chill/index.html',
     tag: 'Nuevo',
     featured: true,
+    buyUrl: 'https://pay.hotmart.com/D105117738X',
   },
   {
     id: 'frame-deep-space',
@@ -437,6 +445,7 @@ export const PACKS: OverlayPack[] = [
     previewUrl: '/frames/deep-space/index.html',
     tag: 'Nuevo',
     featured: true,
+    buyUrl: 'https://pay.hotmart.com/Y105117750R',
   },
   {
     id: 'frame-carbon-racer',
@@ -450,6 +459,7 @@ export const PACKS: OverlayPack[] = [
     previewUrl: '/frames/carbon-racer/index.html',
     previewSize: [420, 320],
     tag: 'Nuevo',
+    buyUrl: 'https://pay.hotmart.com/Y105117765N',
   },
   {
     id: 'frame-anime-shonen',
@@ -463,6 +473,7 @@ export const PACKS: OverlayPack[] = [
     previewUrl: '/frames/anime-shonen/index.html',
     previewSize: [420, 320],
     tag: 'Nuevo',
+    buyUrl: 'https://pay.hotmart.com/W105117769P',
   },
   {
     id: 'frame-beat-drop',
@@ -476,6 +487,7 @@ export const PACKS: OverlayPack[] = [
     previewUrl: '/frames/beat-drop/index.html',
     previewSize: [420, 320],
     tag: 'Nuevo',
+    buyUrl: 'https://pay.hotmart.com/L105117785H',
   },
   {
     id: 'frame-pokemon-trainer',
@@ -489,6 +501,7 @@ export const PACKS: OverlayPack[] = [
     previewUrl: '/frames/pokemon-trainer/index.html',
     previewSize: [420, 320],
     tag: 'Nuevo',
+    buyUrl: 'https://pay.hotmart.com/T105117773B',
   },
   {
     id: 'frame-bogos-binted',
@@ -502,6 +515,7 @@ export const PACKS: OverlayPack[] = [
     previewUrl: '/frames/bogos-binted/index.html',
     previewSize: [420, 320],
     tag: 'Nuevo',
+    buyUrl: 'https://pay.hotmart.com/D105117799H',
   },
   // ── Chat themes ──────────────────────────────────────────
   {
@@ -573,5 +587,6 @@ export const PACKS: OverlayPack[] = [
     previewUrl: '/frames/ocean-depth/index.html',
     previewSize: [420, 320],
     tag: 'Nuevo',
+    buyUrl: 'https://pay.hotmart.com/I105117808U',
   },
 ]
