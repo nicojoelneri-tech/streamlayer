@@ -28,14 +28,14 @@ export default function PackCard({ pack }: { pack: OverlayPack }) {
   const isMobile = useIsMobile()
   const { code, rate, loading: currencyLoading } = useCurrency()
 
-  const showLivePreview = !isMobile && !!pack.previewUrl
+  const showLivePreview = !!pack.previewUrl && !(isMobile && pack.category === 'pack')
 
   return (
     <div className="group flex flex-col overflow-hidden rounded-xl border border-surface-800 bg-surface-900/50 transition-all hover:border-surface-600 hover:shadow-lg hover:shadow-primary-900/20">
       {/* Preview area */}
       <div
         className="relative overflow-hidden bg-surface-900"
-        style={{ aspectRatio: showLivePreview ? undefined : '16/9' }}
+        style={{ aspectRatio: showLivePreview ? undefined : (pack.category === 'camera-frame' ? undefined : '16/9') }}
       >
         {showLivePreview ? (
           <LivePreview
