@@ -5,6 +5,8 @@ import Catalog from './pages/Catalog'
 import PackDetail from './pages/PackDetail'
 import Checkout from './pages/Checkout'
 import Terms from './pages/Terms'
+import Privacy from './pages/Privacy'
+import Refunds from './pages/Refunds'
 import NotFound from './pages/NotFound'
 
 export default function App() {
@@ -16,6 +18,8 @@ export default function App() {
         <Route path="/pack/:id" element={<PackDetail />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/terms" element={<Terms />} />
+        <Route path="/privacy" element={<Privacy />} />
+        <Route path="/refunds" element={<Refunds />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>

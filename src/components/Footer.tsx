@@ -60,10 +60,18 @@ export default function Footer() {
               </a>
             ))}
           </div>
-          <div className="flex flex-col items-center gap-1 text-xs text-surface-500">
+          <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs text-surface-500">
             <Link to="/terms" className="text-surface-500 hover:text-surface-300 no-underline">
               Términos y condiciones
             </Link>
+            <Link to="/privacy" className="text-surface-500 hover:text-surface-300 no-underline">
+              Política de privacidad
+            </Link>
+            <Link to="/refunds" className="text-surface-500 hover:text-surface-300 no-underline">
+              Devoluciones
+            </Link>
+          </div>
+          <div className="flex flex-col items-center gap-1 text-xs text-surface-500">
             <span>Creado por un streamer, para streamers.</span>
             <span>&copy; {new Date().getFullYear()} StreamLayer by El Novato</span>
           </div>
