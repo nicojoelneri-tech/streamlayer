@@ -531,6 +531,7 @@ export const PACKS: OverlayPack[] = [
     previewSize: [1920, 1080],
     previewCrop: [30, 580, 620, 480],
     tag: 'Nuevo',
+    buyUrl: 'https://pay.hotmart.com/F105117836R',
   },
   {
     id: 'chat-enchanted-scroll',
@@ -545,6 +546,7 @@ export const PACKS: OverlayPack[] = [
     previewSize: [1920, 1080],
     previewCrop: [30, 580, 620, 480],
     tag: 'Nuevo',
+    buyUrl: 'https://pay.hotmart.com/A105117856B',
   },
   {
     id: 'chat-paper-craft',
@@ -559,6 +561,7 @@ export const PACKS: OverlayPack[] = [
     previewSize: [1920, 1080],
     previewCrop: [30, 580, 620, 480],
     tag: 'Nuevo',
+    buyUrl: 'https://pay.hotmart.com/N105117859J',
   },
   {
     id: 'chat-bogos-binted',
@@ -573,6 +576,7 @@ export const PACKS: OverlayPack[] = [
     previewSize: [1920, 1080],
     previewCrop: [0, 570, 360, 460],
     tag: 'Nuevo',
+    buyUrl: 'https://pay.hotmart.com/T105117865D',
   },
   // ── Camera frames ─────────────────────────────────────────
   {
