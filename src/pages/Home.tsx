@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom'
 import { Zap, Puzzle, Download, Monitor, ArrowRight, Code, Settings, Camera } from 'lucide-react'
 import { PACKS } from '../data/packs'
-import { STYLES } from '../data/styles'
 import PackCard from '../components/PackCard'
 import elNovatoLogo from '../assets/elnovato-logo.png'
 
@@ -122,38 +121,6 @@ export default function Home() {
             </div>
             <ArrowRight className="ml-auto h-5 w-5 shrink-0 text-surface-600 transition-colors group-hover:text-primary-400" />
           </Link>
-        </div>
-      </section>
-
-      {/* Styles showcase */}
-      <section className="mx-auto max-w-6xl px-4 py-16">
-        <h2 className="mb-2 text-center text-2xl font-bold sm:text-3xl">Elegí tu estilo</h2>
-        <p className="mb-10 text-center text-surface-400">
-          Cada estilo tiene una identidad visual única pensada para diferentes tipos de stream.
-        </p>
-
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
-          {STYLES.map((style) => (
-            <Link
-              key={style.id}
-              to={`/catalog?style=${style.id}`}
-              className="group flex flex-col items-center gap-3 rounded-xl border border-surface-800 bg-surface-900/50 p-4 text-center transition-all hover:border-surface-600 no-underline"
-            >
-              <div className="flex gap-1.5">
-                {style.colors.map((color, i) => (
-                  <div
-                    key={i}
-                    className="h-6 w-6 rounded-full border border-white/10 transition-transform group-hover:scale-110"
-                    style={{ backgroundColor: color }}
-                  />
-                ))}
-              </div>
-              <div>
-                <div className="text-sm font-semibold text-white">{style.name}</div>
-                <div className="mt-0.5 text-[11px] text-surface-500">{style.vibe}</div>
-              </div>
-            </Link>
-          ))}
         </div>
       </section>
 
