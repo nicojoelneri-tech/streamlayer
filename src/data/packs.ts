@@ -574,7 +574,7 @@ export const PACKS: OverlayPack[] = [
     previewColors: ['#39FF14', '#A855F7', '#030310'],
     previewUrl: '/chat-themes/bogos-binted/index.html',
     previewSize: [1920, 1080],
-    previewCrop: [0, 580, 360, 279],
+    previewCrop: [0, 700, 360, 279],
     tag: 'Nuevo',
     buyUrl: 'https://pay.hotmart.com/T105117865D',
   },
