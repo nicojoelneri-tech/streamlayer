@@ -32,9 +32,9 @@ export function useCurrency() {
 
     async function detect() {
       try {
-        const geoRes = await fetch('https://ipapi.co/json/')
+        const geoRes = await fetch('https://ipwho.is/')
         const geo = await geoRes.json()
-        const detectedCode: string = geo.currency || 'USD'
+        const detectedCode: string = geo.currency?.code || 'USD'
 
         let detectedRate = 1
         if (detectedCode !== 'USD') {
