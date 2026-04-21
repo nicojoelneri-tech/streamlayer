@@ -102,10 +102,10 @@ export default function Catalog() {
     <Helmet>
       <title>Catálogo de Overlays para OBS | StreamLayer by El Novato</title>
       <meta name="description" content="Explorá todos los overlays para streamers: packs completos, marcos de cámara y temas de chat. Browser Sources HTML/CSS/JS listos para instalar en OBS." />
-      <link rel="canonical" href="https://streamlayer.vercel.app/catalog" />
+      <link rel="canonical" href="https://streamlayer-two.vercel.app/catalog" />
       <meta property="og:title" content="Catálogo de Overlays para OBS | StreamLayer" />
       <meta property="og:description" content="Packs completos, marcos de cámara y temas de chat para streamers. Listos para OBS, sin diseño previo." />
-      <meta property="og:url" content="https://streamlayer.vercel.app/catalog" />
+      <meta property="og:url" content="https://streamlayer-two.vercel.app/catalog" />
     </Helmet>
     <div className="mx-auto max-w-6xl px-4 py-12">
       <div className="mb-8 flex items-start justify-between gap-4">

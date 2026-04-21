@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://streamlayer.vercel.app/sitemap.xml
+Sitemap: https://streamlayer-two.vercel.app/sitemap.xml

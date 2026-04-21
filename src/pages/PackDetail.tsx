@@ -12,7 +12,7 @@ import LivePreview from '../components/LivePreview'
 import OverlayPreview from '../components/OverlayPreview'
 import PayhipButton from '../components/PayhipButton'
 
-const BASE_URL = 'https://streamlayer.vercel.app'
+const BASE_URL = 'https://streamlayer-two.vercel.app'
 
 function useIsMobile(breakpoint = 768) {
   const [isMobile, setIsMobile] = useState(() => window.innerWidth < breakpoint)

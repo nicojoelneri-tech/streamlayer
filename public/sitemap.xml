@@ -3,235 +3,235 @@
 
   <!-- Páginas principales -->
   <url>
-    <loc>https://streamlayer.vercel.app/</loc>
+    <loc>https://streamlayer-two.vercel.app/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://streamlayer.vercel.app/catalog</loc>
+    <loc>https://streamlayer-two.vercel.app/catalog</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <!-- Packs completos -->
   <url>
-    <loc>https://streamlayer.vercel.app/pack/deadlink</loc>
+    <loc>https://streamlayer-two.vercel.app/pack/deadlink</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://streamlayer.vercel.app/pack/deadlink-blood</loc>
+    <loc>https://streamlayer-two.vercel.app/pack/deadlink-blood</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://streamlayer.vercel.app/pack/deadlink-frost</loc>
+    <loc>https://streamlayer-two.vercel.app/pack/deadlink-frost</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://streamlayer.vercel.app/pack/hanami</loc>
+    <loc>https://streamlayer-two.vercel.app/pack/hanami</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://streamlayer.vercel.app/pack/recoil</loc>
+    <loc>https://streamlayer-two.vercel.app/pack/recoil</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://streamlayer.vercel.app/pack/kickoff</loc>
+    <loc>https://streamlayer-two.vercel.app/pack/kickoff</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://streamlayer.vercel.app/pack/kickoff-neon</loc>
+    <loc>https://streamlayer-two.vercel.app/pack/kickoff-neon</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://streamlayer.vercel.app/pack/kickoff-royal</loc>
+    <loc>https://streamlayer-two.vercel.app/pack/kickoff-royal</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://streamlayer.vercel.app/pack/voidgrid</loc>
+    <loc>https://streamlayer-two.vercel.app/pack/voidgrid</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://streamlayer.vercel.app/pack/voidgrid-ember</loc>
+    <loc>https://streamlayer-two.vercel.app/pack/voidgrid-ember</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://streamlayer.vercel.app/pack/voidgrid-phantom</loc>
+    <loc>https://streamlayer-two.vercel.app/pack/voidgrid-phantom</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://streamlayer.vercel.app/pack/bogos-binted</loc>
+    <loc>https://streamlayer-two.vercel.app/pack/bogos-binted</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <!-- Marcos de cámara -->
   <url>
-    <loc>https://streamlayer.vercel.app/pack/frame-neon-reactor</loc>
+    <loc>https://streamlayer-two.vercel.app/pack/frame-neon-reactor</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://streamlayer.vercel.app/pack/frame-neon-reactor-rainbow</loc>
+    <loc>https://streamlayer-two.vercel.app/pack/frame-neon-reactor-rainbow</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://streamlayer.vercel.app/pack/frame-neon-reactor-sunshine</loc>
+    <loc>https://streamlayer-two.vercel.app/pack/frame-neon-reactor-sunshine</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://streamlayer.vercel.app/pack/frame-arcade-fighter</loc>
+    <loc>https://streamlayer-two.vercel.app/pack/frame-arcade-fighter</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://streamlayer.vercel.app/pack/frame-dark-conquest</loc>
+    <loc>https://streamlayer-two.vercel.app/pack/frame-dark-conquest</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://streamlayer.vercel.app/pack/frame-pro-league</loc>
+    <loc>https://streamlayer-two.vercel.app/pack/frame-pro-league</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://streamlayer.vercel.app/pack/frame-pro-league-field</loc>
+    <loc>https://streamlayer-two.vercel.app/pack/frame-pro-league-field</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://streamlayer.vercel.app/pack/frame-pro-league-royal</loc>
+    <loc>https://streamlayer-two.vercel.app/pack/frame-pro-league-royal</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://streamlayer.vercel.app/pack/frame-pixelcraft</loc>
+    <loc>https://streamlayer-two.vercel.app/pack/frame-pixelcraft</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://streamlayer.vercel.app/pack/frame-horror-static</loc>
+    <loc>https://streamlayer-two.vercel.app/pack/frame-horror-static</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://streamlayer.vercel.app/pack/frame-fortnite-storm</loc>
+    <loc>https://streamlayer-two.vercel.app/pack/frame-fortnite-storm</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://streamlayer.vercel.app/pack/frame-warzone-tactical</loc>
+    <loc>https://streamlayer-two.vercel.app/pack/frame-warzone-tactical</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://streamlayer.vercel.app/pack/frame-vice-city-neon</loc>
+    <loc>https://streamlayer-two.vercel.app/pack/frame-vice-city-neon</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://streamlayer.vercel.app/pack/frame-cyberpunk-rain</loc>
+    <loc>https://streamlayer-two.vercel.app/pack/frame-cyberpunk-rain</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://streamlayer.vercel.app/pack/frame-among-suspect</loc>
+    <loc>https://streamlayer-two.vercel.app/pack/frame-among-suspect</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://streamlayer.vercel.app/pack/frame-rocket-boost</loc>
+    <loc>https://streamlayer-two.vercel.app/pack/frame-rocket-boost</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://streamlayer.vercel.app/pack/frame-lofi-chill</loc>
+    <loc>https://streamlayer-two.vercel.app/pack/frame-lofi-chill</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://streamlayer.vercel.app/pack/frame-deep-space</loc>
+    <loc>https://streamlayer-two.vercel.app/pack/frame-deep-space</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://streamlayer.vercel.app/pack/frame-carbon-racer</loc>
+    <loc>https://streamlayer-two.vercel.app/pack/frame-carbon-racer</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://streamlayer.vercel.app/pack/frame-anime-shonen</loc>
+    <loc>https://streamlayer-two.vercel.app/pack/frame-anime-shonen</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://streamlayer.vercel.app/pack/frame-beat-drop</loc>
+    <loc>https://streamlayer-two.vercel.app/pack/frame-beat-drop</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://streamlayer.vercel.app/pack/frame-pokemon-trainer</loc>
+    <loc>https://streamlayer-two.vercel.app/pack/frame-pokemon-trainer</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://streamlayer.vercel.app/pack/frame-bogos-binted</loc>
+    <loc>https://streamlayer-two.vercel.app/pack/frame-bogos-binted</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://streamlayer.vercel.app/pack/frame-ocean-depth</loc>
+    <loc>https://streamlayer-two.vercel.app/pack/frame-ocean-depth</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <!-- Temas de chat -->
   <url>
-    <loc>https://streamlayer.vercel.app/pack/chat-cyber-hud</loc>
+    <loc>https://streamlayer-two.vercel.app/pack/chat-cyber-hud</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://streamlayer.vercel.app/pack/chat-enchanted-scroll</loc>
+    <loc>https://streamlayer-two.vercel.app/pack/chat-enchanted-scroll</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://streamlayer.vercel.app/pack/chat-paper-craft</loc>
+    <loc>https://streamlayer-two.vercel.app/pack/chat-paper-craft</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://streamlayer.vercel.app/pack/chat-bogos-binted</loc>
+    <loc>https://streamlayer-two.vercel.app/pack/chat-bogos-binted</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <!-- Páginas legales -->
   <url>
-    <loc>https://streamlayer.vercel.app/terms</loc>
+    <loc>https://streamlayer-two.vercel.app/terms</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://streamlayer.vercel.app/privacy</loc>
+    <loc>https://streamlayer-two.vercel.app/privacy</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://streamlayer.vercel.app/refunds</loc>
+    <loc>https://streamlayer-two.vercel.app/refunds</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>

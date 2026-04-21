@@ -1,0 +1,354 @@
+# StreamLayer — Datos para crear productos en Gumroad
+
+Copiá cada bloque al crear el producto en Gumroad.
+Todos los productos van en **borrador** hasta que subas el ZIP.
+
+---
+
+## PACKS COMPLETOS — $49.99 USD
+
+---
+
+### 1. DEADLINK — Overlay Pack
+
+**Nombre:** DEADLINK — Overlay Pack
+**Precio:** 49.99
+**Descripción:**
+Overlay interactivo con estética terminal hacker. Glitch effects, lluvia matrix ambiental, stinger con ruido estático, HUD fragmentado y ticker con scroll en tiempo real.
+
+✅ 10 módulos independientes (camera, chat, alerts, panels, starting, BRB, ending, labels)
+✅ 5 presets de escena listos (Gameplay, Starting, BRB, Ending, Just Chatting)
+✅ Browser Sources HTML/CSS/JS para OBS — no son imágenes estáticas
+✅ Config editable con Bloc de notas (nombre, colores, textos)
+✅ Modo manual + compatible con StreamElements
+✅ Resolución 1920×1080 con animaciones CSS
+✅ README con instrucciones paso a paso
+
+---
+
+### 2. DEADLINK Blood — Overlay Pack
+
+**Nombre:** DEADLINK Blood — Overlay Pack
+**Precio:** 49.99
+**Descripción:**
+Variante roja de DEADLINK. Overlay hacker en tonos sangre con glitch effects, lluvia matrix, stinger y HUD fragmentado.
+
+✅ 10 módulos independientes + 5 presets de escena
+✅ Browser Sources HTML/CSS/JS para OBS
+✅ Config editable con Bloc de notas
+✅ Modo manual + compatible con StreamElements
+✅ Resolución 1920×1080 con animaciones CSS
+✅ README con instrucciones paso a paso
+
+---
+
+### 3. DEADLINK Frost — Overlay Pack
+
+**Nombre:** DEADLINK Frost — Overlay Pack
+**Precio:** 49.99
+**Descripción:**
+Variante frost de DEADLINK. Overlay hacker en tonos cyan/hielo con glitch effects, lluvia matrix, stinger y HUD fragmentado.
+
+✅ 10 módulos independientes + 5 presets de escena
+✅ Browser Sources HTML/CSS/JS para OBS
+✅ Config editable con Bloc de notas
+✅ Modo manual + compatible con StreamElements
+✅ Resolución 1920×1080 con animaciones CSS
+✅ README con instrucciones paso a paso
+
+---
+
+### 4. HANAMI — Overlay Pack
+
+**Nombre:** HANAMI — Overlay Pack
+**Precio:** 49.99
+**Descripción:**
+Overlay con estética japonesa de tinta y sakura. Paneles color crema, pétalos flotantes con efecto de viento, stinger de pincelada acuarela y ticker orgánico.
+
+✅ 10 módulos independientes + 5 presets de escena
+✅ Browser Sources HTML/CSS/JS para OBS
+✅ Config editable con Bloc de notas
+✅ Modo manual + compatible con StreamElements
+✅ Resolución 1920×1080 con animaciones CSS
+✅ README con instrucciones paso a paso
+
+---
+
+### 5. RECOIL — Overlay Pack
+
+**Nombre:** RECOIL — Overlay Pack
+**Precio:** 49.99
+**Descripción:**
+Overlay con estética militar táctica. Tonos acero y rojo, tipografía industrial, HUD minimalista y detalles de mira. Ideal para shooters y streams competitivos.
+
+✅ 10 módulos independientes + 5 presets de escena
+✅ Browser Sources HTML/CSS/JS para OBS
+✅ Config editable con Bloc de notas
+✅ Modo manual + compatible con StreamElements
+✅ Resolución 1920×1080 con animaciones CSS
+✅ README con instrucciones paso a paso
+
+---
+
+### 6. KICKOFF — Overlay Pack
+
+**Nombre:** KICKOFF — Overlay Pack
+**Precio:** 49.99
+**Descripción:**
+Overlay estilo broadcast deportivo. HUD con marcador, ticker de noticias, panel de eventos y estética de transmisión televisiva. Ideal para fútbol y esports.
+
+✅ 10 módulos independientes + 5 presets de escena
+✅ Browser Sources HTML/CSS/JS para OBS
+✅ Config editable con Bloc de notas
+✅ Modo manual + compatible con StreamElements
+✅ Resolución 1920×1080 con animaciones CSS
+✅ README con instrucciones paso a paso
+
+---
+
+### 7. KICKOFF Neon — Overlay Pack
+
+**Nombre:** KICKOFF Neon — Overlay Pack
+**Precio:** 49.99
+**Descripción:**
+Variante neon del KICKOFF. Broadcast deportivo en tonos rosa/magenta vibrante.
+
+✅ 10 módulos independientes + 5 presets de escena
+✅ Browser Sources HTML/CSS/JS para OBS
+✅ Config editable con Bloc de notas
+✅ Modo manual + compatible con StreamElements
+✅ Resolución 1920×1080 con animaciones CSS
+✅ README con instrucciones paso a paso
+
+---
+
+### 8. KICKOFF Royal — Overlay Pack
+
+**Nombre:** KICKOFF Royal — Overlay Pack
+**Precio:** 49.99
+**Descripción:**
+Variante dorada del KICKOFF. Broadcast deportivo premium con acentos dorados. La versión más elegante de la línea deportiva.
+
+✅ 10 módulos independientes + 5 presets de escena
+✅ Browser Sources HTML/CSS/JS para OBS
+✅ Config editable con Bloc de notas
+✅ Modo manual + compatible con StreamElements
+✅ Resolución 1920×1080 con animaciones CSS
+✅ README con instrucciones paso a paso
+
+---
+
+### 9. VOIDGRID — Overlay Pack
+
+**Nombre:** VOIDGRID — Overlay Pack
+**Precio:** 49.99
+**Descripción:**
+Overlay con estética cyberpunk de red de datos. Nodos holográficos, pulsos de energía verde/rosa, grid animado y HUD futurista.
+
+✅ 10 módulos independientes + 5 presets de escena
+✅ Browser Sources HTML/CSS/JS para OBS
+✅ Config editable con Bloc de notas
+✅ Modo manual + compatible con StreamElements
+✅ Resolución 1920×1080 con animaciones CSS
+✅ README con instrucciones paso a paso
+
+---
+
+### 10. VOIDGRID Ember — Overlay Pack
+
+**Nombre:** VOIDGRID Ember — Overlay Pack
+**Precio:** 49.99
+**Descripción:**
+Variante fuego del VOIDGRID. Red de datos en tonos naranja/ámbar. Cyberpunk con estética volcánica.
+
+✅ 10 módulos independientes + 5 presets de escena
+✅ Browser Sources HTML/CSS/JS para OBS
+✅ Config editable con Bloc de notas
+✅ Modo manual + compatible con StreamElements
+✅ Resolución 1920×1080 con animaciones CSS
+✅ README con instrucciones paso a paso
+
+---
+
+### 11. VOIDGRID Phantom — Overlay Pack
+
+**Nombre:** VOIDGRID Phantom — Overlay Pack
+**Precio:** 49.99
+**Descripción:**
+Variante phantom del VOIDGRID. Red de datos en tonos púrpura profundo. La versión más oscura y misteriosa.
+
+✅ 10 módulos independientes + 5 presets de escena
+✅ Browser Sources HTML/CSS/JS para OBS
+✅ Config editable con Bloc de notas
+✅ Modo manual + compatible con StreamElements
+✅ Resolución 1920×1080 con animaciones CSS
+✅ README con instrucciones paso a paso
+
+---
+
+### 12. ALIEN CASINO — Overlay Pack
+
+**Nombre:** ALIEN CASINO — Overlay Pack
+**Precio:** 49.99
+**Descripción:**
+Overlay estilo casino intergaláctico. Neon verde con acentos púrpura y rosa, HUD fragmentado, stinger y ticker animado. Para party games y caos espacial.
+
+✅ 10 módulos independientes + 5 presets de escena
+✅ Browser Sources HTML/CSS/JS para OBS
+✅ Config editable con Bloc de notas
+✅ Modo manual + compatible con StreamElements
+✅ Resolución 1920×1080 con animaciones CSS
+✅ README con instrucciones paso a paso
+
+---
+
+## MARCOS DE CÁMARA — $9.99 USD
+
+Descripción base para todos los marcos:
+> Archivo HTML listo para usar como Browser Source en OBS. Animaciones CSS integradas, config editable (colores, nombre del canal) e instrucciones de instalación incluidas. Resolución 1920×1080.
+
+---
+
+### 13. Neon Reactor — Camera Frame
+**Nombre:** Neon Reactor — Camera Frame
+**Precio:** 9.99
+**Descripción:** Marco de cámara con bordes animados cyan/púrpura/rosa, partículas orbitales, luces viajeras, glitch sutil y label HUD "LIVE". Browser Source HTML para OBS. Animaciones CSS, config editable, instrucciones incluidas.
+
+### 14. Neon Reactor Rainbow — Camera Frame
+**Nombre:** Neon Reactor Rainbow — Camera Frame
+**Precio:** 9.99
+**Descripción:** Variante arcoíris del Neon Reactor. Marco animado con partículas multicolor que ciclan por todo el espectro. Browser Source HTML para OBS. Animaciones CSS, config editable, instrucciones incluidas.
+
+### 15. Neon Reactor Sunshine — Camera Frame
+**Nombre:** Neon Reactor Sunshine — Camera Frame
+**Precio:** 9.99
+**Descripción:** Variante cálida del Neon Reactor. Marco animado en tonos dorado, naranja y ámbar. Browser Source HTML para OBS. Animaciones CSS, config editable, instrucciones incluidas.
+
+### 16. Arcade Fighter — Camera Frame
+**Nombre:** Arcade Fighter — Camera Frame
+**Precio:** 9.99
+**Descripción:** Marco estilo arcade de pelea. Bordes angulares con barra de HP animada, combo counter, chispas de impacto y efectos CRT. Browser Source HTML para OBS. Animaciones CSS, config editable, instrucciones incluidas.
+
+### 17. Dark Conquest — Camera Frame
+**Nombre:** Dark Conquest — Camera Frame
+**Precio:** 9.99
+**Descripción:** Marco estilo medieval oscuro. Bordes de piedra con filigrana dorada, escudos de facción, runas flotantes y partículas de ceniza. Browser Source HTML para OBS. Animaciones CSS, config editable, instrucciones incluidas.
+
+### 18. Pro League — Camera Frame
+**Nombre:** Pro League — Camera Frame
+**Precio:** 9.99
+**Descripción:** Marco estilo broadcast deportivo. Líneas limpias con acento rojo/cyan, tipografía bold y animaciones sutiles. Browser Source HTML para OBS. Animaciones CSS, config editable, instrucciones incluidas.
+
+### 19. Pro League Field — Camera Frame
+**Nombre:** Pro League Field — Camera Frame
+**Precio:** 9.99
+**Descripción:** Variante verde del Pro League. Estética broadcast deportivo en tonos cancha/campo. Browser Source HTML para OBS. Animaciones CSS, config editable, instrucciones incluidas.
+
+### 20. Pro League Royal — Camera Frame
+**Nombre:** Pro League Royal — Camera Frame
+**Precio:** 9.99
+**Descripción:** Variante dorado/púrpura del Pro League. Estética broadcast premium con detalles dorados. Browser Source HTML para OBS. Animaciones CSS, config editable, instrucciones incluidas.
+
+### 21. Block Quest — Camera Frame
+**Nombre:** Block Quest — Camera Frame
+**Precio:** 9.99
+**Descripción:** Marco estilo survival crafting. Bordes pixelados de tierra/piedra, corazones de vida animados, barra de experiencia y antorchas con partículas. Browser Source HTML para OBS. Animaciones CSS, config editable, instrucciones incluidas.
+
+### 22. Horror Static — Camera Frame
+**Nombre:** Horror Static — Camera Frame
+**Precio:** 9.99
+**Descripción:** Marco estilo terror. Bordes agrietados con estática de TV, goteos de sangre animados, niebla espectral y flashes. Para horror y survival. Browser Source HTML para OBS. Animaciones CSS, config editable, instrucciones incluidas.
+
+### 23. Battle Storm — Camera Frame
+**Nombre:** Battle Storm — Camera Frame
+**Precio:** 9.99
+**Descripción:** Marco estilo battle royale. HUD con indicador de zona, barras de escudo y HP, destellos de victoria y chispas de colores. Browser Source HTML para OBS. Animaciones CSS, config editable, instrucciones incluidas.
+
+### 24. Combat Zone — Camera Frame
+**Nombre:** Combat Zone — Camera Frame
+**Precio:** 9.99
+**Descripción:** Marco estilo shooter táctico. Borde militar con heartbeat animado, contador de kills y mira táctica. Browser Source HTML para OBS. Animaciones CSS, config editable, instrucciones incluidas.
+
+### 25. Miami Neon — Camera Frame
+**Nombre:** Miami Neon — Camera Frame
+**Precio:** 9.99
+**Descripción:** Marco estilo Miami años 80. Doble borde de neón rosa/cyan, grid retrowave animado, siluetas de palmeras y partículas de estrellas. Browser Source HTML para OBS. Animaciones CSS, config editable, instrucciones incluidas.
+
+### 26. Chrome Rain — Camera Frame
+**Nombre:** Chrome Rain — Camera Frame
+**Precio:** 9.99
+**Descripción:** Marco estilo ciudad futurista bajo la lluvia. Bordes angulares con glitch, lluvia de código digital e indicador de daño neural. Browser Source HTML para OBS. Animaciones CSS, config editable, instrucciones incluidas.
+
+### 27. Space Suspect — Camera Frame
+**Nombre:** Space Suspect — Camera Frame
+**Precio:** 9.99
+**Descripción:** Marco estilo juego espacial de impostores. Tripulantes en las esquinas, alerta de reunión, "SUS" flotante y destellos de traición. Browser Source HTML para OBS. Animaciones CSS, config editable, instrucciones incluidas.
+
+### 28. Rocket Boost — Camera Frame
+**Nombre:** Rocket Boost — Camera Frame
+**Precio:** 9.99
+**Descripción:** Marco estilo racing futurista. Propulsores animados, velocímetro, rastros de boost y partículas de combustión. Browser Source HTML para OBS. Animaciones CSS, config editable, instrucciones incluidas.
+
+### 29. Lo-Fi Chill — Camera Frame
+**Nombre:** Lo-Fi Chill — Camera Frame
+**Precio:** 9.99
+**Descripción:** Marco estilo lo-fi aesthetic. Bordes suaves con lluvia animada, notas musicales flotantes y vibe de estudio nocturno. Browser Source HTML para OBS. Animaciones CSS, config editable, instrucciones incluidas.
+
+### 30. Deep Space — Camera Frame
+**Nombre:** Deep Space — Camera Frame
+**Precio:** 9.99
+**Descripción:** Marco estilo exploración espacial. Nebulosas animadas, HUD de nave con coordenadas y partículas de polvo cósmico. Browser Source HTML para OBS. Animaciones CSS, config editable, instrucciones incluidas.
+
+### 31. Carbon Racer — Camera Frame
+**Nombre:** Carbon Racer — Camera Frame
+**Precio:** 9.99
+**Descripción:** Marco estilo F1 y carreras. Borde de fibra de carbono, luces de largada animadas, panel DRS y chispas en el borde inferior. Browser Source HTML para OBS. Animaciones CSS, config editable, instrucciones incluidas.
+
+### 32. Anime Shonen — Camera Frame
+**Nombre:** Anime Shonen — Camera Frame
+**Precio:** 9.99
+**Descripción:** Marco estilo anime shonen. Líneas de velocidad, marcas de corte manga, estrella de impacto animada y destellos en los bordes. Browser Source HTML para OBS. Animaciones CSS, config editable, instrucciones incluidas.
+
+### 33. Beat Drop — Camera Frame
+**Nombre:** Beat Drop — Camera Frame
+**Precio:** 9.99
+**Descripción:** Marco estilo DJ y música electrónica. Ecualizador animado, onda de sonido, disco de vinilo giratorio y crossfader. Browser Source HTML para OBS. Animaciones CSS, config editable, instrucciones incluidas.
+
+### 34. Pixel Trainer — Camera Frame
+**Nombre:** Pixel Trainer — Camera Frame
+**Precio:** 9.99
+**Descripción:** Marco estilo RPG de monstruos. Borde tipo esfera de captura, barra de HP animada, pasto con movimiento y texto pixel art. Browser Source HTML para OBS. Animaciones CSS, config editable, instrucciones incluidas.
+
+### 35. Alien Casino — Camera Frame
+**Nombre:** Alien Casino — Camera Frame
+**Precio:** 9.99
+**Descripción:** Marco estilo casino intergaláctico. Borde neon verde con glow pulsante, detalles púrpura/rosa y partículas espaciales. Browser Source HTML para OBS. Animaciones CSS, config editable, instrucciones incluidas.
+
+### 36. Ocean Depth — Camera Frame
+**Nombre:** Ocean Depth — Camera Frame
+**Precio:** 9.99
+**Descripción:** Marco submarino. Borde con degradado oceánico, luz cáustica animada, peces nadando, corales, algas y burbujas bioluminiscentes. Browser Source HTML para OBS. Animaciones CSS, config editable, instrucciones incluidas.
+
+---
+
+## TEMAS DE CHAT — $9.99 USD
+
+### 37. Cyber HUD — Chat Theme
+**Nombre:** Cyber HUD — Chat Theme
+**Precio:** 9.99
+**Descripción:** Caja de chat estilo HUD cyberpunk. Mensajes con esquinas cortadas, acento cian/rojo, fuente técnica y animaciones de entrada. Browser Source HTML para OBS, conectable a Twitch vía config.js. Instrucciones incluidas.
+
+### 38. Enchanted Scroll — Chat Theme
+**Nombre:** Enchanted Scroll — Chat Theme
+**Precio:** 9.99
+**Descripción:** Caja de chat estilo fantasía medieval. Pergaminos con bordes dorados, tipografía Cinzel, detalles en violeta y animaciones elegantes. Browser Source HTML para OBS, conectable a Twitch vía config.js. Instrucciones incluidas.
+
+### 39. Paper Craft — Chat Theme
+**Nombre:** Paper Craft — Chat Theme
+**Precio:** 9.99
+**Descripción:** Caja de chat estilo papel y cuaderno. Fondo crema, trazos a mano y tipografía manuscrita. Ideal para arte, cozy games y Just Chatting. Browser Source HTML para OBS, conectable a Twitch vía config.js. Instrucciones incluidas.
+
+### 40. Alien Casino — Chat Theme
+**Nombre:** Alien Casino — Chat Theme
+**Precio:** 9.99
+**Descripción:** Caja de chat estilo casino intergaláctico. Mensajes con borde neon verde, fondo espacial y glow pulsante. Browser Source HTML para OBS, conectable a Twitch vía config.js. Instrucciones incluidas.

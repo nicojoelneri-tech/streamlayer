@@ -1,0 +1,55 @@
+# Payhip URLs — StreamLayer
+
+Pegá la URL de cada producto acá (formato: https://payhip.com/b/XXXXX)
+Cuando estén todas, avisame y las conecto al código.
+
+---
+
+## PACKS COMPLETOS
+
+- DEADLINK:https://pay.hotmart.com/D105104955Y
+- DEADLINK Blood:https://pay.hotmart.com/E105106237P
+- DEADLINK Frost:https://pay.hotmart.com/H105106536H
+- HANAMI:https://pay.hotmart.com/N105106629C
+- RECOIL:https://pay.hotmart.com/J105107007X
+- KICKOFF:https://pay.hotmart.com/M105107043E
+- KICKOFF Neon:https://pay.hotmart.com/W105107062P
+- KICKOFF Royal:https://pay.hotmart.com/R105107087E
+- VOIDGRID:https://pay.hotmart.com/C105107110V
+- VOIDGRID Ember:https://pay.hotmart.com/K105107146M
+- VOIDGRID Phantom:https://pay.hotmart.com/R105107164F
+- ALIEN CASINO:https://pay.hotmart.com/W105107178G
+
+## MARCOS DE CÁMARA
+
+- Neon Reactor:https://pay.hotmart.com/B105117604Y
+- Neon Reactor https://pay.hotmart.com/W105117612F
+- Neon Reactor https://pay.hotmart.com/X105117617X
+- Arcade Fighter:https://pay.hotmart.com/F105105030X
+- Dark Conquest:https://pay.hotmart.com/Y105117619N
+- Pro League:https://pay.hotmart.com/A105117623G
+- Pro League Field:https://pay.hotmart.com/X105117646P
+- Pro League Royal:https://pay.hotmart.com/M105117654M
+- Block Quest:https://pay.hotmart.com/I105117660U
+- Horror Static:https://pay.hotmart.com/B105117669M
+- Battle Storm:https://pay.hotmart.com/L105117673M
+- Combat Zone:https://pay.hotmart.com/X105117681L
+- Miami Neon:https://pay.hotmart.com/M105117686H
+- Chrome Rain:https://pay.hotmart.com/T105117695X
+- Space Suspect:https://pay.hotmart.com/I105117702S
+- Rocket Boost:https://pay.hotmart.com/Q105117728D
+- Lo-Fi Chill:https://pay.hotmart.com/D105117738X
+- Deep Space:https://pay.hotmart.com/Y105117750R
+- Carbon Racer:https://pay.hotmart.com/Y105117765N
+- Anime Shonen:https://pay.hotmart.com/W105117769P
+- Beat Drop:https://pay.hotmart.com/L105117785H
+- Pixel Trainer:https://pay.hotmart.com/T105117773B
+- Alien Casino:https://pay.hotmart.com/D105117799H
+- Ocean Depth:https://pay.hotmart.com/I105117808U
+
+## TEMAS DE CHAT
+
+- Cyber HUD:https://pay.hotmart.com/F105117836R
+- Enchanted Scroll:https://pay.hotmart.com/A105117856B
+- Paper Craft:https://pay.hotmart.com/N105117859J
+- Alien Casino:https://pay.hotmart.com/T105117865D

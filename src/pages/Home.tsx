@@ -47,10 +47,10 @@ export default function Home() {
     <Helmet>
       <title>StreamLayer by El Novato — Overlays profesionales para OBS</title>
       <meta name="description" content="Overlays modulares y profesionales para streamers. Browser Sources listos para OBS: packs completos, marcos de cámara y temas de chat. Instalá en minutos." />
-      <link rel="canonical" href="https://streamlayer.vercel.app/" />
+      <link rel="canonical" href="https://streamlayer-two.vercel.app/" />
       <meta property="og:title" content="StreamLayer by El Novato — Overlays para OBS" />
       <meta property="og:description" content="Overlays modulares y profesionales para streamers. Browser Sources listos para OBS: packs completos, marcos de cámara y temas de chat." />
-      <meta property="og:url" content="https://streamlayer.vercel.app/" />
+      <meta property="og:url" content="https://streamlayer-two.vercel.app/" />
     </Helmet>
     <div>
       {/* Hero */}
