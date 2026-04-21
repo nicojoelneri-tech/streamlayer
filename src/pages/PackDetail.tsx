@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
+import { Helmet } from 'react-helmet-async'
 import { ShoppingCart, ArrowLeft, Check, X, ChevronLeft, ChevronRight, Maximize2 } from 'lucide-react'
 import { PACKS } from '../data/packs'
 import { STYLES } from '../data/styles'
@@ -10,6 +11,8 @@ import { useCurrency } from '../hooks/useCurrency'
 import LivePreview from '../components/LivePreview'
 import OverlayPreview from '../components/OverlayPreview'
 import PayhipButton from '../components/PayhipButton'
+
+const BASE_URL = 'https://streamlayer.vercel.app'
 
 function useIsMobile(breakpoint = 768) {
   const [isMobile, setIsMobile] = useState(() => window.innerWidth < breakpoint)
@@ -60,6 +63,37 @@ export default function PackDetail() {
   const isPack = pack.category === 'pack'
   const isFrame = pack.category === 'camera-frame'
 
+  const pageUrl = `${BASE_URL}/pack/${pack.id}`
+  const ogImage = pack.previewImages?.[0]
+    ? `${BASE_URL}${pack.previewImages[0]}`
+    : `${BASE_URL}/og-image.png`
+  const priceUSD = (pack.price / 100).toFixed(2)
+  const categoryLabel = isPack ? 'Pack de overlays' : isFrame ? 'Marco de cámara' : 'Tema de chat'
+  const pageTitle = `${pack.name} — ${categoryLabel} para OBS | StreamLayer`
+  const pageDesc = pack.description.length > 155
+    ? pack.description.slice(0, 152) + '...'
+    : pack.description
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: pack.name,
+    description: pack.description,
+    image: ogImage,
+    url: pageUrl,
+    brand: {
+      '@type': 'Brand',
+      name: 'StreamLayer by El Novato',
+    },
+    offers: {
+      '@type': 'Offer',
+      price: priceUSD,
+      priceCurrency: 'USD',
+      availability: pack.price > 0 ? 'https://schema.org/InStock' : 'https://schema.org/PreOrder',
+      url: pack.buyUrl ?? pageUrl,
+    },
+  }
+
   const openLightbox = (index: number) => {
     setActiveImage(index)
     setLightboxOpen(true)
@@ -81,6 +115,22 @@ export default function PackDetail() {
   const backLabel = isFrame ? 'Volver a marcos' : 'Volver al catálogo'
 
   return (
+    <>
+    <Helmet>
+      <title>{pageTitle}</title>
+      <meta name="description" content={pageDesc} />
+      <link rel="canonical" href={pageUrl} />
+      <meta property="og:type" content="product" />
+      <meta property="og:title" content={pageTitle} />
+      <meta property="og:description" content={pageDesc} />
+      <meta property="og:image" content={ogImage} />
+      <meta property="og:url" content={pageUrl} />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content={pageTitle} />
+      <meta name="twitter:description" content={pageDesc} />
+      <meta name="twitter:image" content={ogImage} />
+      <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+    </Helmet>
     <div className="mx-auto max-w-6xl px-4 py-12">
       <Link
         to={backLink}
@@ -476,5 +526,6 @@ export default function PackDetail() {
         </div>
       )}
     </div>
+    </>
   )
 }
